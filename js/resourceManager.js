@@ -12,7 +12,7 @@ class ResourceManager {
       quizzes: {} // Cache pour les données de quiz : { "quiz_ID": data }
     };
     // Optionnel: Définir le chemin de base pour les données
-    this.baseDataPath = 'js/data/';
+    this.baseDataPath = './js/data/';
     console.log("ResourceManager initialized (V2.2).");
   }
 
