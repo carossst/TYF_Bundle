@@ -1,0 +1,136 @@
+{
+  "version": "2.2.0",
+  "releaseDate": "2024-04-12",
+  "themes": [
+    {
+      "id": 1,
+      "name": "I Speak Café French tests",
+      "description": "Writing, Reading and Listening skills for the Café environment.",
+      "icon": "fas fa-coffee",
+      "quizzes": [
+        { "id": 101, "name": "Writing and Reading Café", "description": "Test your writing and reading skills." },
+        { "id": 102, "name": "Writing and Reading Conversation Café", "description": "Practice reading conversations." },
+        { "id": 103, "name": "Listening Café", "description": "Improve your listening comprehension." },
+        { "id": 104, "name": "Listening Conversation Café", "description": "Understand real conversations." },
+        { "id": 105, "name": "Writing, Reading & Listening Café", "description": "Combined skills practice." }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "I Speak Colors French tests",
+      "description": "Mastering colors in various contexts: writing, reading, listening.",
+      "icon": "fas fa-palette",
+      "quizzes": [
+        { "id": 201, "name": "Writing and Reading Colors", "description": "Learn color vocabulary and agreement." },
+        { "id": 202, "name": "Writing and Reading Conversation Colors", "description": "Using colors in dialogue." },
+        { "id": 203, "name": "Listening Colors", "description": "Recognize colors by ear." },
+        { "id": 204, "name": "Listening Conversation Colors", "description": "Understand colors in spoken context." },
+        { "id": 205, "name": "Writing, Reading & Listening Colors", "description": "Comprehensive color practice." }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "I Speak Gender French tests",
+      "description": "Understanding and using grammatical gender in French.",
+      "icon": "fas fa-venus-mars",
+       "quizzes": [
+        { "id": 301, "name": "Writing and Reading Gender", "description": "Identify noun genders." },
+        { "id": 302, "name": "Writing and Reading Conversation Gender", "description": "Apply gender in sentences." },
+        { "id": 303, "name": "Listening Gender", "description": "Recognize gender in spoken words." },
+        { "id": 304, "name": "Listening Conversation Gender", "description": "Hear gender agreement in dialogues." },
+        { "id": 305, "name": "Writing, Reading & Listening Gender", "description": "Full practice on gender." }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "I Speak Numbers French tests",
+      "description": "Practice numbers through writing, reading, and listening.",
+      "icon": "fas fa-sort-numeric-down",
+       "quizzes": [
+        { "id": 401, "name": "Writing and Reading Numbers", "description": "Learn to write and read numbers." },
+        { "id": 402, "name": "Writing and Reading Conversation Numbers", "description": "Use numbers in context." },
+        { "id": 403, "name": "Listening Numbers", "description": "Understand spoken numbers." },
+        { "id": 404, "name": "Listening Conversation Numbers", "description": "Follow numbers in dialogues." },
+        { "id": 405, "name": "Writing, Reading & Listening Numbers", "description": "All-around number practice." }
+      ]
+    },
+     {
+      "id": 5,
+      "name": "I Speak Singular and Plural French tests",
+      "description": "Mastering singular and plural forms in different skills.",
+      "icon": "fas fa-copy",
+       "quizzes": [
+        { "id": 501, "name": "Writing and Reading Singular/Plural", "description": "Identify and form plurals." },
+        { "id": 502, "name": "Writing and Reading Conversation S/P", "description": "Use plurals in sentences." },
+        { "id": 503, "name": "Listening Singular/Plural", "description": "Distinguish singular/plural by ear." },
+        { "id": 504, "name": "Listening Conversation S/P", "description": "Hear plurals in context." },
+        { "id": 505, "name": "Writing, Reading & Listening S/P", "description": "Comprehensive plural practice." }
+      ]
+    },
+     {
+      "id": 6,
+      "name": "I Speak Accents French tests",
+      "description": "Understanding and using French accents correctly.",
+      "icon": "fas fa-italic", // Alternative: fas fa-signature
+       "quizzes": [
+        { "id": 601, "name": "Writing and Reading Accents", "description": "Recognize and write accents." },
+        { "id": 602, "name": "Writing and Reading Conversation Accents", "description": "See accents used in text." },
+        { "id": 603, "name": "Listening Accents", "description": "Hear the effect of accents." },
+        { "id": 604, "name": "Listening Conversation Accents", "description": "Understand accented words in speech." },
+        { "id": 605, "name": "Writing, Reading & Listening Accents", "description": "Full accent practice." }
+      ]
+    },
+     {
+      "id": 7,
+      "name": "I Speak ça va (breaking the ice) French tests",
+      "description": "Everyday greetings and small talk to break the ice.",
+      "icon": "fas fa-handshake",
+       "quizzes": [
+        { "id": 701, "name": "Writing and Reading Ça va", "description": "Basic greetings and responses." },
+        { "id": 702, "name": "Writing and Reading Conversation Ça va", "description": "Read simple dialogues." },
+        { "id": 703, "name": "Listening Ça va", "description": "Understand spoken greetings." },
+        { "id": 704, "name": "Listening Conversation Ça va", "description": "Follow basic conversations." },
+        { "id": 705, "name": "Writing, Reading & Listening Ça va", "description": "Practice common interactions." }
+      ]
+    },
+     {
+      "id": 8,
+      "name": "I Speak Métro French tests",
+      "description": "Navigating the Paris Métro: vocabulary and situations.",
+      "icon": "fas fa-subway",
+       "quizzes": [
+        { "id": 801, "name": "Writing and Reading Métro", "description": "Understand signs and vocabulary." },
+        { "id": 802, "name": "Writing and Reading Conversation Métro", "description": "Read dialogues about the metro." },
+        { "id": 803, "name": "Listening Métro", "description": "Understand announcements." },
+        { "id": 804, "name": "Listening Conversation Métro", "description": "Follow conversations about metro travel." },
+        { "id": 805, "name": "Writing, Reading & Listening Métro", "description": "Comprehensive metro practice." }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "I Speak Boulangerie French tests",
+      "description": "Ordering bread and pastries like a local.",
+      "icon": "fas fa-bread-slice",
+       "quizzes": [
+        { "id": 901, "name": "Writing and Reading Boulangerie", "description": "Vocabulary for items and ordering." },
+        { "id": 902, "name": "Writing and Reading Conversation Boulangerie", "description": "Read typical bakery interactions." },
+        { "id": 903, "name": "Listening Boulangerie", "description": "Understand orders and requests." },
+        { "id": 904, "name": "Listening Conversation Boulangerie", "description": "Follow dialogues at the bakery." },
+        { "id": 905, "name": "Writing, Reading & Listening Boulangerie", "description": "Full bakery scenario practice." }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "General Revision", // Exemple pour le 10ème thème
+      "description": "Mixed quizzes covering various basic topics.",
+      "icon": "fas fa-random",
+       "quizzes": [
+        { "id": 1001, "name": "General Mix 1", "description": "Reviewing basics." },
+        { "id": 1002, "name": "General Mix 2", "description": "Consolidating knowledge." },
+        { "id": 1003, "name": "General Mix 3", "description": "Intermediate review." },
+        { "id": 1004, "name": "General Mix 4", "description": "Further consolidation." },
+        { "id": 1005, "name": "General Mix 5", "description": "Final basic review." }
+      ]
+    }
+  ]
+}
