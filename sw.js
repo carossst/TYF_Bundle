@@ -1,19 +1,19 @@
-// sw.js - Fixed Service Worker v2.2.1
-// This service worker handles caching and resolves path issues
-
+// sw.js - Service Worker adapté à votre structure exacte
 const CACHE_NAME = 'test-your-french-cache-v2.2.1';
 const APP_SHELL = [
   './',
   './index.html',
   './style.css',
-  './js/main.js',
-  './js/ui.js',
-  './js/quizManager.js',
-  './js/resourceManager.js',
-  './js/storage.js',
-  './js/data/metadata.json',  // Corrected path
-  './icons/icon-192x192.png',
-  './manifest.json'
+  './manifest.json',
+  './js/main.js', 
+  './data/main.js',          // Chemins alternatifs basés sur votre structure
+  './data/quizManager.js',
+  './data/resourceManager.js',
+  './data/storage.js',
+  './data/ui.js',
+  './themes/metadata.json',  // Selon votre structure
+  './metadata.json',         // Alternative
+  './icons/icon-192x192.png'
 ];
 
 // Install event - cache the app shell
@@ -52,20 +52,19 @@ self.addEventListener('fetch', (event) => {
   // Parse the URL
   const requestUrl = new URL(event.request.url);
   
-  // Handle data files specially - adjust paths as needed
+  // Handle metadata.json specially
   if (requestUrl.pathname.includes('/metadata.json')) {
-    event.respondWith(handleDataRequest('./js/data/metadata.json'));
+    event.respondWith(handleMetadataRequest());
     return;
   }
   
-  // For quiz files, adjust path if needed
+  // For quiz files, adjust path based on your structure
   if (requestUrl.pathname.match(/\/quiz_\d+\.json$/)) {
     const quizFile = requestUrl.pathname.split('/').pop();
-    const themeMatch = requestUrl.pathname.match(/theme_(\d+)/);
+    const themeMatch = requestUrl.pathname.match(/theme-(\d+)/);
     if (themeMatch && themeMatch[1]) {
       const themeId = themeMatch[1];
-      const correctedPath = `./js/data/quizzes/theme_${themeId}/${quizFile}`;
-      event.respondWith(handleDataRequest(correctedPath));
+      event.respondWith(handleQuizRequest(themeId, quizFile));
       return;
     }
   }
@@ -110,49 +109,85 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Special handler for data requests
-function handleDataRequest(correctedPath) {
-  return caches.match(correctedPath)
-    .then(cachedResponse => {
-      if (cachedResponse) {
-        return cachedResponse;
+// Special handler for metadata.json requests
+async function handleMetadataRequest() {
+  const possiblePaths = [
+    './metadata.json',
+    './themes/metadata.json',
+    './data/metadata.json'
+  ];
+  
+  // Try cache first
+  for (const path of possiblePaths) {
+    const cachedResponse = await caches.match(path);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+  }
+  
+  // Try fetching from network
+  for (const path of possiblePaths) {
+    try {
+      const networkResponse = await fetch(path);
+      if (networkResponse && networkResponse.status === 200) {
+        // Clone and cache
+        const responseToCache = networkResponse.clone();
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(path, responseToCache);
+        return networkResponse;
       }
-      
-      // Try fetching with corrected path
-      return fetch(correctedPath)
-        .then(networkResponse => {
-          if (!networkResponse || networkResponse.status !== 200) {
-            throw new Error('Failed to fetch data');
-          }
-          
-          // Clone and cache
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(correctedPath, responseToCache);
-            });
-            
-          return networkResponse;
-        })
-        .catch(error => {
-          console.error('[Service Worker] Data fetch error:', error);
-          return new Response(JSON.stringify({error: 'Failed to load data'}), {
-            headers: {'Content-Type': 'application/json'},
-            status: 404
-          });
-        });
-    });
+    } catch (error) {
+      console.warn(`[Service Worker] Failed to fetch metadata from ${path}`);
+    }
+  }
+  
+  return new Response(JSON.stringify({error: 'Failed to load metadata'}), {
+    headers: {'Content-Type': 'application/json'},
+    status: 404
+  });
+}
+
+// Special handler for quiz requests
+async function handleQuizRequest(themeId, quizFile) {
+  const possiblePaths = [
+    `./theme-${themeId}/${quizFile}`,
+    `./themes/theme-${themeId}/${quizFile}`
+  ];
+  
+  // Try cache first
+  for (const path of possiblePaths) {
+    const cachedResponse = await caches.match(path);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+  }
+  
+  // Try fetching from network
+  for (const path of possiblePaths) {
+    try {
+      const networkResponse = await fetch(path);
+      if (networkResponse && networkResponse.status === 200) {
+        // Clone and cache
+        const responseToCache = networkResponse.clone();
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(path, responseToCache);
+        return networkResponse;
+      }
+    } catch (error) {
+      console.warn(`[Service Worker] Failed to fetch quiz from ${path}`);
+    }
+  }
+  
+  return new Response(JSON.stringify({error: `Failed to load quiz ${quizFile}`}), {
+    headers: {'Content-Type': 'application/json'},
+    status: 404
+  });
 }
 
 // Listen for messages from the main thread
 self.addEventListener('message', (event) => {
   if (event.data && event.data.action === 'skipWaiting') {
     self.skipWaiting();
-  }
-  
-  if (event.data && event.data.action === 'checkForUpdates') {
-    console.log('[Service Worker] Checking for updates');
-    // You would add update logic here
   }
   
   if (event.data && event.data.action === 'cacheAudio') {
