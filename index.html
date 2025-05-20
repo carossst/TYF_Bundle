@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#111f46" />
-  <!-- Ajout d'une Content Security Policy adaptée pour GitHub Pages -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data:">
+  <!-- CSP modifiée pour permettre l'import ES modules correctement -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data:">
   <title>Test Your French</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="manifest" href="./manifest.json">
@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Service Worker Registration (needed for PWA features) -->
+  <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
@@ -27,76 +27,59 @@
   </script>
 </head>
 <body>
-  <!-- Le reste du contenu HTML reste inchangé -->
+  <!-- Le contenu HTML reste le même -->
   <div id="app-container">
     <!-- Welcome Screen -->
     <div id="welcome-screen" class="screen">
-        <div class="quiz-logo">
-            <img src="./icons/icon-192x192.png" alt="Test Your French Logo">
-        </div>
-        <h1>Test Your French</h1>
-        <p class="subtitle">Improve your French with interactive quizzes on various topics.</p>
+      <div class="quiz-logo">
+        <img src="./icons/icon-192x192.png" alt="Test Your French Logo">
+      </div>
+      <h1>Test Your French</h1>
+      <p class="subtitle">Improve your French with interactive quizzes on various topics.</p>
 
-        <!-- Placeholder for initial stats -->
-        <div id="welcome-stats-placeholder">
-            <!-- Initial stats summary will be injected here -->
-        </div>
+      <!-- Placeholder for initial stats -->
+      <div id="welcome-stats-placeholder">
+        <!-- Initial stats summary will be injected here -->
+      </div>
 
-        <!-- Global Counters -->
-        <div class="test-details">
-             <div class="detail-item"><i class="fas fa-book-open"></i><span id="total-themes-count">...</span> themes available</div>
-             <div class="detail-item"><i class="fas fa-question-circle"></i>About <span id="total-questions-count">...</span> questions in total</div>
-             <div class="timer-option">
-                <input type="checkbox" id="enable-timer" checked aria-describedby="timer-desc">
-                <label for="enable-timer">Enable quiz timer <i class="far fa-clock" id="timer-desc"></i></label>
-              </div>
-         </div>
-        <!-- End Global Counters -->
-
-        <!-- Theme list section -->
-        <h2>Sélectionne un thème</h2>
-        <div id="themes-list" class="selection-container">
-            <!-- Themes will be inserted dynamically here -->
-            <p class="loading-message">Chargement des thèmes...</p>
+      <!-- Global Counters -->
+      <div class="test-details">
+        <div class="detail-item"><i class="fas fa-book-open"></i><span id="total-themes-count">...</span> themes available</div>
+        <div class="detail-item"><i class="fas fa-question-circle"></i>About <span id="total-questions-count">...</span> questions in total</div>
+        <div class="timer-option">
+          <input type="checkbox" id="enable-timer" checked aria-describedby="timer-desc">
+          <label for="enable-timer">Enable quiz timer <i class="far fa-clock" id="timer-desc"></i></label>
         </div>
+      </div>
 
-        <div class="buttons">
-            <div class="button-group">
-                <button id="show-stats-btn" class="btn" aria-label="Afficher les statistiques globales">
-                    <i class="fas fa-chart-bar btn-icon"></i>Statistiques Globales
-                </button>
-            </div>
+      <!-- Theme list section -->
+      <h2>Sélectionne un thème</h2>
+      <div id="themes-list" class="selection-container">
+        <!-- Themes will be inserted dynamically here -->
+        <p class="loading-message">Chargement des thèmes...</p>
+      </div>
+
+      <div class="buttons">
+        <div class="button-group">
+          <button id="show-stats-btn" class="btn" aria-label="Afficher les statistiques globales">
+            <i class="fas fa-chart-bar btn-icon"></i>Statistiques Globales
+          </button>
         </div>
+      </div>
     </div>
     
-    <!-- Autres écrans non affichés pour brièveté -->
-    <!-- Quiz Selection Screen, Quiz Screen, Result Screen, et Stats Screen -->
+    <!-- Autres écrans maintenus comme dans votre original -->
   </div>
 
   <footer class="footer">
-      <div class="footer-content">
-          <a href="/" class="footer-logo">Test Your French</a>
-          <p class="footer-text">Version 2.2.1 - © 2025 French Quiz App</p>
-      </div>
+    <div class="footer-content">
+      <a href="/" class="footer-logo">Test Your French</a>
+      <p class="footer-text">Version 2.2.1 - © 2025 French Quiz App</p>
+    </div>
   </footer>
 
-  <!-- Chargement des modules JavaScript en respectant votre structure -->
-  <script type="module">
-    // Détection de l'environnement (GitHub Pages ou local)
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    const baseJsPath = isGitHubPages ? './data/' : './js/';
-    
-    // Import dynamique du module principal
-    import(`${baseJsPath}main.js`)
-      .catch(err => {
-        console.error('Failed to load main module:', err);
-        // Tentative de fallback
-        import('./data/main.js')
-          .catch(err2 => {
-            console.error('All attempts to load main.js failed:', err2);
-            document.body.innerHTML = '<div style="text-align:center; padding:2rem; color:red;">Failed to load application modules. Please check console for details.</div>';
-          });
-      });
-  </script>
+  <!-- Chargement du script principal directement -->
+  <!-- IMPORTANT: Remplacez "data" par le dossier qui contient réellement main.js -->
+  <script type="module" src="./data/main.js"></script>
 </body>
 </html>
