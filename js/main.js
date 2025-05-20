@@ -127,6 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
       // Initialiser l'UI avec les thèmes chargés
       quizUI.initThemesView();
+      quizUI.showWelcomeScreen(); // Affiche l’écran d’accueil au démarrage
+
     })
     .catch(error => {
       console.error("Erreur lors du chargement des métadonnées:", error);
