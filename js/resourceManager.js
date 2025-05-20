@@ -14,8 +14,15 @@ window.ResourceManager = (function() {
     // Utiliser la configuration si disponible, sinon utiliser un chemin par défaut
     // qui est plus flexible avec plusieurs possibilités
     this.baseDataPath = window.resourceManagerConfig?.baseDataPath || './';
+    
+    // Détecter si nous sommes sur GitHub Pages
+    this.isGitHubPages = window.location.hostname.includes('github.io');
+    this.repoName = this.isGitHubPages ? window.location.pathname.split('/')[1] : '';
+    
     console.log("ResourceManager initialized - Flexible version for GitHub Pages");
     console.log("Base path:", this.baseDataPath);
+    console.log("GitHub Pages detected:", this.isGitHubPages);
+    if (this.isGitHubPages) console.log("Repository name:", this.repoName);
   }
   
   // Méthodes
@@ -35,15 +42,27 @@ window.ResourceManager = (function() {
       './js/data/metadata.json',
       './js/data/themes/metadata.json',
       './themes/metadata.json',
+      
       // Chemins relatifs au baseDataPath
       `${this.baseDataPath}metadata.json`,
       `${this.baseDataPath}js/data/metadata.json`,
       `${this.baseDataPath}themes/metadata.json`,
       `${this.baseDataPath}data/metadata.json`,
+      
       // Chemins absolus
       '/metadata.json',
       '/js/data/metadata.json',
-      '/themes/metadata.json'
+      '/themes/metadata.json',
+      
+      // Chemins GitHub Pages spécifiques
+      `/TYF_Bundle/metadata.json`,
+      `/TYF_Bundle/js/data/metadata.json`,
+      `/TYF_Bundle/js/data/themes/metadata.json`,
+      
+      // Chemins dynamiques GitHub Pages basés sur le nom du repo détecté
+      `/${this.repoName}/metadata.json`,
+      `/${this.repoName}/js/data/metadata.json`,
+      `/${this.repoName}/js/data/themes/metadata.json`
     ];
 
     let metadata = null;
@@ -121,24 +140,37 @@ window.ResourceManager = (function() {
       `./data/themes/theme-${themeId}/quiz_${quizId}.json`,
       `./theme-${themeId}/quiz_${quizId}.json`,
       `./quiz_${quizId}.json`,
+      
       // Sans préfixe "quiz_"
       `./js/data/themes/theme-${themeId}/${quizId}.json`,
       `./themes/theme-${themeId}/${quizId}.json`,
+      
       // Chemins relatifs au baseDataPath
       `${this.baseDataPath}themes/theme-${themeId}/quiz_${quizId}.json`,
       `${this.baseDataPath}js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
       `${this.baseDataPath}data/themes/theme-${themeId}/quiz_${quizId}.json`,
       `${this.baseDataPath}theme-${themeId}/quiz_${quizId}.json`,
       `${this.baseDataPath}quiz_${quizId}.json`,
+      
       // Noms de fichiers variables avec underscore ou tiret
       `./js/data/themes/theme_${themeId}/quiz_${quizId}.json`,
       `./js/data/themes/theme-${themeId}/quiz-${quizId}.json`,
       `./themes/theme_${themeId}/quiz_${quizId}.json`,
+      
       // Format avec 3 chiffres (exemple: quiz_101.json, quiz_902.json)
       `./js/data/themes/theme-${themeId}/quiz_${quizId.toString().padStart(3, '0')}.json`,
       `./themes/theme-${themeId}/quiz_${quizId.toString().padStart(3, '0')}.json`,
       `./${quizId.toString().padStart(3, '0')}.json`,
-      `./quiz_${quizId.toString().padStart(3, '0')}.json`
+      `./quiz_${quizId.toString().padStart(3, '0')}.json`,
+      
+      // Chemins GitHub Pages spécifiques
+      `/TYF_Bundle/js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
+      `/TYF_Bundle/themes/theme-${themeId}/quiz_${quizId}.json`,
+      
+      // Chemins dynamiques GitHub Pages basés sur le nom du repo détecté
+      `/${this.repoName}/js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
+      `/${this.repoName}/themes/theme-${themeId}/quiz_${quizId}.json`,
+      `/${this.repoName}/js/data/themes/theme-${themeId}/quiz_${quizId.toString().padStart(3, '0')}.json`
     ];
 
     let quizData = null;
