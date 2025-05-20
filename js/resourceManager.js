@@ -1,7 +1,6 @@
 // resourceManager.js - Version améliorée pour GitHub Pages
 // Cette version utilise une variable globale ResourceManager au lieu d'export/import
 // et est plus souple pour trouver les fichiers dans différentes structures de dossiers
-
 // Créer un objet global ResourceManager
 window.ResourceManager = (function() {
   
