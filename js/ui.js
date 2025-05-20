@@ -574,3 +574,1175 @@ QuizUI.prototype.renderThemes = function(themes) {
     themesList.innerHTML = '<p class="error-message">Impossible d\'afficher les thèmes.</p>'; // Show error if rendering fails
   });
 };
+
+/** Affiche la liste des quiz pour un thème */
+QuizUI.prototype.renderQuizzes = function(theme, quizzes) {
+  const quizzesList = this.dom.quizzesList;
+  if (!quizzesList) { console.error("Quizzes list container not found."); return; }
+  quizzesList.innerHTML = ''; // Clear previous content
+  
+  if (!quizzes || quizzes.length === 0) {
+    quizzesList.innerHTML = '<p class="no-data">Aucun quiz disponible pour ce thème.</p>';
+    return;
+  }
+
+  // Optional: Sort quizzes (e.g., by level, completion status, or quiz number)
+  quizzes.sort((a, b) => {
+    // First show quizzes that are in progress but not completed
+    const aInProgress = a.progress && !a.progress.completed;
+    const bInProgress = b.progress && !b.progress.completed;
+    if (aInProgress && !bInProgress) return -1;
+    if (!aInProgress && bInProgress) return 1;
+    
+    // Then by level (ascending: A1, A2, B1, etc.)
+    if (a.level !== b.level) {
+      const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+      return levels.indexOf(a.level) - levels.indexOf(b.level);
+    }
+    
+    // Finally by quiz number/id
+    return a.id - b.id;
+  });
+  
+  // Create a wrapper for quiz difficulty grouping if needed
+  const createLevelGroup = (level) => {
+    const groupId = `level-${level.toLowerCase()}`;
+    
+    // Check if group already exists
+    let group = quizzesList.querySelector(`#${groupId}`);
+    if (!group) {
+      group = document.createElement('div');
+      group.id = groupId;
+      group.className = 'level-group';
+      
+      const levelTitle = document.createElement('h3');
+      levelTitle.className = 'level-title';
+      levelTitle.textContent = `Niveau ${level}`;
+      
+      group.appendChild(levelTitle);
+      quizzesList.appendChild(group);
+    }
+    return group;
+  };
+  
+  // Group quizzes by difficulty level if specified
+  const quizzesByLevel = {};
+  let hasLevels = false;
+  
+  quizzes.forEach(quiz => {
+    if (quiz.level) {
+      hasLevels = true;
+      if (!quizzesByLevel[quiz.level]) {
+        quizzesByLevel[quiz.level] = [];
+      }
+      quizzesByLevel[quiz.level].push(quiz);
+    }
+  });
+  
+  // Render quizzes by level if levels exist, otherwise render flat list
+  if (hasLevels) {
+    // Define level order
+    const levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    
+    // Create groups for each level that has quizzes
+    levelOrder.forEach(level => {
+      if (quizzesByLevel[level] && quizzesByLevel[level].length > 0) {
+        const levelGroup = createLevelGroup(level);
+        
+        // Render quizzes for this level
+        quizzesByLevel[level].forEach(quiz => {
+          const quizElement = this._createQuizElement(theme.id, quiz);
+          levelGroup.appendChild(quizElement);
+        });
+      }
+    });
+    
+    // If any quizzes don't have levels, add them at the end
+    const unleveledQuizzes = quizzes.filter(quiz => !quiz.level);
+    if (unleveledQuizzes.length > 0) {
+      const otherGroup = createLevelGroup('Autre');
+      unleveledQuizzes.forEach(quiz => {
+        const quizElement = this._createQuizElement(theme.id, quiz);
+        otherGroup.appendChild(quizElement);
+      });
+    }
+  } else {
+    // Render as flat list without level grouping
+    quizzes.forEach(quiz => {
+      const quizElement = this._createQuizElement(theme.id, quiz);
+      quizzesList.appendChild(quizElement);
+    });
+  }
+};
+
+/** Helper pour créer un élément de quiz */
+QuizUI.prototype._createQuizElement = function(themeId, quiz) {
+  const quizElement = document.createElement('div');
+  quizElement.className = 'selection-item quiz-item';
+  quizElement.setAttribute('data-theme-id', themeId);
+  quizElement.setAttribute('data-quiz-id', quiz.id);
+  quizElement.setAttribute('tabindex', '0'); // Make focusable
+  quizElement.setAttribute('role', 'button');
+  
+  // Create icon based on status
+  let icon = '<i class="fas fa-question-circle"></i>'; // Default
+  let statusClass = '';
+  let statusText = '';
+  let accessibilityLabel = '';
+  
+  if (quiz.progress && quiz.progress.completed) {
+    // Completed quiz
+    const score = quiz.progress.score;
+    const total = quiz.progress.total;
+    const percent = Math.round((score / total) * 100);
+    
+    statusText = `${score}/${total} (${percent}%)`;
+    accessibilityLabel = `Completed quiz: ${quiz.name}. Score: ${score} out of ${total}, ${percent}% correct.`;
+    
+    if (percent >= 90) {
+      icon = '<i class="fas fa-award"></i>';
+      statusClass = 'status-excellent';
+    } else if (percent >= 70) {
+      icon = '<i class="fas fa-check-circle"></i>';
+      statusClass = 'status-good';
+    } else {
+      icon = '<i class="fas fa-times-circle"></i>';
+      statusClass = 'status-needs-improvement';
+    }
+  } else if (quiz.progress) {
+    // In progress but not completed
+    icon = '<i class="fas fa-play-circle"></i>';
+    statusClass = 'status-in-progress';
+    statusText = 'En cours';
+    accessibilityLabel = `Quiz in progress: ${quiz.name}.`;
+  } else {
+    // Not started
+    accessibilityLabel = `Quiz not started: ${quiz.name}.`;
+  }
+  
+  // Format quiz date completed if it exists
+  let dateCompletedText = '';
+  if (quiz.progress && quiz.progress.dateCompleted) {
+    const date = new Date(quiz.progress.dateCompleted);
+    dateCompletedText = `<span class="date-completed">Terminé le ${date.toLocaleDateString()}</span>`;
+  }
+  
+  // Format total time if available
+  let timeText = '';
+  if (quiz.progress && quiz.progress.totalTime) {
+    const minutes = Math.floor(quiz.progress.totalTime / 60);
+    const seconds = quiz.progress.totalTime % 60;
+    timeText = `<span class="time-spent">Temps: ${minutes}m ${seconds}s</span>`;
+  }
+  
+  // Build status section HTML
+  let statusHTML = '';
+  if (statusText) {
+    statusHTML = `
+      <div class="item-status ${statusClass}">
+        <span class="status-text">${statusText}</span>
+        ${dateCompletedText}
+        ${timeText}
+      </div>
+    `;
+  }
+  
+  // Additional info: question count, difficulty
+  let metaInfo = '';
+  if (quiz.questionCount) {
+    metaInfo += `<span class="meta-info"><i class="fas fa-list"></i> ${quiz.questionCount} questions</span>`;
+  }
+  if (quiz.level) {
+    metaInfo += `<span class="meta-info"><i class="fas fa-signal"></i> Niveau ${quiz.level}</span>`;
+  }
+  if (quiz.estimatedTime) {
+    metaInfo += `<span class="meta-info"><i class="far fa-clock"></i> ~ ${quiz.estimatedTime} min</span>`;
+  }
+  
+  // Set accessibility label
+  quizElement.setAttribute('aria-label', accessibilityLabel);
+  
+  // Build the quiz item HTML
+  quizElement.innerHTML = `
+    <div class="item-icon">${icon}</div>
+    <div class="item-content">
+      <h3>${quiz.name}</h3>
+      <p>${quiz.description || 'Test your knowledge on this topic.'}</p>
+      <div class="meta-info-container">
+        ${metaInfo}
+      </div>
+      ${statusHTML}
+    </div>
+    <div class="item-action" aria-hidden="true">
+      Commencer <i class="fas fa-arrow-right"></i>
+    </div>
+  `;
+  
+  return quizElement;
+};
+// ----- Fonctions de rendu pour l'écran des statistiques -----
+
+/** Affiche les barres de progression par thème dans l'écran statistiques */
+QuizUI.prototype.renderThemeBars = function(themeStats, themes) {
+  const container = this.dom.stats.themeBars;
+  if (!container) { console.error("Theme bars container not found."); return; }
+  container.innerHTML = ''; // Clear previous content
+  
+  if (!themeStats || Object.keys(themeStats).length === 0) {
+    container.innerHTML = '<p class="no-data">Aucune donnée de progression disponible.</p>';
+    return;
+  }
+  
+  // Create array from theme stats object for sorting
+  const themeArray = Object.keys(themeStats).map(themeId => {
+    const themeData = themeStats[themeId];
+    // Find theme name from themes array
+    const theme = themes.find(t => t.id === Number(themeId));
+    return {
+      id: themeId,
+      name: theme ? theme.name : `Theme ${themeId}`,
+      completion: themeData.completion,
+      accuracy: themeData.avgAccuracy,
+      quizzes: themeData.quizzes
+    };
+  });
+  
+  // Sort by completion rate (descending)
+  themeArray.sort((a, b) => b.completion - a.completion);
+  
+  // Create theme bars
+  themeArray.forEach(theme => {
+    const barEl = document.createElement('div');
+    barEl.className = 'theme-bar';
+    
+    // Use theme accuracy for color gradient (red -> yellow -> green)
+    const accuracyColorClass = theme.accuracy >= 80 ? 'high-score' : 
+                              theme.accuracy >= 60 ? 'medium-score' : 'low-score';
+    
+    barEl.innerHTML = `
+      <div class="theme-info">
+        <span class="theme-name">${theme.name}</span>
+        <span class="theme-stats">
+          ${theme.quizzes.completed}/${theme.quizzes.total} quizzes · ${theme.accuracy}% accuracy
+        </span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress ${accuracyColorClass}" style="width: ${theme.completion}%"></div>
+      </div>
+    `;
+    
+    container.appendChild(barEl);
+  });
+};
+
+/** Affiche les meilleurs et pires thèmes dans l'écran statistiques */
+QuizUI.prototype.renderBestAndWorstThemes = function(bestTheme, worstTheme, themes) {
+  const bestContainer = this.dom.stats.bestTheme;
+  const worstContainer = this.dom.stats.worstTheme;
+  
+  // Helper function to render a theme performance card
+  const renderThemeCard = (container, themeData, label) => {
+    if (!container) return; // Skip if container not found
+    
+    if (!themeData || !themeData.id) {
+      container.innerHTML = `<p class="no-data">Pas assez de données pour déterminer le ${label} thème.</p>`;
+      return;
+    }
+    
+    // Find theme name from themes array
+    const theme = themes.find(t => t.id === Number(themeData.id));
+    const themeName = theme ? theme.name : `Theme ${themeData.id}`;
+    
+    container.innerHTML = `
+      <div class="performance-card">
+        <h4>${themeName}</h4>
+        <div class="performance-stats">
+          <div class="stat">
+            <span class="stat-value">${themeData.accuracy}%</span>
+            <span class="stat-label">Précision</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">${themeData.completion}%</span>
+            <span class="stat-label">Complétion</span>
+          </div>
+        </div>
+      </div>
+    `;
+  };
+  
+  // Render best and worst theme cards
+  renderThemeCard(bestContainer, bestTheme, 'meilleur');
+  renderThemeCard(worstContainer, worstTheme, 'pire');
+};
+
+/** Affiche l'historique des quiz récemment terminés */
+QuizUI.prototype.renderQuizHistory = function(historyItems) {
+  const container = this.dom.stats.historyList;
+  if (!container) { console.error("History list container not found."); return; }
+  container.innerHTML = ''; // Clear previous content
+  
+  if (!historyItems || historyItems.length === 0) {
+    container.innerHTML = '<p class="no-data">Aucun historique disponible.</p>';
+    return;
+  }
+  
+  // Sort history by date (descending - most recent first)
+  historyItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  // Take only the most recent items (e.g., last 10)
+  const recentItems = historyItems.slice(0, 10);
+  
+  // Create list of history items
+  const listEl = document.createElement('ul');
+  listEl.className = 'history-list';
+  
+  recentItems.forEach(item => {
+    const date = new Date(item.date);
+    const formattedDate = date.toLocaleDateString();
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    const scorePercent = Math.round((item.score / item.total) * 100);
+    const scoreClass = scorePercent >= 80 ? 'high-score' : 
+                       scorePercent >= 60 ? 'medium-score' : 'low-score';
+    
+    const listItem = document.createElement('li');
+    listItem.className = 'history-item';
+    listItem.innerHTML = `
+      <div class="history-content">
+        <div class="history-title">
+          <span class="quiz-name">${item.quizName}</span>
+          <span class="theme-name">${item.themeName}</span>
+        </div>
+        <div class="history-details">
+          <span class="history-date">${formattedDate} à ${formattedTime}</span>
+          <span class="history-score ${scoreClass}">${item.score}/${item.total} (${scorePercent}%)</span>
+          ${item.time ? `<span class="history-time"><i class="far fa-clock"></i> ${Math.floor(item.time / 60)}m ${item.time % 60}s</span>` : ''}
+        </div>
+      </div>
+    `;
+    
+    listEl.appendChild(listItem);
+  });
+  
+  container.appendChild(listEl);
+};
+
+// ----- Fonctions de gestion du quiz -----
+
+/** Démarre un quiz sélectionné */
+QuizUI.prototype.startSelectedQuiz = async function(themeId, quizId) {
+  // Ensure themeId and quizId are set in manager
+  this.quizManager.currentThemeId = themeId;
+  this.quizManager.currentQuizId = quizId;
+  
+  this._transitionScreen(this.dom.screens.quiz);
+  this._showLoading(this.dom.quiz, "Chargement du quiz...");
+  this._clearError(this.dom.quiz);
+  
+  try {
+    // Load quiz data via the quiz manager
+    await this.quizManager.loadQuiz(themeId, quizId);
+    
+    // Once loaded, setup quiz UI components
+    const quiz = this.quizManager.getQuizData();
+    
+    // Set quiz name
+    this.dom.quizName.textContent = quiz.name;
+    
+    // Initialize quiz UI state
+    this.renderQuizProgress();
+    this.renderCurrentQuestion();
+    
+    // Start timer if enabled
+    this.updateTimerUIState();
+    if (this.quizManager.timerEnabled) {
+      this.startTimer();
+    }
+    
+    this._hideLoading(this.dom.quiz);
+    
+  } catch (error) {
+    console.error("Failed to start quiz:", error);
+    this._showError(this.dom.quiz, `Impossible de charger le quiz. ${error.message}`);
+    
+    // Disable navigation buttons on error
+    this.dom.buttons.prev.disabled = true;
+    this.dom.buttons.next.disabled = true;
+    this.dom.buttons.submit.disabled = true;
+  }
+};
+
+/** Affiche la barre de progression du quiz */
+QuizUI.prototype.renderQuizProgress = function() {
+  const steps = this.dom.progressSteps;
+  if (!steps) return;
+  
+  steps.innerHTML = ''; // Clear previous steps
+  
+  const totalQuestions = this.quizManager.getQuestionCount();
+  const currentIndex = this.quizManager.getCurrentQuestionIndex();
+  const status = this.quizManager.questionStatus;
+  
+  // Update progress bar width
+  const progressPercent = ((currentIndex) / (totalQuestions)) * 100;
+  this.dom.progress.style.width = `${progressPercent}%`;
+  
+  // Create step indicators
+  for (let i = 0; i < totalQuestions; i++) {
+    const step = document.createElement('div');
+    step.className = 'step';
+    
+    // Current step
+    if (i === currentIndex) {
+      step.classList.add('current');
+    }
+    
+    // Completed steps - add status class
+    if (i < currentIndex) {
+      // Check the status from quiz manager
+      if (status[i] === true) {
+        step.classList.add('correct');
+      } else if (status[i] === false) {
+        step.classList.add('incorrect');
+      } else {
+        step.classList.add('completed');
+      }
+    }
+    
+    // Add aria attributes for accessibility
+    step.setAttribute('aria-label', `Question ${i + 1} de ${totalQuestions}`);
+    
+    steps.appendChild(step);
+  }
+  
+  // Update button states
+  this.updateNavigationButtons();
+};
+
+/** Met à jour l'état des boutons de navigation */
+QuizUI.prototype.updateNavigationButtons = function() {
+  const currentIndex = this.quizManager.getCurrentQuestionIndex();
+  const totalQuestions = this.quizManager.getQuestionCount();
+  const isAnswered = this.quizManager.isCurrentQuestionAnswered();
+  
+  // Prev button - disable on first question
+  this.dom.buttons.prev.disabled = currentIndex === 0;
+  
+  // Next/Submit buttons
+  if (currentIndex < totalQuestions - 1) {
+    // Not last question - show Next, hide Submit
+    this.dom.buttons.next.style.display = '';
+    this.dom.buttons.submit.style.display = 'none';
+    // Enable Next if question is answered
+    this.dom.buttons.next.disabled = !isAnswered;
+  } else {
+    // Last question - hide Next, show Submit
+    this.dom.buttons.next.style.display = 'none';
+    this.dom.buttons.submit.style.display = '';
+    // Enable Submit if all questions are answered
+    this.dom.buttons.submit.disabled = !this.quizManager.isQuizComplete();
+  }
+};
+
+/** Affiche la question actuelle */
+QuizUI.prototype.renderCurrentQuestion = function() {
+  const questionContainer = this.dom.quiz;
+  if (!questionContainer) return;
+  
+  const currentQuestionData = this.quizManager.getCurrentQuestion();
+  if (!currentQuestionData) {
+    questionContainer.innerHTML = '<p class="error-message">Question non disponible.</p>';
+    return;
+  }
+  
+  // Reset feedback area
+  if (this.dom.feedback) {
+    this.dom.feedback.innerHTML = '';
+    this.dom.feedback.classList.remove('correct', 'incorrect');
+  }
+  
+  // Create question container
+  const wrapper = document.createElement('div');
+  wrapper.className = 'question';
+  
+  // Question number and text
+  const questionIndex = this.quizManager.getCurrentQuestionIndex();
+  const questionNumber = questionIndex + 1;
+  const totalQuestions = this.quizManager.getQuestionCount();
+  
+  const questionHeader = document.createElement('div');
+  questionHeader.className = 'question-header';
+  questionHeader.innerHTML = `
+    <span class="question-number">Question ${questionNumber}/${totalQuestions}</span>
+  `;
+  
+  const questionText = document.createElement('div');
+  questionText.className = 'question-text';
+  questionText.innerHTML = currentQuestionData.text;
+  
+  wrapper.appendChild(questionHeader);
+  wrapper.appendChild(questionText);
+  
+  // Instructions if provided
+  if (currentQuestionData.instructions) {
+    const instructions = document.createElement('div');
+    instructions.className = 'question-instructions';
+    instructions.textContent = currentQuestionData.instructions;
+    wrapper.appendChild(instructions);
+  }
+  
+  // Create answer options based on question type
+  const answersContainer = document.createElement('div');
+  answersContainer.className = 'answers-container';
+  
+  // Get saved answer from quiz manager if question was already answered
+  const savedAnswer = this.quizManager.getSavedAnswer(questionIndex);
+  
+  switch (currentQuestionData.type) {
+    case 'multiple-choice':
+      this._renderMultipleChoice(answersContainer, currentQuestionData, savedAnswer);
+      break;
+      
+    case 'text-input':
+      this._renderTextInput(answersContainer, currentQuestionData, savedAnswer);
+      break;
+      
+    case 'matching':
+      this._renderMatching(answersContainer, currentQuestionData, savedAnswer);
+      break;
+      
+    case 'fill-in-blanks':
+      this._renderFillInBlanks(answersContainer, currentQuestionData, savedAnswer);
+      break;
+      
+    default:
+      answersContainer.innerHTML = '<p class="error-message">Type de question non pris en charge.</p>';
+  }
+  
+  wrapper.appendChild(answersContainer);
+  
+  // Clear and add new question
+  questionContainer.innerHTML = '';
+  questionContainer.appendChild(wrapper);
+  
+  // Update UI state
+  this.renderQuizProgress();
+};
+
+/** Render multiple choice question */
+QuizUI.prototype._renderMultipleChoice = function(container, question, savedAnswer) {
+  const isMultiAnswer = question.multiAnswer || false;
+  const optionsType = isMultiAnswer ? 'checkbox' : 'radio';
+  const optionsName = `question-${question.id}-options`;
+  
+  const form = document.createElement('form');
+  form.className = 'options-form';
+  form.setAttribute('data-question-id', question.id);
+  
+  // Helper to check if an option was selected in saved answer
+  const isSelected = (optionValue) => {
+    if (!savedAnswer) return false;
+    if (Array.isArray(savedAnswer)) {
+      return savedAnswer.includes(optionValue);
+    }
+    return savedAnswer === optionValue;
+  };
+  
+  // Create options
+  question.options.forEach((option, index) => {
+    const optionId = `option-${question.id}-${index}`;
+    const optionDiv = document.createElement('div');
+    optionDiv.className = 'option';
+    
+    // If saved answer exists and matches this option, add selected class
+    if (isSelected(option.value || index)) {
+      optionDiv.classList.add('selected');
+    }
+    
+    const input = document.createElement('input');
+    input.type = optionsType;
+    input.id = optionId;
+    input.name = optionsName;
+    input.value = option.value || index;
+    input.checked = isSelected(option.value || index);
+    
+    const label = document.createElement('label');
+    label.htmlFor = optionId;
+    label.innerHTML = option.text;
+    
+    // Add change event listener
+    input.addEventListener('change', (e) => {
+      // Update UI
+      const selectedOptions = form.querySelectorAll('.selected');
+      selectedOptions.forEach(el => el.classList.remove('selected'));
+      
+      if (isMultiAnswer) {
+        // For checkboxes, add selected class to all checked options
+        const checkedInputs = form.querySelectorAll('input:checked');
+        checkedInputs.forEach(input => {
+          input.closest('.option').classList.add('selected');
+        });
+        
+        // Get all selected values
+        const selectedValues = Array.from(checkedInputs).map(input => input.value);
+        this.quizManager.saveAnswer(question.id, selectedValues);
+      } else {
+        // For radio, just add to the clicked option
+        e.target.closest('.option').classList.add('selected');
+        this.quizManager.saveAnswer(question.id, e.target.value);
+      }
+      
+      // Update navigation buttons
+      this.updateNavigationButtons();
+    });
+    
+    optionDiv.appendChild(input);
+    optionDiv.appendChild(label);
+    form.appendChild(optionDiv);
+  });
+  
+  container.appendChild(form);
+};
+
+/** Render text input question */
+QuizUI.prototype._renderTextInput = function(container, question, savedAnswer) {
+  const form = document.createElement('form');
+  form.className = 'text-input-form';
+  form.setAttribute('data-question-id', question.id);
+  
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'text-answer-input';
+  input.placeholder = question.placeholder || 'Tapez votre réponse ici';
+  input.value = savedAnswer || '';
+  
+  // Add input event listener
+  input.addEventListener('input', (e) => {
+    const answer = e.target.value.trim();
+    this.quizManager.saveAnswer(question.id, answer);
+    this.updateNavigationButtons();
+  });
+  
+  form.appendChild(input);
+  container.appendChild(form);
+};
+
+/** Render matching question */
+QuizUI.prototype._renderMatching = function(container, question, savedAnswer) {
+  const matchingContainer = document.createElement('div');
+  matchingContainer.className = 'matching-container';
+  
+  // Create left column items
+  const leftColumn = document.createElement('div');
+  leftColumn.className = 'matching-column left-column';
+  
+  question.items.forEach((item, index) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'matching-item';
+    itemDiv.setAttribute('data-item-id', index);
+    itemDiv.innerHTML = `
+      <span class="item-number">${index + 1}.</span>
+      <span class="item-text">${item.text}</span>
+    `;
+    leftColumn.appendChild(itemDiv);
+  });
+  
+  // Create right column (matches)
+  const rightColumn = document.createElement('div');
+  rightColumn.className = 'matching-column right-column';
+  
+  // Create selects for each item
+  question.items.forEach((item, index) => {
+    const selectDiv = document.createElement('div');
+    selectDiv.className = 'matching-select';
+    
+    const select = document.createElement('select');
+    select.setAttribute('data-item-id', index);
+    
+    // Add empty option
+    const emptyOption = document.createElement('option');
+    emptyOption.value = '';
+    emptyOption.textContent = '-- Choisir --';
+    select.appendChild(emptyOption);
+    
+    // Add match options
+    question.matches.forEach((match, matchIndex) => {
+      const option = document.createElement('option');
+      option.value = matchIndex;
+      option.textContent = match.text;
+      
+      // If saved answer exists and matches this item, select it
+      if (savedAnswer && savedAnswer[index] === matchIndex) {
+        option.selected = true;
+      }
+      
+      select.appendChild(option);
+    });
+    
+    // Add change event listener
+    select.addEventListener('change', () => {
+      const currentAnswer = savedAnswer ? {...savedAnswer} : {};
+      
+      if (select.value === '') {
+        // Remove this match from answer
+        delete currentAnswer[index];
+      } else {
+        // Add or update this match
+        currentAnswer[index] = Number(select.value);
+      }
+      
+      this.quizManager.saveAnswer(question.id, currentAnswer);
+      this.updateNavigationButtons();
+    });
+    
+    selectDiv.appendChild(select);
+    rightColumn.appendChild(selectDiv);
+  });
+  
+  matchingContainer.appendChild(leftColumn);
+  matchingContainer.appendChild(rightColumn);
+  container.appendChild(matchingContainer);
+};
+
+
+      /** Render fill-in-blanks question (suite) */
+QuizUI.prototype._renderFillInBlanks = function(container, question, savedAnswer) {
+  const fillBlanksContainer = document.createElement('div');
+  fillBlanksContainer.className = 'fill-blanks-container';
+  
+  // Parse text and replace blanks with input fields
+  const segments = question.text.split(/\{blank(\d+)\}/);
+  const blanksCount = segments.length > 1 ? (segments.length - 1) / 2 : 0;
+  
+  const textContainer = document.createElement('div');
+  textContainer.className = 'fill-blanks-text';
+  
+  for (let i = 0; i < segments.length; i++) {
+    // Text segments
+    if (i % 2 === 0) {
+      const textSpan = document.createElement('span');
+      textSpan.innerHTML = segments[i];
+      textContainer.appendChild(textSpan);
+    } else {
+      // Blank inputs
+      const blankIndex = parseInt(segments[i]) - 1;
+      const inputId = `blank-${question.id}-${blankIndex}`;
+      
+      const inputWrapper = document.createElement('span');
+      inputWrapper.className = 'blank-input-wrapper';
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'blank-input';
+      input.id = inputId;
+      input.setAttribute('data-blank-index', blankIndex);
+      
+      // Set saved value if exists
+      if (savedAnswer && savedAnswer[blankIndex]) {
+        input.value = savedAnswer[blankIndex];
+      }
+      
+      // Add input event listener
+      input.addEventListener('input', () => {
+        const currentAnswer = savedAnswer ? {...savedAnswer} : {};
+        currentAnswer[blankIndex] = input.value.trim();
+        this.quizManager.saveAnswer(question.id, currentAnswer);
+        this.updateNavigationButtons();
+      });
+      
+      inputWrapper.appendChild(input);
+      textContainer.appendChild(inputWrapper);
+    }
+  }
+  
+  fillBlanksContainer.appendChild(textContainer);
+  container.appendChild(fillBlanksContainer);
+};
+
+// ----- Navigation des questions -----
+
+/** Passe à la question précédente */
+QuizUI.prototype.goToPreviousQuestion = function() {
+  if (this.quizManager.goToPrevQuestion()) {
+    this.renderCurrentQuestion();
+  }
+};
+
+/** Passe à la question suivante */
+QuizUI.prototype.goToNextQuestion = function() {
+  if (this.quizManager.goToNextQuestion()) {
+    this.renderCurrentQuestion();
+  }
+};
+
+/** Affiche les résultats du quiz */
+QuizUI.prototype.showResults = function() {
+  // Verify all questions are answered
+  if (!this.quizManager.isQuizComplete()) {
+    alert('Veuillez répondre à toutes les questions avant de terminer le quiz.');
+    return;
+  }
+  
+  // Stop timer if running
+  this.stopTimer();
+  
+  // Calculate results
+  const results = this.quizManager.calculateResults();
+  
+  // Store results in local storage
+  this.quizManager.saveQuizResults(results);
+  
+  // Display results screen
+  this.renderResultsScreen(results);
+  this._transitionScreen(this.dom.screens.result);
+};
+
+/** Affiche l'écran des résultats */
+QuizUI.prototype.renderResultsScreen = function(results) {
+  const resultScreen = this.dom.screens.result;
+  if (!resultScreen) return;
+  
+  const quizData = this.quizManager.getQuizData();
+  const totalQuestions = results.totalQuestions;
+  const correctAnswers = results.correctAnswers;
+  const score = results.score;
+  const totalTime = results.totalTime || 0;
+  
+  // Format time
+  const minutes = Math.floor(totalTime / 60);
+  const seconds = totalTime % 60;
+  const timeFormatted = `${minutes}m ${seconds}s`;
+  
+  // Determine result message based on score
+  let resultMessage = '';
+  let resultIcon = '';
+  
+  if (score >= 90) {
+    resultMessage = 'Excellent !';
+    resultIcon = '<i class="fas fa-trophy"></i>';
+  } else if (score >= 70) {
+    resultMessage = 'Bon travail !';
+    resultIcon = '<i class="fas fa-award"></i>';
+  } else if (score >= 50) {
+    resultMessage = 'Pas mal.';
+    resultIcon = '<i class="fas fa-thumbs-up"></i>';
+  } else {
+    resultMessage = 'Continue tes efforts.';
+    resultIcon = '<i class="fas fa-book"></i>';
+  }
+  
+  // Create results HTML
+  resultScreen.innerHTML = `
+    <div class="results-container">
+      <h1>Résultats du Quiz</h1>
+      <h2>${quizData.name}</h2>
+      
+      <div class="result-summary">
+        <div class="result-message">
+          ${resultIcon}
+          <h3>${resultMessage}</h3>
+        </div>
+        
+        <div class="score-display">
+          <div class="score-circle">
+            <span class="score-value">${score}%</span>
+          </div>
+          <p>${correctAnswers} sur ${totalQuestions} réponses correctes</p>
+        </div>
+        
+        <div class="result-details">
+          <p><i class="far fa-clock"></i> Temps total: ${timeFormatted}</p>
+          <p><i class="fas fa-calendar"></i> Terminé le ${new Date().toLocaleDateString()}</p>
+        </div>
+      </div>
+      
+      <div class="question-results">
+        <h3>Détail des questions</h3>
+        <div class="questions-list">
+          ${this._generateQuestionResultsList(results.questionResults)}
+        </div>
+      </div>
+      
+      <div class="buttons">
+        <div class="button-group">
+          <button id="restart-quiz" class="btn btn-secondary">
+            <i class="fas fa-redo btn-icon"></i>Recommencer
+          </button>
+          <button id="exit-results" class="btn btn-secondary">
+            <i class="fas fa-list btn-icon"></i>Liste des Quiz
+          </button>
+        </div>
+        <div class="button-group">
+          <button id="export-results" class="btn">
+            <i class="fas fa-download btn-icon"></i>Exporter
+          </button>
+          <button id="print-results" class="btn">
+            <i class="fas fa-print btn-icon"></i>Imprimer
+          </button>
+          <button id="copy-results" class="btn">
+            <i class="fas fa-copy btn-icon"></i>Copier
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Set up result screen button event listeners
+  resultScreen.querySelector('#restart-quiz').addEventListener('click', () => this.restartCurrentQuiz());
+  resultScreen.querySelector('#exit-results').addEventListener('click', () => this.showQuizSelection());
+  resultScreen.querySelector('#export-results').addEventListener('click', () => this.exportResults());
+  resultScreen.querySelector('#print-results').addEventListener('click', () => this.printResults());
+  resultScreen.querySelector('#copy-results').addEventListener('click', () => this.copyShareText());
+};
+
+/** Génère la liste détaillée des résultats pour chaque question */
+QuizUI.prototype._generateQuestionResultsList = function(questionResults) {
+  if (!questionResults || questionResults.length === 0) {
+    return '<p class="no-data">Aucun détail disponible.</p>';
+  }
+  
+  let html = '';
+  
+  questionResults.forEach((result, index) => {
+    const questionNumber = index + 1;
+    const iconClass = result.isCorrect ? 'fa-check-circle correct' : 'fa-times-circle incorrect';
+    
+    html += `
+      <div class="question-result ${result.isCorrect ? 'correct' : 'incorrect'}">
+        <div class="question-result-header">
+          <span class="question-number">Question ${questionNumber}</span>
+          <i class="fas ${iconClass}"></i>
+        </div>
+        <div class="question-result-content">
+          <p>${result.question}</p>
+          <div class="answer-comparison">
+            <div class="user-answer">
+              <span class="label">Votre réponse:</span>
+              <span class="value">${result.userAnswer}</span>
+            </div>
+            <div class="correct-answer">
+              <span class="label">Réponse correcte:</span>
+              <span class="value">${result.correctAnswer}</span>
+            </div>
+          </div>
+          ${result.explanation ? `<div class="explanation">${result.explanation}</div>` : ''}
+        </div>
+      </div>
+    `;
+  });
+  
+  return html;
+};
+
+/** Redémarre le quiz actuel */
+QuizUI.prototype.restartCurrentQuiz = function() {
+  if (confirm('Voulez-vous recommencer ce quiz ?')) {
+    this.quizManager.restartQuiz();
+    this._transitionScreen(this.dom.screens.quiz);
+    this.renderQuizProgress();
+    this.renderCurrentQuestion();
+    
+    // Reset and start timer if enabled
+    if (this.quizManager.timerEnabled) {
+      this.startTimer();
+    }
+  }
+};
+
+/** Exporte les résultats au format CSV */
+QuizUI.prototype.exportResults = function() {
+  const results = this.quizManager.getLastResults();
+  if (!results) {
+    alert('Aucun résultat à exporter.');
+    return;
+  }
+  
+  const quizData = this.quizManager.getQuizData();
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0, 10);
+  
+  // Build CSV content
+  let csvContent = 'Question,Votre Réponse,Réponse Correcte,Résultat\n';
+  
+  results.questionResults.forEach(result => {
+    // Escape commas and quotes in text fields
+    const question = `"${result.question.replace(/"/g, '""')}"`;
+    const userAnswer = `"${result.userAnswer.replace(/"/g, '""')}"`;
+    const correctAnswer = `"${result.correctAnswer.replace(/"/g, '""')}"`;
+    const isCorrect = result.isCorrect ? 'Correct' : 'Incorrect';
+    
+    csvContent += `${question},${userAnswer},${correctAnswer},${isCorrect}\n`;
+  });
+  
+  // Add summary
+  csvContent += '\n';
+  csvContent += `"Quiz","${quizData.name}"\n`;
+  csvContent += `"Score","${results.score}%"\n`;
+  csvContent += `"Correct Answers","${results.correctAnswers}/${results.totalQuestions}"\n`;
+  
+  // Create and download the file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `quiz-results-${quizData.id}-${dateStr}.csv`;
+  link.style.display = 'none';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+/** Imprime les résultats */
+QuizUI.prototype.printResults = function() {
+  window.print();
+};
+
+/** Copie le texte de partage des résultats */
+QuizUI.prototype.copyShareText = function() {
+  const results = this.quizManager.getLastResults();
+  if (!results) {
+    alert('Aucun résultat à partager.');
+    return;
+  }
+  
+  const quizData = this.quizManager.getQuizData();
+  
+  // Build share text
+  const shareText = `
+J'ai obtenu ${results.score}% au quiz "${quizData.name}" sur Test Your French !
+${results.correctAnswers} bonnes réponses sur ${results.totalQuestions} questions.
+Essaie de battre mon score !
+  `;
+  
+  // Use the clipboard API if available
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareText.trim())
+      .then(() => {
+        alert('Résultats copiés dans le presse-papier !');
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+        this._fallbackCopy(shareText.trim());
+      });
+  } else {
+    this._fallbackCopy(shareText.trim());
+  }
+};
+
+/** Méthode de secours pour copier du texte */
+QuizUI.prototype._fallbackCopy = function(text) {
+  // Create a temporary textarea
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      alert('Résultats copiés dans le presse-papier !');
+    } else {
+      console.error('Failed to execute copy command');
+      // Show the text to manually copy
+      alert('Impossible de copier automatiquement. Voici le texte à copier :\n\n' + text);
+    }
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+    // Show the text to manually copy
+    alert('Impossible de copier automatiquement. Voici le texte à copier :\n\n' + text);
+  }
+  
+  document.body.removeChild(textarea);
+};
+
+// ----- Gestion du timer -----
+
+/** Démarre le timer du quiz */
+QuizUI.prototype.startTimer = function() {
+  // Clear any existing timer interval
+  this.stopTimer();
+  
+  // Initialize timer start time in quiz manager
+  this.quizManager.startTimer();
+  
+  // Show timer UI
+  this.updateTimerUIState();
+  
+  // Start timer update interval
+  this.timerInterval = setInterval(() => {
+    this.updateTimerDisplay();
+  }, 1000); // Update every second
+  
+  // Update display immediately
+  this.updateTimerDisplay();
+};
+
+/** Arrête le timer du quiz */
+QuizUI.prototype.stopTimer = function() {
+  // Clear interval
+  if (this.timerInterval) {
+    clearInterval(this.timerInterval);
+    this.timerInterval = null;
+  }
+  
+  // Tell quiz manager to stop and get elapsed time
+  this.quizManager.stopTimer();
+  
+  // Update display one last time
+  this.updateTimerDisplay();
+};
+
+/** Affiche/cache le timer */
+QuizUI.prototype.toggleTimer = function() {
+  const timerDisplay = this.dom.quiz.timer.display;
+  const toggleButton = this.dom.quiz.timer.toggle;
+  
+  if (!timerDisplay || !toggleButton) return;
+  
+  const isVisible = !timerDisplay.classList.contains('timer-hidden');
+  
+  if (isVisible) {
+    // Hide timer
+    timerDisplay.classList.add('timer-hidden');
+    toggleButton.innerHTML = '<i class="fas fa-eye"></i>';
+    toggleButton.setAttribute('aria-label', 'Afficher le chronomètre');
+  } else {
+    // Show timer
+    timerDisplay.classList.remove('timer-hidden');
+    toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
+    toggleButton.setAttribute('aria-label', 'Masquer le chronomètre');
+  }
+};
+
+/** Met à jour l'affichage du timer */
+QuizUI.prototype.updateTimerDisplay = function() {
+  const timerValue = this.dom.quiz.timer.value;
+  if (!timerValue) return;
+  
+  const elapsedSeconds = this.quizManager.getElapsedTime();
+  
+  // Format time as MM:SS
+  const minutes = Math.floor(elapsedSeconds / 60);
+  const seconds = elapsedSeconds % 60;
+  
+  const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
+  const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
+  
+  timerValue.textContent = `${minutesStr}:${secondsStr}`;
+};
+
+/** Met à jour l'état du timer dans l'UI */
+QuizUI.prototype.updateTimerUIState = function() {
+  const timerContainer = this.dom.quiz.timer.container;
+  if (!timerContainer) return;
+  
+  if (this.quizManager.timerEnabled) {
+    timerContainer.classList.remove('hidden');
+  } else {
+    timerContainer.classList.add('hidden');
+    this.stopTimer(); // Ensure timer is stopped if disabled
+  }
+};
