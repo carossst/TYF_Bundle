@@ -1,6 +1,8 @@
-// js/themeController.js - Version 2.2.0 (11/04/2025)
-// Contrôleur pour la gestion des thèmes et des quiz dans l'application
-// Implémente le chargement à la demande et le cycle de vie des données
+/*
+ * js/themeController.js - Version 2.2.1 (Fixed version)
+ * Contrôleur pour la gestion des thèmes et des quiz dans l'application
+ * Implémente le chargement à la demande et le cycle de vie des données
+ */
 
 import resourceManager from './resourceManager.js';
 import storage from './storage.js';
@@ -15,7 +17,7 @@ class ThemeController {
       quizzes: false
     };
     
-    console.log("ThemeController initialisé (v2.2.0)");
+    console.log("ThemeController initialisé (v2.2.1 - Fixed)");
   }
 
   /**
@@ -54,13 +56,13 @@ class ThemeController {
       
       // Informations de base sur la progression
       let completedQuizzes = 0;
-      const totalQuizzes = theme.quizzes.length;
+      const totalQuizzes = theme.quizzes ? theme.quizzes.length : 0;
       
-      // Si des données de progression existent pour ce thème
-      if (themeProgress && themeProgress.quizzes) {
+      // Si des données de progression existent pour ce thème et qu'il y a des quiz
+      if (themeProgress && themeProgress.quizzes && theme.quizzes) {
         // Compter les quiz complétés
         for (const quizId in themeProgress.quizzes) {
-          if (themeProgress.quizzes[quizId].completed) {
+          if (themeProgress.quizzes[quizId] && themeProgress.quizzes[quizId].completed) {
             completedQuizzes++;
           }
         }
@@ -90,28 +92,6 @@ class ThemeController {
         }
       };
     });
-  }
-  
-  /**
-   * Récupère les détails d'un thème spécifique
-   * @param {number} themeId - ID du thème
-   * @returns {Promise<Object>} Données détaillées du thème
-   */
-  async getTheme(themeId) {
-    this.currentThemeId = themeId;
-    
-    try {
-      // Charger les données complètes du thème
-      const themeData = await resourceManager.getTheme(themeId);
-      
-      // Précharger le premier quiz de chaque thème en arrière-plan
-      this.preloadFirstQuizzes(themeId);
-      
-      return themeData;
-    } catch (error) {
-      console.error(`Erreur lors du chargement du thème ${themeId}:`, error);
-      throw error;
-    }
   }
   
   /**
@@ -182,7 +162,7 @@ class ThemeController {
     try {
       // Charger les métadonnées si nécessaire
       const metadata = await resourceManager.loadMetadata();
-      const themeInfo = metadata.themes.find(theme => theme.id === themeId);
+      const themeInfo = metadata.themes.find(theme => theme.id === Number(themeId));
       
       if (themeInfo && themeInfo.quizzes && themeInfo.quizzes.length > 0) {
         // Précharger le premier quiz de ce thème
@@ -210,7 +190,7 @@ class ThemeController {
       const quizzes = await resourceManager.getThemeQuizzes(themeId);
       
       // Filtrer pour exclure le quiz déjà chargé
-      const otherQuizzes = quizzes.filter(quiz => quiz.id !== selectedQuizId);
+      const otherQuizzes = quizzes.filter(quiz => quiz.id !== Number(selectedQuizId));
       
       // Précharger en arrière-plan
       for (const quiz of otherQuizzes) {
