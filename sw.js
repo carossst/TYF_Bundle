@@ -1,16 +1,16 @@
 // sw.js - Service Worker adapté à votre structure exacte
-const CACHE_NAME = 'test-your-french-cache-v2.2.1';
+const CACHE_NAME = 'test-your-french-cache-v2.2.2';
 const APP_SHELL = [
   './',
   './index.html',
   './style.css',
   './manifest.json',
-  './js/data/main.js', 
-  './js/data/quizManager.js',
-  './js/data/resourceManager.js',
-  './js/data/storage.js',
-  './js/data/ui.js',
-  './js/data/themes/metadata.json',
+  './js/main.js',           // Chemin correct
+  './js/quizManager.js',    // Chemin correct
+  './js/resourceManager.js', // Chemin correct
+  './js/storage.js',        // Chemin correct
+  './js/ui.js',             // Chemin correct
+  './js/data/metadata.json', // Chemin correct
   './icons/icon-192x192.png'
 ];
 
@@ -110,10 +110,13 @@ self.addEventListener('fetch', (event) => {
 // Special handler for metadata.json requests
 async function handleMetadataRequest() {
   const possiblePaths = [
-    './js/data/themes/metadata.json',
-    './js/data/metadata.json',
-    './themes/metadata.json',
-    './metadata.json'
+    './js/data/metadata.json',      // Chemin correct (primaire)
+    './metadata.json',              // Fallback à la racine
+    './js/metadata.json',           // Autre alternative
+    './js/data/themes/metadata.json', // Autre alternative
+    // Chemins GitHub Pages
+    '/TYF_Bundle/js/data/metadata.json',
+    '/TYF_Bundle/metadata.json'
   ];
   
   // Try cache first
@@ -149,9 +152,13 @@ async function handleMetadataRequest() {
 // Special handler for quiz requests
 async function handleQuizRequest(themeId, quizFile) {
   const possiblePaths = [
-    `./js/data/themes/theme-${themeId}/${quizFile}`,
-    `./themes/theme-${themeId}/${quizFile}`,
-    `./theme-${themeId}/${quizFile}`
+    `./js/data/themes/theme-${themeId}/${quizFile}`,  // Structure originale
+    `./themes/theme-${themeId}/${quizFile}`,          // Alternative sans js/data
+    `./theme-${themeId}/${quizFile}`,                 // Alternative sans themes/
+    `./js/data/themes/theme-${themeId}/quiz_${quizFile.split('_')[1]}`, // Alternative sans "quiz_" préfixe
+    // Chemins GitHub Pages
+    `/TYF_Bundle/js/data/themes/theme-${themeId}/${quizFile}`,
+    `/TYF_Bundle/themes/theme-${themeId}/${quizFile}`
   ];
   
   // Try cache first
