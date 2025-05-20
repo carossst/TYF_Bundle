@@ -1,10 +1,7 @@
-// js/tests/quiz.test.js - Version 2.2.0 (11/04/2025)
-// Tests unitaires pour les fonctions critiques du QuizManager
-
-// Utilisation du framework de test Jest
+// quiz-test.js - Adapté pour tests avec structure de dossiers correcte
 // Pour exécuter ces tests : npx jest quiz.test.js
 
-import QuizManager from '../quizManager.js';
+import QuizManager from '../js/data/quizManager.js';
 
 // Simulacre des données de quiz pour les tests
 const mockQuizData = {

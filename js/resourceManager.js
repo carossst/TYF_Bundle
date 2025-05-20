@@ -1,18 +1,20 @@
-// resourceManager.js - Version simplifiée et corrigée
-class ResourceManager {
-  constructor() {
+// resourceManager.js - Version non-module pour éviter les problèmes d'importation
+// Cette version utilise une variable globale ResourceManager au lieu d'export/import
+
+// Créer un objet global ResourceManager
+window.ResourceManager = (function() {
+  
+  // Constructeur
+  function ResourceManagerClass() {
     this.cache = {
       metadata: null,
       quizzes: {}
     };
-    // Utilisation de chemins relatifs simples
-    console.log("ResourceManager initialized (fixed path version)");
+    console.log("ResourceManager initialized (non-module version)");
   }
-
-  /**
-   * Charge et met en cache les métadonnées des thèmes et quizzes.
-   */
-  async loadMetadata() {
+  
+  // Méthodes
+  ResourceManagerClass.prototype.loadMetadata = async function() {
     // Vérifier le cache d'abord
     if (this.cache.metadata) {
       return this.cache.metadata;
@@ -22,9 +24,10 @@ class ResourceManager {
 
     // Liste des chemins possibles à essayer
     const pathsToTry = [
+      './js/data/themes/metadata.json',
+      './js/data/metadata.json',
       './themes/metadata.json',
-      './metadata.json',
-      './data/metadata.json'
+      './metadata.json'
     ];
 
     let metadata = null;
@@ -58,12 +61,9 @@ class ResourceManager {
     this.cache.metadata = metadata;
     console.log(`Métadonnées chargées avec succès depuis ${successPath}`);
     return metadata;
-  }
+  };
 
-  /**
-   * Récupère la liste des quiz pour un thème donné.
-   */
-  async getThemeQuizzes(themeId) {
+  ResourceManagerClass.prototype.getThemeQuizzes = async function(themeId) {
     try {
       const metadata = await this.loadMetadata();
       const theme = metadata.themes.find(t => t.id === Number(themeId));
@@ -77,12 +77,9 @@ class ResourceManager {
       console.error(`Erreur lors de la récupération des quiz pour le thème ${themeId}:`, error);
       throw error;
     }
-  }
+  };
 
-  /**
-   * Charge et met en cache les données d'un quiz spécifique.
-   */
-  async getQuiz(themeId, quizId) {
+  ResourceManagerClass.prototype.getQuiz = async function(themeId, quizId) {
     const cacheKey = `quiz_${quizId}`;
 
     // Vérifier le cache
@@ -92,10 +89,10 @@ class ResourceManager {
 
     // Liste des chemins possibles à essayer
     const pathsToTry = [
-      `./theme-${themeId}/quiz_${quizId}.json`,
+      `./js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
       `./themes/theme-${themeId}/quiz_${quizId}.json`,
-      `./quizzes/theme-${themeId}/quiz_${quizId}.json`,
-      `./quiz_${quizId}.json` // Fallback
+      `./data/themes/theme-${themeId}/quiz_${quizId}.json`,
+      `./theme-${themeId}/quiz_${quizId}.json` // Fallback
     ];
 
     let quizData = null;
@@ -135,12 +132,9 @@ class ResourceManager {
     this.cache.quizzes[cacheKey] = quizData;
     console.log(`Quiz ${quizId} (Thème ${themeId}) chargé avec succès depuis ${successPath}`);
     return quizData;
-  }
+  };
 
-  /**
-   * Précharge les quiz d'un thème.
-   */
-  async preloadThemeQuizzes(themeId) {
+  ResourceManagerClass.prototype.preloadThemeQuizzes = async function(themeId) {
     console.log(`Préchargement des quiz pour le thème ${themeId}...`);
     try {
       const quizzesMeta = await this.getThemeQuizzes(themeId);
@@ -160,12 +154,9 @@ class ResourceManager {
     } catch (error) {
       console.error(`Erreur lors du préchargement pour le thème ${themeId}:`, error);
     }
-  }
+  };
 
-  /**
-   * Vide le cache.
-   */
-  clearCache(type = 'all') {
+  ResourceManagerClass.prototype.clearCache = function(type = 'all') {
     if (type === 'all' || type === 'metadata') {
       this.cache.metadata = null;
       console.log("Cache des métadonnées vidé");
@@ -174,8 +165,11 @@ class ResourceManager {
       this.cache.quizzes = {};
       console.log("Cache des quiz vidé");
     }
-  }
-}
+  };
 
-// Exporter une instance unique
-export default new ResourceManager();
+  // Retourner une instance unique (singleton)
+  return new ResourceManagerClass();
+})();
+
+// Pour compatibilité avec la version module
+var resourceManager = window.ResourceManager;

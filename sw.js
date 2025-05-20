@@ -5,14 +5,12 @@ const APP_SHELL = [
   './index.html',
   './style.css',
   './manifest.json',
-  './js/main.js', 
-  './data/main.js',          // Chemins alternatifs basés sur votre structure
-  './data/quizManager.js',
-  './data/resourceManager.js',
-  './data/storage.js',
-  './data/ui.js',
-  './themes/metadata.json',  // Selon votre structure
-  './metadata.json',         // Alternative
+  './js/data/main.js', 
+  './js/data/quizManager.js',
+  './js/data/resourceManager.js',
+  './js/data/storage.js',
+  './js/data/ui.js',
+  './js/data/themes/metadata.json',
   './icons/icon-192x192.png'
 ];
 
@@ -112,9 +110,10 @@ self.addEventListener('fetch', (event) => {
 // Special handler for metadata.json requests
 async function handleMetadataRequest() {
   const possiblePaths = [
-    './metadata.json',
+    './js/data/themes/metadata.json',
+    './js/data/metadata.json',
     './themes/metadata.json',
-    './data/metadata.json'
+    './metadata.json'
   ];
   
   // Try cache first
@@ -150,8 +149,9 @@ async function handleMetadataRequest() {
 // Special handler for quiz requests
 async function handleQuizRequest(themeId, quizFile) {
   const possiblePaths = [
-    `./theme-${themeId}/${quizFile}`,
-    `./themes/theme-${themeId}/${quizFile}`
+    `./js/data/themes/theme-${themeId}/${quizFile}`,
+    `./themes/theme-${themeId}/${quizFile}`,
+    `./theme-${themeId}/${quizFile}`
   ];
   
   // Try cache first

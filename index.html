@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#111f46" />
-  <!-- CSP modifiée pour permettre l'import ES modules correctement -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data:">
   <title>Test Your French</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="manifest" href="./manifest.json">
@@ -13,6 +11,7 @@
   <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
@@ -27,59 +26,155 @@
   </script>
 </head>
 <body>
-  <!-- Le contenu HTML reste le même -->
   <div id="app-container">
     <!-- Welcome Screen -->
     <div id="welcome-screen" class="screen">
-      <div class="quiz-logo">
-        <img src="./icons/icon-192x192.png" alt="Test Your French Logo">
-      </div>
-      <h1>Test Your French</h1>
-      <p class="subtitle">Improve your French with interactive quizzes on various topics.</p>
-
-      <!-- Placeholder for initial stats -->
-      <div id="welcome-stats-placeholder">
-        <!-- Initial stats summary will be injected here -->
-      </div>
-
-      <!-- Global Counters -->
-      <div class="test-details">
-        <div class="detail-item"><i class="fas fa-book-open"></i><span id="total-themes-count">...</span> themes available</div>
-        <div class="detail-item"><i class="fas fa-question-circle"></i>About <span id="total-questions-count">...</span> questions in total</div>
-        <div class="timer-option">
-          <input type="checkbox" id="enable-timer" checked aria-describedby="timer-desc">
-          <label for="enable-timer">Enable quiz timer <i class="far fa-clock" id="timer-desc"></i></label>
+        <div class="quiz-logo">
+            <img src="./icons/icon-192x192.png" alt="Test Your French Logo">
         </div>
-      </div>
+        <h1>Test Your French</h1>
+        <p class="subtitle">Improve your French with interactive quizzes on various topics.</p>
 
-      <!-- Theme list section -->
-      <h2>Sélectionne un thème</h2>
-      <div id="themes-list" class="selection-container">
-        <!-- Themes will be inserted dynamically here -->
-        <p class="loading-message">Chargement des thèmes...</p>
-      </div>
-
-      <div class="buttons">
-        <div class="button-group">
-          <button id="show-stats-btn" class="btn" aria-label="Afficher les statistiques globales">
-            <i class="fas fa-chart-bar btn-icon"></i>Statistiques Globales
-          </button>
+        <!-- Placeholder for initial stats -->
+        <div id="welcome-stats-placeholder">
+            <!-- Initial stats summary will be injected here -->
         </div>
-      </div>
+
+        <!-- Global Counters -->
+        <div class="test-details">
+             <div class="detail-item"><i class="fas fa-book-open"></i><span id="total-themes-count">...</span> themes available</div>
+             <div class="detail-item"><i class="fas fa-question-circle"></i>About <span id="total-questions-count">...</span> questions in total</div>
+             <div class="timer-option">
+                <input type="checkbox" id="enable-timer" checked aria-describedby="timer-desc">
+                <label for="enable-timer">Enable quiz timer <i class="far fa-clock" id="timer-desc"></i></label>
+              </div>
+         </div>
+
+        <!-- New section for theme list -->
+        <h2>Sélectionne un thème</h2>
+        <div id="themes-list" class="selection-container">
+            <!-- Les thèmes seront insérés dynamiquement ici -->
+            <p class="loading-message">Chargement des thèmes...</p>
+        </div>
+
+        <div class="buttons">
+            <div class="button-group">
+                <button id="show-stats-btn" class="btn" aria-label="Afficher les statistiques globales">
+                    <i class="fas fa-chart-bar btn-icon"></i>Statistiques Globales
+                </button>
+            </div>
+        </div>
+
     </div>
-    
-    <!-- Autres écrans maintenus comme dans votre original -->
+    <!-- End Welcome Screen -->
+
+    <!-- Quiz Selection Screen -->
+    <div id="quiz-selection" class="screen hidden">
+        <h1 id="theme-title">Nom du Thème</h1>
+        <p id="theme-description" class="subtitle">Description du thème sélectionné</p>
+
+        <div id="quizzes-list" class="selection-container">
+            <!-- Les quiz seront ajoutés dynamiquement ici -->
+            <p class="loading-message">Chargement des quiz...</p>
+        </div>
+
+        <div class="buttons">
+            <div class="button-group">
+                <button id="back-to-themes" class="btn btn-secondary" aria-label="Retour à l'écran d'accueil">
+                    <i class="fas fa-arrow-left btn-icon"></i>Retour Accueil
+                </button>
+            </div>
+            <div class="button-group">
+                 <button id="show-stats-btn-from-quiz" class="btn" aria-label="Afficher les statistiques globales">
+                     <i class="fas fa-chart-bar btn-icon"></i>Statistiques
+                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="screen hidden">
+        <h1 id="quiz-name">Nom du Quiz</h1>
+
+        <div class="timer-container hidden" id="timer-display">
+            <div class="timer">
+                <i class="fas fa-stopwatch"></i>
+                <span id="timer-value">00:00</span>
+            </div>
+            <button class="timer-toggle" id="timer-toggle" aria-label="Masquer le chronomètre">
+                <i class="fas fa-eye-slash"></i>
+            </button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 0%"></div>
+            </div>
+            <div class="progress-steps" id="progress-steps">
+                <!-- Les étapes seront générées dynamiquement ici -->
+            </div>
+        </div>
+
+        <div id="quiz" class="question-container">
+            <!-- Les questions seront générées dynamiquement ici -->
+            <p class="loading-message">Chargement de la question...</p>
+        </div>
+
+        <div id="feedback" class="feedback-container">
+            <!-- Le feedback sera généré dynamiquement ici -->
+        </div>
+
+        <div class="buttons">
+            <div class="button-group">
+                <button id="exit-quiz" class="btn btn-secondary" aria-label="Quitter le quiz">
+                    <i class="fas fa-times btn-icon"></i>Quitter
+                </button>
+                <button id="prev-btn" class="btn btn-secondary" aria-label="Question précédente" disabled>
+                    <i class="fas fa-chevron-left btn-icon"></i>Précédent
+                </button>
+            </div>
+            <div class="button-group">
+                <button id="next-btn" class="btn" aria-label="Question suivante" disabled>
+                    Suivant<i class="fas fa-chevron-right"></i>
+                </button>
+                <button id="submit-btn" class="btn btn-success" aria-label="Soumettre le quiz" style="display: none;" disabled>
+                    Terminer<i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="result" class="screen" style="display: none;">
+        <!-- Contenu écran résultats -->
+    </div>
+
+    <!-- Stats Screen -->
+     <div id="stats-screen" class="screen hidden">
+         <!-- Contenu écran statistiques -->
+     </div>
+
+    <!-- Badge Notification (add this if not present) -->
+    <div id="badges-notification" class="install-notification hidden">
+        <!-- Badge notification content injected here -->
+         <button class="close-notification" aria-label="Fermer la notification"><i class="fas fa-times"></i></button>
+    </div>
   </div>
 
   <footer class="footer">
-    <div class="footer-content">
-      <a href="/" class="footer-logo">Test Your French</a>
-      <p class="footer-text">Version 2.2.1 - © 2025 French Quiz App</p>
-    </div>
+      <div class="footer-content">
+          <a href="/" class="footer-logo">Test Your French</a>
+          <p class="footer-text">Version 2.2.1 - © 2025 French Quiz App</p>
+      </div>
   </footer>
 
-  <!-- Chargement du script principal directement -->
-  <!-- IMPORTANT: Remplacez "data" par le dossier qui contient réellement main.js -->
-  <script type="module" src="./data/main.js"></script>
+  <!-- Chargement des scripts JavaScript sans modules -->
+  <!-- IMPORTANT: CHEMINS CORRIGÉS POUR CORRESPONDRE À LA STRUCTURE ACTUELLE -->
+  <script src="./js/data/storage.js"></script>
+  <script src="./js/data/resourceManager.js"></script>
+  <script src="./js/data/quizManager.js"></script>
+  <script src="./js/data/ui.js"></script>
+  <script src="./js/data/main.js"></script>
+
 </body>
 </html>
