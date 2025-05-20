@@ -119,7 +119,9 @@ class QuizUI {
            this.themeIndexCache = metadatahidden');
         this.dom.screens.welcome.classList.add('fade-in');
         this.dom.screens.welcome.addEventListener('.themes || []; // Assure que c'est un tableau
-           return this.themeIndexCache;
+          async getThemeIndex() {
+
+          return this.themeIndexCache;
        } catch (error) {
            animationend', () => this.dom.screens.welcome.classList.removeconsole.error("Failed to load theme index in UI:", error);
            throw error('fade-in'), { once: true });
@@ -340,7 +342,11 @@ buttons.backToQuizzes?.addEventListener('click', () => this.show  _hideLoading(c
 
 (this.dom.screens.welcome); }
 
-  async showThemeSelection() {
+  async showThemeSelection() { 
+    console.log("[UI] showThemeSelection triggered");
+    console.trace("[UI] showThemeSelection triggered");
+
+
      this._transitionScreen(this.dom.screens.themeSelection);
      this       if (type === 'theme') {
            const themeId = Number(item.dataset.themeId);
@@ -661,6 +667,8 @@ Result = themeProgress?.quizzes?.[quizMeta.id];
     } catch (e) {endu des listes -----
 
   renderThemes(themes) {
+    console.log("[UI] renderThemes called with:", themes);
+
     const themes
         console.warn("Could not fetch theme name for results display.");
         results.theme.nameList = this.dom.themesList; themesList.innerHTML = '';
@@ -699,6 +707,8 @@ Result = themeProgress?.quizzes?.[quizMeta.id];
     const gérés par délégation dans setupEventListeners
         themesList.appendChild(themeElement);
     });
+    console.log(`[UI] Appended ${themes.length} themes`);
+
    shareTextTemplate = `I scored ${results.score}/${results.total} (${results.accuracy}%) on the "${results.quiz.name}" quiz in the "${results.theme.name}"}
 
   renderQuizzes(themeInfo, quizzesWithProgress) {
