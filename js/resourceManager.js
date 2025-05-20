@@ -1,5 +1,5 @@
 /*
- * js/resourceManager.js - Version 2.2.0 (12 avril 2024)
+ * js/resourceManager.js - Version 2.2.1 (Fixed)
  * Gestionnaire centralisé pour charger les ressources de données dynamiques.
  * Charge metadata.json et les fichiers quiz_XXX.json individuels à la demande.
  * Inclut un cache en mémoire simple.
@@ -11,9 +11,9 @@ class ResourceManager {
       metadata: null,
       quizzes: {} // Cache pour les données de quiz : { "quiz_ID": data }
     };
-    // Optionnel: Définir le chemin de base pour les données
+    // Correction du chemin de base pour les données
     this.baseDataPath = './js/data/';
-    console.log("ResourceManager initialized (V2.2).");
+    console.log("ResourceManager initialized (V2.2.1 - Fixed paths).");
   }
 
   /**
@@ -34,9 +34,27 @@ class ResourceManager {
     try {
       const response = await fetch(metadataUrl);
       if (!response.ok) {
-        // Gérer les erreurs HTTP (ex: 404 Not Found)
-        throw new Error(`Failed to fetch metadata: ${response.status} ${response.statusText}`);
+        // Tentative alternative si le premier chemin échoue
+        const fallbackUrl = './metadata.json';
+        console.warn(`Failed to fetch metadata from ${metadataUrl}, trying fallback: ${fallbackUrl}`);
+        
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          throw new Error(`Failed to fetch metadata: ${response.status} ${response.statusText}`);
+        }
+        
+        const metadata = await fallbackResponse.json();
+        
+        // Validation simple de la structure reçue
+        if (!metadata || !Array.isArray(metadata.themes)) {
+          throw new Error("Invalid metadata structure received.");
+        }
+        
+        this.cache.metadata = metadata; // Mettre en cache
+        console.log("Metadata loaded and cached successfully from fallback location.");
+        return metadata;
       }
+      
       const metadata = await response.json();
 
       // Validation simple de la structure reçue
@@ -102,8 +120,34 @@ class ResourceManager {
     try {
       const response = await fetch(filePath);
       if (!response.ok) {
-        throw new Error(`Failed to fetch quiz ${quizId}: ${response.status} ${response.statusText}`);
+        // Tentative alternative avec un chemin différent
+        const fallbackPath = `./quizzes/theme_${themeId}/quiz_${quizId}.json`;
+        console.warn(`Failed to fetch quiz from ${filePath}, trying fallback: ${fallbackPath}`);
+        
+        const fallbackResponse = await fetch(fallbackPath);
+        if (!fallbackResponse.ok) {
+          throw new Error(`Failed to fetch quiz ${quizId}: ${response.status} ${response.statusText}`);
+        }
+        
+        const quizData = await fallbackResponse.json();
+        
+        // 3. Validation simple de la structure
+        if (!quizData || quizData.id !== Number(quizId) || !Array.isArray(quizData.questions)) {
+          console.error("Invalid quiz data structure received:", quizData);
+          throw new Error(`Invalid data structure loaded for quiz ${quizId}.`);
+        }
+        
+        // Ajouter themeId aux données chargées si absent (utile pour contexte)
+        if (!quizData.themeId) {
+          quizData.themeId = Number(themeId);
+        }
+        
+        // 4. Mettre en cache et retourner
+        this.cache.quizzes[cacheKey] = quizData;
+        console.log(`Quiz ${quizId} (Theme ${themeId}) loaded and cached from fallback location.`);
+        return quizData;
       }
+      
       const quizData = await response.json();
 
       // 3. Validation simple de la structure
@@ -115,7 +159,6 @@ class ResourceManager {
        if (!quizData.themeId) {
            quizData.themeId = Number(themeId);
        }
-
 
       // 4. Mettre en cache et retourner
       this.cache.quizzes[cacheKey] = quizData;

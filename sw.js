@@ -1,145 +1,176 @@
-/*
- * sw.js - Version 2.2.0 (12 avril 2024)
- * Service Worker pour Test Your French (Quiz multi-thèmes)
- * Stratégie: Cache First pour l'App Shell et les ressources pré-cachées.
- * Cache dynamiquement les données de quiz JSON et les fichiers audio au fur et à mesure.
- */
+// sw.js - Fixed Service Worker v2.2.1
+// This service worker handles caching and resolves path issues
 
-const CACHE_NAME = 'french-quiz-cache-v2.2'; // !! IMPORTANT: Changer cette version lors de mises à jour majeures du contenu/code !!
-
-// Ressources essentielles de l'application (App Shell) + metadata
-const CORE_CACHE_RESOURCES = [
-  '/', // Important pour la racine
-  'index.html',
-  'style.css',
-  'manifest.json',
-  'sw.js', // Le SW lui-même, pour les mises à jour
-  // Fichiers JavaScript Core (nécessaires pour démarrer et naviguer)
-  'js/main.js',
-  'js/resourceManager.js',
-  'js/themeController.js',
-  'js/quizManager.js',
-  'js/ui.js',
-  'js/storage.js',
-  // Métadonnées des thèmes/quiz
-  'js/data/metadata.json',
-  // Icônes principales
-  'icons/icon-192x192.png',
-  'icons/icon-512x512.png',
-  // CDN externe (Font Awesome) - Pour une meilleure expérience offline
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+const CACHE_NAME = 'test-your-french-cache-v2.2.1';
+const APP_SHELL = [
+  './',
+  './index.html',
+  './style.css',
+  './js/main.js',
+  './js/ui.js',
+  './js/quizManager.js',
+  './js/resourceManager.js',
+  './js/storage.js',
+  './js/data/metadata.json',  // Corrected path
+  './icons/icon-192x192.png',
+  './manifest.json'
 ];
 
-// --- Installation ---
-self.addEventListener('install', event => {
-  console.log(`[SW ${CACHE_NAME}] Installing...`);
-  self.skipWaiting(); // Force l'activation immédiate du nouveau SW
-
+// Install event - cache the app shell
+self.addEventListener('install', (event) => {
+  console.log('[Service Worker] Installation');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log(`[SW ${CACHE_NAME}] Caching core App Shell resources:`, CORE_CACHE_RESOURCES);
-        // Tenter de mettre en cache l'App Shell. Si cela échoue, l'installation échoue.
-        return cache.addAll(CORE_CACHE_RESOURCES);
-      })
-      .then(() => {
-        console.log(`[SW ${CACHE_NAME}] Core resources cached successfully!`);
-        // Envoyer message à l'app (optionnel)
-        self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
-           if(clients && clients.length){ clients.forEach(client => client.postMessage({ type: 'app-ready-offline' })); }
-        });
+        console.log('[Service Worker] Caching app shell');
+        return cache.addAll(APP_SHELL);
       })
       .catch(error => {
-        // Si l'App Shell ne peut pas être mis en cache, l'installation échoue.
-        console.error(`[SW ${CACHE_NAME}] Installation failed: Could not cache core resources.`, error);
-        // Il est crucial que l'App Shell soit mis en cache pour que l'app fonctionne offline.
-        throw error; // Force l'échec de l'installation
+        console.error('[Service Worker] Install error:', error);
       })
   );
 });
 
-// --- Activation & Nettoyage ---
-self.addEventListener('activate', event => {
-  console.log(`[SW ${CACHE_NAME}] Activating...`);
-  // Prendre contrôle immédiat pour que les nouvelles stratégies de fetch s'appliquent
-  event.waitUntil(self.clients.claim());
-
-  // Nettoyer les anciens caches qui ne correspondent pas à CACHE_NAME
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  console.log('[Service Worker] Activation');
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames
-          .filter(cacheName => cacheName !== CACHE_NAME) // Garde seulement le nouveau cache
-          .map(cacheName => {
-            console.log(`[SW ${CACHE_NAME}] Deleting old cache:`, cacheName);
-            return caches.delete(cacheName);
-          })
-      );
-    }).then(() => {
-      console.log(`[SW ${CACHE_NAME}] Activation complete. Old caches cleaned.`);
+    caches.keys().then(keyList => {
+      return Promise.all(keyList.map(key => {
+        if (key !== CACHE_NAME) {
+          console.log('[Service Worker] Removing old cache', key);
+          return caches.delete(key);
+        }
+      }));
     })
   );
+  return self.clients.claim();
 });
 
-// --- Interception Fetch (Stratégie Cache First, Network Fallback, Cache on Network Success) ---
-self.addEventListener('fetch', event => {
-  const { request } = event;
-
-  // Ignorer requêtes non-GET et extensions chrome/internes
-  if (request.method !== 'GET' || !request.url.startsWith('http')) {
+// Fetch event - handle requests with cache strategy
+self.addEventListener('fetch', (event) => {
+  // Parse the URL
+  const requestUrl = new URL(event.request.url);
+  
+  // Handle data files specially - adjust paths as needed
+  if (requestUrl.pathname.includes('/metadata.json')) {
+    event.respondWith(handleDataRequest('./js/data/metadata.json'));
     return;
   }
-
-  // Ne pas mettre en cache les API externes (si vous en ajoutez)
-  // if (request.url.includes('some-external-api.com')) { return; }
-
+  
+  // For quiz files, adjust path if needed
+  if (requestUrl.pathname.match(/\/quiz_\d+\.json$/)) {
+    const quizFile = requestUrl.pathname.split('/').pop();
+    const themeMatch = requestUrl.pathname.match(/theme_(\d+)/);
+    if (themeMatch && themeMatch[1]) {
+      const themeId = themeMatch[1];
+      const correctedPath = `./js/data/quizzes/theme_${themeId}/${quizFile}`;
+      event.respondWith(handleDataRequest(correctedPath));
+      return;
+    }
+  }
+  
+  // Standard cache-first strategy for other requests
   event.respondWith(
-    caches.open(CACHE_NAME).then(cache => {
-      // 1. Essayer de trouver la requête dans le cache
-      return cache.match(request).then(cachedResponse => {
-        if (cachedResponse) {
-          // console.log(`[SW ${CACHE_NAME}] Serving from Cache: ${request.url}`);
-          return cachedResponse; // Ressource trouvée dans le cache
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response; // Return cached response
         }
-
-        // 2. Non trouvé dans le cache -> Aller au réseau
-        // console.log(`[SW ${CACHE_NAME}] Cache miss, fetching from Network: ${request.url}`);
-        return fetch(request).then(networkResponse => {
-          // Si la réponse réseau est valide (status 2xx)
-          if (networkResponse && networkResponse.ok) {
-            // Cloner la réponse car elle ne peut être lue qu'une fois
+        
+        // Not in cache, fetch from network
+        return fetch(event.request)
+          .then(networkResponse => {
+            // Don't cache cross-origin requests
+            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+              return networkResponse;
+            }
+            
+            // Clone response to cache it
             const responseToCache = networkResponse.clone();
-            // Mettre la réponse réussie en cache pour la prochaine fois
-            // console.log(`[SW ${CACHE_NAME}] Caching successful network response: ${request.url}`);
-            cache.put(request, responseToCache);
-          } else if (networkResponse) {
-             // Si réponse réseau non OK (404, 500), ne PAS la mettre en cache
-             console.warn(`[SW ${CACHE_NAME}] Network response not OK (${networkResponse.status}) for: ${request.url}. Won't cache.`);
-          }
-          // Retourner la réponse réseau (même si elle n'est pas "ok", le navigateur gérera l'erreur)
-          return networkResponse;
-
-        }).catch(error => {
-          // 3. Échec complet du réseau (typiquement offline)
-          console.warn(`[SW ${CACHE_NAME}] Network fetch failed for: ${request.url}`, error);
-          // Ici, on pourrait retourner une page offline générique si elle est pré-cachée:
-          // return cache.match('/offline.html');
-          // Ou juste une réponse d'erreur simple :
-          return new Response("Network error fetching resource.", {
-            status: 408, // Request Timeout
-            headers: { 'Content-Type': 'text/plain' }
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+              
+            return networkResponse;
+          })
+          .catch(error => {
+            console.log('[Service Worker] Fetch error:', error);
+            // Return a fallback page for navigation requests
+            if (event.request.mode === 'navigate') {
+              return caches.match('./index.html');
+            }
+            return new Response('Network error occurred', {
+              status: 503,
+              statusText: 'Service Unavailable'
+            });
           });
-        });
-      });
-    })
+      })
   );
 });
 
-// --- Gestion des Messages ---
-self.addEventListener('message', event => {
+// Special handler for data requests
+function handleDataRequest(correctedPath) {
+  return caches.match(correctedPath)
+    .then(cachedResponse => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      
+      // Try fetching with corrected path
+      return fetch(correctedPath)
+        .then(networkResponse => {
+          if (!networkResponse || networkResponse.status !== 200) {
+            throw new Error('Failed to fetch data');
+          }
+          
+          // Clone and cache
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(correctedPath, responseToCache);
+            });
+            
+          return networkResponse;
+        })
+        .catch(error => {
+          console.error('[Service Worker] Data fetch error:', error);
+          return new Response(JSON.stringify({error: 'Failed to load data'}), {
+            headers: {'Content-Type': 'application/json'},
+            status: 404
+          });
+        });
+    });
+}
+
+// Listen for messages from the main thread
+self.addEventListener('message', (event) => {
   if (event.data && event.data.action === 'skipWaiting') {
-    console.log(`[SW ${CACHE_NAME}] Received skipWaiting command.`);
     self.skipWaiting();
   }
-  // Potentiellement ajouter d'autres actions ici
+  
+  if (event.data && event.data.action === 'checkForUpdates') {
+    console.log('[Service Worker] Checking for updates');
+    // You would add update logic here
+  }
+  
+  if (event.data && event.data.action === 'cacheAudio') {
+    const audioUrl = event.data.url;
+    if (audioUrl) {
+      caches.open(CACHE_NAME)
+        .then(cache => {
+          fetch(audioUrl)
+            .then(response => {
+              if (response.ok) {
+                cache.put(audioUrl, response);
+                console.log('[Service Worker] Cached audio file:', audioUrl);
+              }
+            })
+            .catch(error => {
+              console.error('[Service Worker] Audio caching error:', error);
+            });
+        });
+    }
+  }
 });
