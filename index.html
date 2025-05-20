@@ -2,267 +2,32 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111f46" />
   <title>Test Your French</title>
-  <link rel="stylesheet" href="./style.css">
-  <link rel="manifest" href="./manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192x192.png">
-  <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
-  <script src="./sw.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<!-- Cette section représente la partie manquante à la fin du fichier index.html -->
-
--time-per-question">0s</div>
-                    <p>Durée moyenne par question</p>
-                </div>
-            </div>
-            
-            <!-- Performance par thème -->
-            <div class="themes-performance">
-                <h2>Performance par Thème</h2>
-                <div class="themes-chart">
-                    <div id="themes-bars-container">
-                        <!-- Les barres de thèmes seront générées dynamiquement ici -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Comparaison de thèmes -->
-            <div class="themes-comparison">
-                <h2>Meilleur vs Pire Thème</h2>
-                <div class="comparison-container">
-                    <div class="best-theme">
-                        <h3>Meilleure Performance</h3>
-                        <div id="best-theme-name">Aucune donnée</div>
-                        <div class="theme-accuracy" id="best-theme-accuracy">-</div>
-                    </div>
-                    <div class="worst-theme">
-                        <h3>Performance à Améliorer</h3>
-                        <div id="worst-theme-name">Aucune donnée</div>
-                        <div class="theme-accuracy" id="worst-theme-accuracy">-</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Historique des Quiz -->
-            <div class="recent-history">
-                <h2>Historique Récent</h2>
-                <div id="quiz-history-list" class="history-list">
-                    <!-- L'historique des quiz sera généré dynamiquement ici -->
-                </div>
-            </div>
-            
-            <div class="buttons">
-                <div class="button-group">
-                    <button id="back-from-stats" class="btn btn-secondary" aria-label="Retour à la sélection de thème">
-                        <i class="fas fa-arrow-left btn-icon"></i>Retour
-                    </button>
-                </div>
-                <div class="button-group">
-                    <button id="reset-progress" class="btn btn-danger" aria-label="Réinitialiser toutes les données">
-                        <i class="fas fa-trash-alt btn-icon"></i>Réinitialiser
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Theme Selection Screen -->
-<div id="theme-selection" class="screen">
-  <h1>Sélectionne un thème</h1>
-  <div id="themes-list" class="selection-container">
-    <!-- Les thèmes seront insérés dynamiquement ici -->
-    <p class="loading-message">Chargement des thèmes...</p>
-  </div>
-
-  <div class="buttons">
-    <div class="button-group">
-      <button id="show-stats-btn" class="btn" aria-label="Afficher les statistiques">
-        <i class="fas fa-chart-bar btn-icon"></i>Statistiques
-      </button>
+  <div id="welcome-screen" class="screen">
+    <div class="quiz-logo"><img src="./icons/icon-192x192.png" alt="Logo TYF"></div>
+    <h1>Test Your French</h1>
+    <p class="subtitle">Améliore ton français avec des quiz interactifs !</p>
+    <div id="welcome-stats-placeholder"></div>
+    <div class="test-details">
+      <div class="detail-item"><i class="fas fa-book-open"></i><span id="total-themes-count">...</span> thèmes</div>
+      <div class="detail-item"><i class="fas fa-question-circle"></i><span id="total-questions-count">...</span> questions</div>
+      <div class="timer-option">
+        <input type="checkbox" id="enable-timer" checked>
+        <label for="enable-timer">Activer le minuteur <i class="far fa-clock"></i></label>
+      </div>
+    </div>
+    <h2>Sélectionne un thème</h2>
+    <div id="themes-list" class="selection-container">
+      <p class="loading-message">Chargement des thèmes...</p>
+    </div>
+    <div class="buttons">
+      <div class="button-group">
+        <button id="show-stats-btn" class="btn"><i class="fas fa-chart-bar btn-icon"></i>Statistiques</button>
+      </div>
     </div>
   </div>
-</div>
-
-
-        <!-- Quiz Selection Screen -->
-        <div id="quiz-selection" class="screen hidden">
-            <h1 id="theme-title">Nom du Thème</h1>
-            <p id="theme-description" class="subtitle">Description du thème sélectionné</p>
-            
-            <div id="quizzes-list" class="selection-container">
-                <!-- Les quiz seront ajoutés dynamiquement ici -->
-                <p class="loading-message">Chargement des quiz...</p>
-            </div>
-            
-            <div class="buttons">
-                <div class="button-group">
-                    <button id="back-to-themes" class="btn btn-secondary" aria-label="Retour à la sélection de thème">
-                        <i class="fas fa-arrow-left btn-icon"></i>Retour aux Thèmes
-                    </button>
-                </div>
-                <div class="button-group">
-                    <button id="show-stats-btn" class="btn" aria-label="Afficher les statistiques">
-                        <i class="fas fa-chart-bar btn-icon"></i>Statistiques
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quiz Screen -->
-        <div id="quiz-screen" class="screen hidden">
-            <h1 id="quiz-name">Nom du Quiz</h1>
-            
-            <div class="timer-container hidden" id="timer-display">
-                <div class="timer">
-                    <i class="fas fa-stopwatch"></i>
-                    <span id="timer-value">00:00</span>
-                </div>
-                <button class="timer-toggle" id="timer-toggle" aria-label="Masquer le chronomètre">
-                    <i class="fas fa-eye-slash"></i>
-                </button>
-            </div>
-            
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress" id="progress" style="width: 0%"></div>
-                </div>
-                <div class="progress-steps" id="progress-steps">
-                    <!-- Les étapes seront générées dynamiquement ici -->
-                </div>
-            </div>
-            
-            <div id="quiz" class="question-container">
-                <!-- Les questions seront générées dynamiquement ici -->
-                <p class="loading-message">Chargement de la question...</p>
-            </div>
-            
-            <div id="feedback" class="feedback-container">
-                <!-- Le feedback sera généré dynamiquement ici -->
-            </div>
-            
-            <div class="buttons">
-                <div class="button-group">
-                    <button id="exit-quiz" class="btn btn-secondary" aria-label="Quitter le quiz">
-                        <i class="fas fa-times btn-icon"></i>Quitter
-                    </button>
-                    <button id="prev-btn" class="btn btn-secondary" aria-label="Question précédente" disabled>
-                        <i class="fas fa-chevron-left btn-icon"></i>Précédent
-                    </button>
-                </div>
-                <div class="button-group">
-                    <button id="next-btn" class="btn" aria-label="Question suivante" disabled>
-                        Suivant<i class="fas fa-chevron-right"></i>
-                    </button>
-                    <button id="submit-btn" class="btn btn-success" aria-label="Soumettre le quiz" style="display: none;" disabled>
-                        Terminer<i class="fas fa-check"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Screen -->
-        <div id="result" class="screen" style="display: none;">
-            <div class="result-container">
-                <h1 id="result-quiz-name">Résultats du Quiz</h1>
-                
-                <div class="score-highlight">
-                    <span id="score">0</span>/<span id="total-questions">0</span>
-                </div>
-                
-                <div id="score-message">
-                    <!-- Message d'évaluation généré dynamiquement ici -->
-                </div>
-                
-                <div class="stats-container">
-                    <h2>Vos statistiques</h2>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="accuracy">0%</div>
-                            <div class="stat-label">Précision</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="avg-time">0s</div>
-                            <div class="stat-label">Temps moyen</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="fastest-answer">0s</div>
-                            <div class="stat-label">Réponse la plus rapide</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="slowest-answer">0s</div>
-                            <div class="stat-label">Réponse la plus longue</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="social-share">
-                    <div class="social-share-title">Partagez vos résultats</div>
-                    <div class="copyable-text-container">
-                        <textarea id="share-text" class="copyable-text" readonly aria-label="Texte à partager"></textarea>
-                        <button id="copy-btn" class="btn btn-sm" aria-label="Copier le texte">
-                            <i class="fas fa-copy"></i> Copier
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="summary-container">
-                    <h2>Résumé des réponses</h2>
-                    <div id="answers-summary">
-                        <!-- Résumé des réponses généré dynamiquement ici -->
-                    </div>
-                </div>
-                
-                <div class="cta-container">
-                    <h3>Que faire maintenant ?</h3>
-                    <div class="cta-buttons">
-                        <a id="restart-btn" class="cta-button primary">
-                            <i class="fas fa-redo cta-icon"></i>
-                            <div class="cta-content">
-                                <span class="cta-title">Recommencer ce quiz</span>
-                                <span class="cta-desc">Essayez d'améliorer votre score</span>
-                            </div>
-                            <i class="fas fa-arrow-right cta-arrow"></i>
-                        </a>
-                        <a id="back-to-quizzes-btn" class="cta-button secondary">
-                            <i class="fas fa-th-list cta-icon"></i>
-                            <div class="cta-content">
-                                <span class="cta-title">Explorer d'autres quiz</span>
-                                <span class="cta-desc">Revenez à la sélection de quiz</span>
-                            </div>
-                            <i class="fas fa-arrow-right cta-arrow"></i>
-                        </a>
-                        <a id="export-btn" class="cta-button tertiary">
-                            <i class="fas fa-file-export cta-icon"></i>
-                            <div class="cta-content">
-                                <span class="cta-title">Exporter les résultats</span>
-                                <span class="cta-desc">Sauvegardez vos résultats en fichier texte</span>
-                            </div>
-                            <i class="fas fa-arrow-right cta-arrow"></i>
-                        </a>
-                        <a id="print-btn" class="cta-button tertiary">
-                            <i class="fas fa-print cta-icon"></i>
-                            <div class="cta-content">
-                                <span class="cta-title">Imprimer les résultats</span>
-                                <span class="cta-desc">Obtenez une copie papier de vos résultats</span>
-                            </div>
-                            <i class="fas fa-arrow-right cta-arrow"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <footer class="footer">
-        <div class="footer-content">
-            <a href="/" class="footer-logo">Test Your French</a>
-            <p class="footer-text">Version 2.1.0 - &copy; 2025 French Quiz App</p>
-        </div>
-    </footer>
-
-    <!-- Chargement des modules JavaScript -->
-    <script type="module" src="./js/main.js"></script>
 </body>
 </html>
