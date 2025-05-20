@@ -127,7 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
       // Initialiser l'UI avec les thèmes chargés
       quizUI.initThemesView();
-      quizUI.showWelcomeScreen(); // Affiche l’écran d’accueil au démarrage
+      quizUI.showThemeSelection(); // → affiche directement les 10 thèmes
+
 
     })
     .catch(error => {
