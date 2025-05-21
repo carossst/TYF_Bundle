@@ -3,39 +3,6 @@
   "releaseDate": "2025-05-20",
   "themes": [
     {
-      "id": 9,
-      "name": "I Speak Caf\u00e9",
-      "description": "Ordering bread and pastries like a local.",
-      "icon": "fas fa-coffee",
-      "quizzes": [
-        {
-          "id": 901,
-          "name": "Quiz 901",
-          "description": ""
-        },
-        {
-          "id": 902,
-          "name": "Quiz 902",
-          "description": ""
-        },
-        {
-          "id": 903,
-          "name": "Quiz 903",
-          "description": ""
-        },
-        {
-          "id": 904,
-          "name": "Quiz 904",
-          "description": ""
-        },
-        {
-          "id": 905,
-          "name": "Quiz 905",
-          "description": ""
-        }
-      ]
-    },
-    {
       "id": 2,
       "name": "I Speak Colors",
       "description": "Mastering colors in French.",
@@ -64,39 +31,6 @@
         {
           "id": 205,
           "name": "Quiz 205",
-          "description": ""
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "I Speak Gender",
-      "description": "Grammatical gender in French.",
-      "icon": "fas fa-venus-mars",
-      "quizzes": [
-        {
-          "id": 401,
-          "name": "Quiz 401",
-          "description": ""
-        },
-        {
-          "id": 402,
-          "name": "Quiz 402",
-          "description": ""
-        },
-        {
-          "id": 403,
-          "name": "Quiz 403",
-          "description": ""
-        },
-        {
-          "id": 404,
-          "name": "Quiz 404",
-          "description": ""
-        },
-        {
-          "id": 405,
-          "name": "Quiz 405",
           "description": ""
         }
       ]
@@ -135,9 +69,75 @@
       ]
     },
     {
+      "id": 4,
+      "name": "I Speak Gender",
+      "description": "Understanding grammatical gender.",
+      "icon": "fas fa-venus-mars",
+      "quizzes": [
+        {
+          "id": 401,
+          "name": "Quiz 401",
+          "description": ""
+        },
+        {
+          "id": 402,
+          "name": "Quiz 402",
+          "description": ""
+        },
+        {
+          "id": 403,
+          "name": "Quiz 403",
+          "description": ""
+        },
+        {
+          "id": 404,
+          "name": "Quiz 404",
+          "description": ""
+        },
+        {
+          "id": 405,
+          "name": "Quiz 405",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "I Speak Singular & Plural",
+      "description": "Mastering singular and plural forms.",
+      "icon": "fas fa-copy",
+      "quizzes": [
+        {
+          "id": 501,
+          "name": "Quiz 501",
+          "description": ""
+        },
+        {
+          "id": 502,
+          "name": "Quiz 502",
+          "description": ""
+        },
+        {
+          "id": 503,
+          "name": "Quiz 503",
+          "description": ""
+        },
+        {
+          "id": 504,
+          "name": "Quiz 504",
+          "description": ""
+        },
+        {
+          "id": 505,
+          "name": "Quiz 505",
+          "description": ""
+        }
+      ]
+    },
+    {
       "id": 6,
       "name": "I Speak Present Tense",
-      "description": "Using French present tense correctly.",
+      "description": "Using the present tense correctly in French.",
       "icon": "fas fa-italic",
       "quizzes": [
         {
@@ -203,7 +203,7 @@
     {
       "id": 8,
       "name": "I Speak \u00c7a Va",
-      "description": "Breaking the ice in French.",
+      "description": "Breaking the ice with everyday conversations.",
       "icon": "fas fa-handshake",
       "quizzes": [
         {
@@ -234,9 +234,9 @@
       ]
     },
     {
-      "id": 10,
+      "id": 9,
       "name": "I Speak M\u00e9tro",
-      "description": "Navigating Paris M\u00e9tro.",
+      "description": "Navigating Paris M\u00e9tro and transport vocabulary.",
       "icon": "fas fa-subway",
       "quizzes": [
         {
@@ -262,39 +262,6 @@
         {
           "id": 1005,
           "name": "Quiz 1005",
-          "description": ""
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "name": "I Speak Singular & Plural",
-      "description": "Mastering singular and plural forms.",
-      "icon": "fas fa-copy",
-      "quizzes": [
-        {
-          "id": 501,
-          "name": "Quiz 501",
-          "description": ""
-        },
-        {
-          "id": 502,
-          "name": "Quiz 502",
-          "description": ""
-        },
-        {
-          "id": 503,
-          "name": "Quiz 503",
-          "description": ""
-        },
-        {
-          "id": 504,
-          "name": "Quiz 504",
-          "description": ""
-        },
-        {
-          "id": 505,
-          "name": "Quiz 505",
           "description": ""
         }
       ]
