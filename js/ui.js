@@ -193,8 +193,13 @@ QuizUI.prototype.renderCurrentQuestion = function() {
     return;
   }
 
+  const audioHTML = question.audio
+    ? `<audio controls class="question-audio" src="./audio/${question.audio}"></audio>`
+    : "";
+
   container.innerHTML = `
     <div class="question-text"><strong>${question.text || question.question || "Question sans texte"}</strong></div>
+    ${audioHTML}
     <div class="question-options">
       ${question.options.map((opt, idx) => `
         <div class="option" data-index="${idx}" tabindex="0" role="button">
@@ -204,10 +209,17 @@ QuizUI.prototype.renderCurrentQuestion = function() {
     </div>
   `;
 
-  container.querySelectorAll('.option').forEach(optionEl => {
+  const options = container.querySelectorAll('.option');
+  const selected = this.quizManager.selectedAnswers?.[this.quizManager.currentQuestionIndex];
+
+  options.forEach(optionEl => {
+    const idx = parseInt(optionEl.dataset.index, 10);
+    if (selected === idx) optionEl.classList.add("selected");
+
     optionEl.addEventListener('click', () => {
-      const index = parseInt(optionEl.dataset.index, 10);
-      this.quizManager.selectAnswer?.(index);
+      this.quizManager.selectAnswer?.(idx);
+      options.forEach(opt => opt.classList.remove("selected"));
+      optionEl.classList.add("selected");
     });
   });
 };
