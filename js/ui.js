@@ -169,12 +169,12 @@ QuizUI.prototype.showQuizSelection = async function() {
     container.appendChild(el);
   });
 
-  container.addEventListener("click", (e) => {
+  container.addEventListener("click", async (e) => {
     const item = e.target.closest(".quiz-item");
     if (!item) return;
     const quizId = item.dataset.quizId;
     if (quizId) {
-      this.quizManager.startQuiz?.(themeId, Number(quizId));
+      await this.quizManager.startQuiz?.(themeId, Number(quizId));
       this.renderCurrentQuestion?.();
     }
   });
@@ -210,4 +210,66 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       this.quizManager.selectAnswer?.(index);
     });
   });
+};
+QuizUI.prototype.showResults = function() {
+  this.hideAllScreens();
+  this.dom.screens.result.classList.remove("hidden");
+
+  const quiz = this.quizManager.currentQuizData;
+  const answers = this.quizManager.selectedAnswers;
+  const container = this.dom.results.summary;
+
+  if (!quiz || !Array.isArray(quiz.questions)) {
+    container.innerHTML = "<p>Aucune donnée de résultat disponible.</p>";
+    return;
+  }
+
+  let correctCount = 0;
+  container.innerHTML = "";
+
+  quiz.questions.forEach((q, idx) => {
+    const userAnswerIndex = answers[idx];
+    const isAnswered = userAnswerIndex !== null;
+
+    const userAnswerText = isAnswered && q.options?.[userAnswerIndex] !== undefined
+      ? q.options[userAnswerIndex]
+      : "Non répondu";
+
+    const correctAnswerText = q.correctAnswer || "Réponse non définie";
+    const isCorrect = isAnswered && userAnswerText === correctAnswerText;
+    if (isCorrect) correctCount++;
+
+    const item = document.createElement("div");
+    item.className = "result-item";
+    item.innerHTML = `
+      <div><strong>Q${idx + 1}:</strong> ${q.text}</div>
+      <div>Votre réponse: ${userAnswerText}</div>
+      <div>Bonne réponse: ${correctAnswerText}</div>
+      <div style="color:${isCorrect ? 'green' : 'red'}">${isCorrect ? "✅ Correct" : "❌ Incorrect"}</div>
+      <hr/>
+    `;
+    container.appendChild(item);
+  });
+
+  if (this.dom.results.quizName) {
+    this.dom.results.quizName.textContent = quiz.name || "Résultats";
+  }
+
+  if (this.dom.results.score) {
+    this.dom.results.score.textContent = `${correctCount}`;
+  }
+
+  if (this.dom.results.totalQuestions) {
+    this.dom.results.totalQuestions.textContent = `${quiz.questions.length}`;
+  }
+
+  if (this.dom.results.message) {
+    const percent = Math.round((correctCount / quiz.questions.length) * 100);
+    this.dom.results.message.textContent =
+      percent >= 80
+        ? "Excellent travail 🎉"
+        : percent >= 50
+        ? "Pas mal, tu peux faire mieux !"
+        : "Continue à t'entraîner 💪";
+  }
 };
