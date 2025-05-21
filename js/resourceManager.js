@@ -11,18 +11,18 @@ window.ResourceManager = (function() {
       quizzes: {}
     };
     
-    // Utiliser la configuration si disponible, sinon utiliser un chemin par défaut
-    // qui est plus flexible avec plusieurs possibilités
-    this.baseDataPath = window.resourceManagerConfig?.baseDataPath || './';
-    
     // Détecter si nous sommes sur GitHub Pages
     this.isGitHubPages = window.location.hostname.includes('github.io');
-    this.repoName = this.isGitHubPages ? window.location.pathname.split('/')[1] : '';
     
-    console.log("ResourceManager initialized - Flexible version for GitHub Pages");
-    console.log("Base path:", this.baseDataPath);
-    console.log("GitHub Pages detected:", this.isGitHubPages);
-    if (this.isGitHubPages) console.log("Repository name:", this.repoName);
+    // Base path prioritaire pour GitHub Pages
+    if (this.isGitHubPages) {
+      this.baseDataPath = '/TYF_Bundle/';
+      console.log("GitHub Pages détecté - Utilisation du chemin GitHub Pages:", this.baseDataPath);
+    } else {
+      // Utiliser la configuration si disponible, sinon utiliser un chemin par défaut
+      this.baseDataPath = window.resourceManagerConfig?.baseDataPath || './';
+      console.log("Mode local détecté - Utilisation du chemin local:", this.baseDataPath);
+    }
   }
   
   // Méthodes
@@ -35,36 +35,26 @@ window.ResourceManager = (function() {
 
     console.log("Attempting to load metadata from multiple possible locations...");
 
-    // Liste étendue des chemins possibles à essayer
-    const pathsToTry = [
-      // Chemins directs
+    // Liste des chemins possibles à essayer
+    const pathsToTry = [];
+    
+    // Si nous sommes sur GitHub Pages, priorité aux chemins avec le nom du dépôt
+    if (this.isGitHubPages) {
+      pathsToTry.push(
+        '/TYF_Bundle/metadata.json',
+        '/TYF_Bundle/js/data/metadata.json',
+        '/TYF_Bundle/js/metadata.json'
+      );
+    }
+    
+    // Ajouter les chemins standards (toujours essayer, même sur GitHub Pages)
+    pathsToTry.push(
       './metadata.json',
       './js/data/metadata.json',
-      './js/data/themes/metadata.json',
-      './themes/metadata.json',
       './js/metadata.json',
-      
-      // Chemins relatifs au baseDataPath
       `${this.baseDataPath}metadata.json`,
-      `${this.baseDataPath}js/data/metadata.json`,
-      `${this.baseDataPath}themes/metadata.json`,
-      `${this.baseDataPath}data/metadata.json`,
-      
-      // Chemins absolus
-      '/metadata.json',
-      '/js/data/metadata.json',
-      '/themes/metadata.json',
-      
-      // Chemins GitHub Pages spécifiques
-      `/TYF_Bundle/metadata.json`,
-      `/TYF_Bundle/js/data/metadata.json`,
-      `/TYF_Bundle/js/data/themes/metadata.json`,
-      
-      // Chemins dynamiques GitHub Pages basés sur le nom du repo détecté
-      `/${this.repoName}/metadata.json`,
-      `/${this.repoName}/js/data/metadata.json`,
-      `/${this.repoName}/js/data/themes/metadata.json`
-    ];
+      `${this.baseDataPath}js/data/metadata.json`
+    );
 
     let metadata = null;
     let successPath = null;
@@ -232,8 +222,6 @@ window.ResourceManager = (function() {
       };
       
       console.log("✅ Using embedded metadata fallback");
-      // Ne pas lancer d'erreur, utiliser les données intégrées à la place
-      // return metadata;
     } else {
       // Validation simple seulement si les données ont été chargées depuis un fichier
       if (!metadata || !Array.isArray(metadata.themes)) {
@@ -280,46 +268,23 @@ window.ResourceManager = (function() {
 
     console.log(`Attempting to load quiz ${quizId} for theme ${themeId}...`);
 
-    // Liste étendue des chemins possibles à essayer
-    const pathsToTry = [
-      // Noms de fichiers variables avec structure de dossiers variées
+    // Liste des chemins possibles à essayer
+    const pathsToTry = [];
+    
+    // Si nous sommes sur GitHub Pages, priorité aux chemins avec le nom du dépôt
+    if (this.isGitHubPages) {
+      pathsToTry.push(
+        `/TYF_Bundle/js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
+        `/TYF_Bundle/themes/theme-${themeId}/quiz_${quizId}.json`
+      );
+    }
+    
+    // Ajouter les chemins standards (toujours essayer)
+    pathsToTry.push(
       `./js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
       `./themes/theme-${themeId}/quiz_${quizId}.json`,
-      `./data/themes/theme-${themeId}/quiz_${quizId}.json`,
-      `./theme-${themeId}/quiz_${quizId}.json`,
-      `./quiz_${quizId}.json`,
-      
-      // Sans préfixe "quiz_"
-      `./js/data/themes/theme-${themeId}/${quizId}.json`,
-      `./themes/theme-${themeId}/${quizId}.json`,
-      
-      // Chemins relatifs au baseDataPath
-      `${this.baseDataPath}themes/theme-${themeId}/quiz_${quizId}.json`,
-      `${this.baseDataPath}js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
-      `${this.baseDataPath}data/themes/theme-${themeId}/quiz_${quizId}.json`,
-      `${this.baseDataPath}theme-${themeId}/quiz_${quizId}.json`,
-      `${this.baseDataPath}quiz_${quizId}.json`,
-      
-      // Noms de fichiers variables avec underscore ou tiret
-      `./js/data/themes/theme_${themeId}/quiz_${quizId}.json`,
-      `./js/data/themes/theme-${themeId}/quiz-${quizId}.json`,
-      `./themes/theme_${themeId}/quiz_${quizId}.json`,
-      
-      // Format avec 3 chiffres (exemple: quiz_101.json, quiz_902.json)
-      `./js/data/themes/theme-${themeId}/quiz_${quizId.toString().padStart(3, '0')}.json`,
-      `./themes/theme-${themeId}/quiz_${quizId.toString().padStart(3, '0')}.json`,
-      `./${quizId.toString().padStart(3, '0')}.json`,
-      `./quiz_${quizId.toString().padStart(3, '0')}.json`,
-      
-      // Chemins GitHub Pages spécifiques
-      `/TYF_Bundle/js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
-      `/TYF_Bundle/themes/theme-${themeId}/quiz_${quizId}.json`,
-      
-      // Chemins dynamiques GitHub Pages basés sur le nom du repo détecté
-      `/${this.repoName}/js/data/themes/theme-${themeId}/quiz_${quizId}.json`,
-      `/${this.repoName}/themes/theme-${themeId}/quiz_${quizId}.json`,
-      `/${this.repoName}/js/data/themes/theme-${themeId}/quiz_${quizId.toString().padStart(3, '0')}.json`
-    ];
+      `${this.baseDataPath}js/data/themes/theme-${themeId}/quiz_${quizId}.json`
+    );
 
     let quizData = null;
     let successPath = null;
