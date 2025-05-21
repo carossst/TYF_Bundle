@@ -67,13 +67,20 @@ window.ResourceManager = (function() {
         
         if (response.ok) {
           try {
+            // Récupération et validation immédiate du JSON
             metadata = await response.json();
+            
+            // Vérification que le contenu du JSON est valide
+            if (!metadata || !Array.isArray(metadata.themes) || metadata.themes.length === 0) {
+              throw new Error("Parsed metadata is empty or invalid");
+            }
+            
             successPath = path;
             console.log(`✅ SUCCESS! Metadata loaded from: ${path}`);
             break;
           } catch (parseError) {
-            console.log(`❌ JSON parsing error from ${path}: ${parseError.message}`);
-            // Continuer à essayer d'autres chemins si le parsing échoue
+            console.log(`❌ JSON parsing error or invalid content from ${path}: ${parseError.message}`);
+            // Continuer à essayer d'autres chemins si le parsing échoue ou si le contenu est invalide
           }
         } else {
           console.log(`❌ Failed to load from ${path}: ${response.status} ${response.statusText}`);
@@ -227,12 +234,6 @@ window.ResourceManager = (function() {
       };
       
       console.log("✅ Using embedded metadata fallback");
-    } else {
-      // Validation simple seulement si les données ont été chargées depuis un fichier
-      if (!metadata || !Array.isArray(metadata.themes) || metadata.themes.length === 0) {
-        console.error("❗ CRITICAL ERROR: Invalid metadata structure");
-        throw new Error("Invalid metadata structure. Check metadata.json format.");
-      }
     }
 
     this.cache.metadata = metadata;
@@ -303,12 +304,18 @@ window.ResourceManager = (function() {
         if (response.ok) {
           try {
             quizData = await response.json();
+            
+            // Validation de base immédiate
+            if (!quizData || !Array.isArray(quizData.questions) || quizData.questions.length === 0) {
+              throw new Error("Parsed quiz data is empty or invalid");
+            }
+            
             successPath = path;
             console.log(`✅ SUCCESS! Quiz loaded from: ${path}`);
             break;
           } catch (parseError) {
-            console.log(`❌ JSON parsing error from ${path}: ${parseError.message}`);
-            // Continuer à essayer d'autres chemins si le parsing échoue
+            console.log(`❌ JSON parsing error or invalid content from ${path}: ${parseError.message}`);
+            // Continuer à essayer d'autres chemins si le parsing échoue ou si le contenu est invalide
           }
         } else {
           console.log(`❌ Failed to load from ${path}: ${response.status} ${response.statusText}`);
@@ -321,12 +328,6 @@ window.ResourceManager = (function() {
     if (!quizData) {
       console.error(`❗ CRITICAL ERROR: Could not load quiz ${quizId} from any location`);
       throw new Error(`Could not load quiz ${quizId} from any location. Check network tab for details.`);
-    }
-
-    // Validation de base
-    if (!quizData || !Array.isArray(quizData.questions)) {
-      console.error(`❗ Quiz ${quizId} has invalid structure: missing questions array`);
-      throw new Error(`Quiz ${quizId} has invalid structure: missing questions array`);
     }
     
     // Compatibilité: les numéros d'ID peuvent ne pas correspondre exactement
