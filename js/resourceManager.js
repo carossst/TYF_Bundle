@@ -66,10 +66,15 @@ window.ResourceManager = (function() {
         const response = await fetch(path);
         
         if (response.ok) {
-          metadata = await response.json();
-          successPath = path;
-          console.log(`✅ SUCCESS! Metadata loaded from: ${path}`);
-          break;
+          try {
+            metadata = await response.json();
+            successPath = path;
+            console.log(`✅ SUCCESS! Metadata loaded from: ${path}`);
+            break;
+          } catch (parseError) {
+            console.log(`❌ JSON parsing error from ${path}: ${parseError.message}`);
+            // Continuer à essayer d'autres chemins si le parsing échoue
+          }
         } else {
           console.log(`❌ Failed to load from ${path}: ${response.status} ${response.statusText}`);
         }
@@ -224,7 +229,7 @@ window.ResourceManager = (function() {
       console.log("✅ Using embedded metadata fallback");
     } else {
       // Validation simple seulement si les données ont été chargées depuis un fichier
-      if (!metadata || !Array.isArray(metadata.themes)) {
+      if (!metadata || !Array.isArray(metadata.themes) || metadata.themes.length === 0) {
         console.error("❗ CRITICAL ERROR: Invalid metadata structure");
         throw new Error("Invalid metadata structure. Check metadata.json format.");
       }
@@ -296,10 +301,15 @@ window.ResourceManager = (function() {
         const response = await fetch(path);
         
         if (response.ok) {
-          quizData = await response.json();
-          successPath = path;
-          console.log(`✅ SUCCESS! Quiz loaded from: ${path}`);
-          break;
+          try {
+            quizData = await response.json();
+            successPath = path;
+            console.log(`✅ SUCCESS! Quiz loaded from: ${path}`);
+            break;
+          } catch (parseError) {
+            console.log(`❌ JSON parsing error from ${path}: ${parseError.message}`);
+            // Continuer à essayer d'autres chemins si le parsing échoue
+          }
         } else {
           console.log(`❌ Failed to load from ${path}: ${response.status} ${response.statusText}`);
         }
