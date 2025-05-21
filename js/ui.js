@@ -194,7 +194,7 @@ QuizUI.prototype.renderCurrentQuestion = function() {
   }
 
   container.innerHTML = `
-    <div class="question-text"><strong>${question.text}</strong></div>
+    <div class="question-text"><strong>${question.text || question.question || "Question sans texte"}</strong></div>
     <div class="question-options">
       ${question.options.map((opt, idx) => `
         <div class="option" data-index="${idx}" tabindex="0" role="button">
