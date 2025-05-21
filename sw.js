@@ -47,6 +47,8 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - handle requests with cache strategy
 self.addEventListener('fetch', (event) => {
+  if (!event.request.url.startsWith('http')) return;
+
   // Parse the URL
   const requestUrl = new URL(event.request.url);
   

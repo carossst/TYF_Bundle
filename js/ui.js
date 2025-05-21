@@ -1,4 +1,4 @@
-/* ui.js – version complète générée automatiquement */
+/* ui.js – version finale corrigée */
 console.log("QuizUI initialized (Simplified version)");
 
 window.QuizUI = function(quizManager, domElements, resourceManagerInstance) {
@@ -14,56 +14,30 @@ window.QuizUI = function(quizManager, domElements, resourceManagerInstance) {
   this.lastResults = null;
 };
 
-// Méthode : afficher l'écran d'accueil et lancer le chargement
 QuizUI.prototype.showWelcomeScreen = function() {
   this.hideAllScreens();
-  this.dom.screens.welcome.classList.remove('hidden');
+  this.dom.screens.welcome.classList.remove("hidden");
   this.initializeWelcomeScreen();
-  this.quizManager.resetQuizState();
-  this.stopTimer?.();
 };
 
-// Méthode : charger les thèmes et les afficher
 QuizUI.prototype.initializeWelcomeScreen = async function() {
-  console.log("Initializing welcome screen...");
-  if (this.dom.themesList) {
-    this.dom.themesList.innerHTML = "<p>Chargement des thèmes...</p>";
-  }
-
-  try {
-    const metadata = await this.resourceManager.loadMetadata();
-    if (!metadata || !metadata.themes || !Array.isArray(metadata.themes)) {
-      throw new Error("Invalid metadata structure");
-    }
-    this.themeIndexCache = metadata.themes;
-    this.renderThemesSimple(metadata.themes);
-  } catch (error) {
-    console.error("Erreur de chargement des thèmes :", error);
-    if (this.dom.themesList) {
-      this.dom.themesList.innerHTML = "<p class='error-message'>Impossible de charger les thèmes.</p>";
-    }
-  }
+  const metadata = await this.resourceManager.loadMetadata();
+  this.themeIndexCache = metadata.themes || [];
+  this.renderThemesSimple(this.themeIndexCache);
 };
 
-// Méthode : rendu simple des thèmes
 QuizUI.prototype.renderThemesSimple = function(themes) {
   const container = this.dom.themesList;
   if (!container) return;
-  container.innerHTML = '';
-
-  if (!themes || themes.length === 0) {
-    container.innerHTML = '<p class="no-data">Aucun thème disponible.</p>';
-    return;
-  }
+  container.innerHTML = "";
 
   themes.forEach(theme => {
-    const el = document.createElement('div');
-    el.className = 'selection-item theme-item';
-    el.setAttribute('data-theme-id', theme.id);
-    el.setAttribute('tabindex', '0');
-    el.setAttribute('role', 'button');
-    el.setAttribute('aria-label', `Thème : ${theme.name}`);
-
+    const el = document.createElement("div");
+    el.className = "selection-item theme-item";
+    el.setAttribute("data-theme-id", theme.id);
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", `Thème : ${theme.name}`);
     el.innerHTML = `
       <div class="item-icon"><i class="${theme.icon || 'fas fa-book'}"></i></div>
       <div class="item-content">
@@ -76,21 +50,12 @@ QuizUI.prototype.renderThemesSimple = function(themes) {
       </div>
       <div class="item-action" aria-hidden="true">Explorer <i class="fas fa-arrow-right"></i></div>
     `;
-
-    el.addEventListener('click', () => {
-      this.quizManager.currentThemeId = theme.id;
-      this.showQuizSelection?.();
-    });
-
     container.appendChild(el);
   });
-
-  console.log("Themes rendered:", themes.length);
 };
 
-// Méthode utilitaire : cacher tous les écrans
 QuizUI.prototype.hideAllScreens = function() {
   Object.values(this.dom.screens || {}).forEach(el => {
-    if (el) el.classList.add('hidden');
+    if (el) el.classList.add("hidden");
   });
 };
