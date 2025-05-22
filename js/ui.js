@@ -175,6 +175,7 @@ QuizUI.prototype.setupEventListeners = function() {
 
 QuizUI.prototype.showExitConfirmation = function() {
   if (confirm('Êtes-vous sûr de vouloir quitter ce quiz ? Votre progression sera perdue.')) {
+    // ✅ RETOUR: Vers la sélection de quiz du thème actuel
     this.showQuizSelection();
   }
 };
@@ -369,22 +370,10 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       `).join('')
     : '<p>Aucune option disponible</p>';
 
-  // ✅ AJOUT: Boutons de navigation rapide
-  const quickNavHTML = `
-    <div class="quick-navigation">
-      <button class="btn-quick-nav" onclick="window.quizUI.showWelcomeScreen()">
-        <i class="fas fa-home"></i> Accueil
-      </button>
-      <button class="btn-quick-nav" onclick="window.quizUI.showQuizSelection()">
-        <i class="fas fa-list"></i> Thème
-      </button>
-    </div>
-  `;
-
+  // ✅ SUPPRESSION: Boutons de navigation rapide retirés
   container.innerHTML = `
     <div class="question-header">
       <span class="question-number">Question ${this.quizManager.currentQuestionIndex + 1}</span>
-      ${quickNavHTML}
     </div>
     <div class="question-text">
       <p>${questionText}</p>
@@ -398,7 +387,10 @@ QuizUI.prototype.renderCurrentQuestion = function() {
   // Expose quizUI globally for quick nav buttons
   window.quizUI = this;
 
-  // Gestion de la sélection des options
+  // ✅ CORRECTION: S'assurer que quizManager est accessible
+  window.currentQuizManager = this.quizManager; // Debug global access
+
+  // Gestion de la sélection des options - CORRECTION
   const options = container.querySelectorAll('.option');
   const selectedIndex = this.quizManager.getSelectedAnswer();
 
@@ -408,11 +400,22 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       optionEl.classList.add("selected");
     }
 
-    // Event listener pour la sélection
-    optionEl.addEventListener('click', () => {
+    // ✅ CORRECTION: Event listener pour la sélection
+    optionEl.addEventListener('click', (event) => {
+      event.preventDefault();
+      console.log(`Option ${idx} clicked - QuizManager available:`, !!this.quizManager);
+      
+      // Vérifier que quizManager est disponible
+      if (!this.quizManager) {
+        console.error("QuizManager not available!");
+        return;
+      }
+      
+      // Sélectionner la réponse dans le quiz manager
+      console.log("Calling selectAnswer...");
       this.quizManager.selectAnswer(idx);
       
-      // Mettre à jour l'affichage
+      // Mettre à jour l'affichage visuel
       options.forEach(opt => opt.classList.remove("selected"));
       optionEl.classList.add("selected");
       
