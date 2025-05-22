@@ -337,23 +337,27 @@ QuizUI.prototype.showQuizScreen = function() {
   this.updateProgressBar();
 };
 
+// ✅ VERSION CORRIGÉE - Sélection des réponses qui fonctionne !
 QuizUI.prototype.renderCurrentQuestion = function() {
+  console.log("🔧 DEBUG: Rendering question - START");
+  
   const container = this.dom.quiz?.container;
   if (!container) {
-    console.error("Quiz container not found");
+    console.error("❌ Quiz container not found");
     return;
   }
 
   const question = this.quizManager.getCurrentQuestion();
   if (!question) {
     container.innerHTML = "<p>Question introuvable.</p>";
-    console.error("No question data available");
+    console.error("❌ No question data available");
     return;
   }
 
-  console.log("Rendering question:", question);
+  console.log("✅ Question data:", question);
 
   const questionText = question.question || question.text || "Question sans texte";
+  const selectedIndex = this.quizManager.getSelectedAnswer();
   
   const audioHTML = question.audio
     ? `<div class="question-audio-container">
@@ -363,7 +367,9 @@ QuizUI.prototype.renderCurrentQuestion = function() {
 
   const optionsHTML = question.options && Array.isArray(question.options)
     ? question.options.map((opt, idx) => `
-        <div class="option" data-index="${idx}" tabindex="0" role="button" aria-label="Option ${idx + 1}">
+        <div class="option" data-index="${idx}" tabindex="0" role="button" 
+             aria-label="Option ${idx + 1}" 
+             ${selectedIndex === idx ? 'style="background-color: var(--primary); color: white;"' : ''}>
           <span class="option-letter">${String.fromCharCode(65 + idx)}.</span>
           <span class="option-text">${opt}</span>
         </div>
@@ -383,118 +389,44 @@ QuizUI.prototype.renderCurrentQuestion = function() {
     </div>
   `;
 
-  // ✅ DÉCLARATION DES VARIABLES NÉCESSAIRES
-  const options = container.querySelectorAll('.option');
-  const selectedIndex = this.quizManager.getSelectedAnswer();
-
-  // ========== FIX URGENT SÉLECTION RÉPONSES ==========
-  // ✅ DÉBOGAGE - Vérifications avant event listeners
-  console.log("🔧 DEBUG: Setting up option event listeners");
-  console.log("🔧 QuizManager disponible:", !!this.quizManager);
-  console.log("🔧 Nombre d'options trouvées:", options.length);
-
-  // Assurer que quizManager est accessible globalement pour debug
-  window.currentQuizManager = this.quizManager;
-  window.currentQuizUI = this;
-
-  // Gestion de la sélection des options - VERSION DEBUG
-  options.forEach((optionEl, idx) => {
-    console.log(`🔧 Setup listener pour option ${idx}`);
+  // ✅ NOUVELLE VERSION SIMPLIFIÉE - Event delegation sur le container
+  console.log("🔧 Setting up click handlers...");
+  
+  container.addEventListener('click', (event) => {
+    const option = event.target.closest('.option');
+    if (!option) return;
     
-    // Marquer l'option sélectionnée au chargement
-    if (selectedIndex === idx) {
-      optionEl.classList.add("selected");
-      console.log(`🔧 Option ${idx} pré-sélectionnée`);
+    const index = parseInt(option.dataset.index);
+    if (isNaN(index)) return;
+    
+    console.log(`🎯 Option ${index} clicked!`);
+    
+    try {
+      // Sélectionner la réponse
+      this.quizManager.selectAnswer(index);
+      
+      // Mettre à jour visuellement
+      container.querySelectorAll('.option').forEach(opt => {
+        opt.style.backgroundColor = '';
+        opt.style.color = '';
+      });
+      option.style.backgroundColor = 'var(--primary)';
+      option.style.color = 'white';
+      
+      // Afficher feedback
+      this.showQuestionFeedback(question, index);
+      
+      // Mettre à jour boutons
+      this.updateNavigationButtons();
+      
+      console.log(`✅ Selection completed for option ${index}`);
+      
+    } catch (error) {
+      console.error(`❌ Error selecting answer:`, error);
     }
-
-    // ✅ EVENT LISTENER PRINCIPAL - VERSION RENFORCÉE
-    const handleClick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      
-      console.log(`🎯 CLIC sur option ${idx}`);
-      console.log(`🎯 QuizManager:`, !!this.quizManager);
-      console.log(`🎯 Question actuelle:`, !!question);
-      
-      // Vérifications de sécurité
-      if (!this.quizManager) {
-        console.error("❌ QuizManager non disponible!");
-        alert("Erreur: QuizManager non disponible");
-        return;
-      }
-      
-      if (!question || !question.options) {
-        console.error("❌ Question non disponible!");
-        alert("Erreur: Question non disponible");
-        return;
-      }
-      
-      try {
-        // Sélectionner la réponse
-        console.log(`🎯 Appel selectAnswer(${idx})`);
-        this.quizManager.selectAnswer(idx);
-        
-        // Vérifier que la sélection a fonctionné
-        const newSelected = this.quizManager.getSelectedAnswer();
-        console.log(`🎯 Nouvelle sélection:`, newSelected);
-        
-        // Mettre à jour l'affichage visuel
-        options.forEach(opt => opt.classList.remove("selected"));
-        optionEl.classList.add("selected");
-        console.log(`🎯 UI mise à jour - option ${idx} sélectionnée`);
-        
-        // Afficher le feedback
-        console.log(`🎯 Affichage feedback...`);
-        this.showQuestionFeedback(question, idx);
-        
-        // Mettre à jour les boutons
-        console.log(`🎯 Mise à jour boutons navigation...`);
-        this.updateNavigationButtons();
-        
-        console.log(`✅ Sélection terminée avec succès!`);
-        
-      } catch (error) {
-        console.error(`❌ Erreur lors de la sélection:`, error);
-        alert(`Erreur: ${error.message}`);
-      }
-    };
-
-    // Attacher l'event listener avec bind pour préserver 'this'
-    const boundHandler = handleClick.bind(this);
-    optionEl.addEventListener('click', boundHandler);
-    
-    // Stocker la référence pour debugging
-    optionEl._clickHandler = boundHandler;
-    
-    console.log(`✅ Listener attaché pour option ${idx}`);
-
-    // Support clavier
-    optionEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        console.log(`⌨️ Touche ${e.key} sur option ${idx}`);
-        boundHandler(e);
-      }
-    });
-
-    // Test de l'event listener immédiatement
-    optionEl.addEventListener('mouseenter', () => {
-      console.log(`🐭 Hover sur option ${idx} - Event listeners fonctionnent`);
-    });
   });
 
-  console.log("✅ Tous les event listeners configurés");
-
-  // ========== TEST AUTOMATIQUE ==========
-  // Tester automatiquement après 1 seconde
-  setTimeout(() => {
-    console.log("🧪 TEST AUTOMATIQUE des event listeners");
-    const testOption = container.querySelector('.option');
-    if (testOption) {
-      console.log("🧪 Option de test trouvée:", testOption);
-      console.log("🧪 Handlers attachés:", !!testOption._clickHandler);
-    }
-  }, 1000);
+  console.log("✅ Event handlers set up successfully");
 };
 
 QuizUI.prototype.showQuestionFeedback = function(question, selectedIndex) {
