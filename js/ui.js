@@ -1,5 +1,5 @@
-/* ui.js – version corrigée pour afficher correctement les questions */
-console.log("QuizUI initialized (Version corrigée v2.2.5)");
+/* ui.js – version complète avec feedback, navigation et évaluations */
+console.log("QuizUI initialized (Version complète v2.2.5)");
 
 window.QuizUI = function(quizManager, domElements, resourceManagerInstance) {
   if (!quizManager || !domElements || !resourceManagerInstance) {
@@ -12,6 +12,8 @@ window.QuizUI = function(quizManager, domElements, resourceManagerInstance) {
   this.themeIndexCache = null;
   this.timerInterval = null;
   this.lastResults = null;
+  this.feedbackTimeout = null;
+  this.themeProgress = {}; // Track progress per theme
 };
 
 QuizUI.prototype.hideAllScreens = function() {
@@ -30,6 +32,19 @@ QuizUI.prototype.initializeWelcomeScreen = async function() {
   const metadata = await this.resourceManager.loadMetadata();
   this.themeIndexCache = metadata.themes || [];
   this.renderThemesSimple(this.themeIndexCache);
+  this.updateWelcomeStats();
+};
+
+QuizUI.prototype.updateWelcomeStats = async function() {
+  if (!window.storage) return;
+  
+  try {
+    const userStats = await window.storage.getUserStats();
+    // Update welcome screen stats if elements exist
+    // This would connect to your welcome stats display
+  } catch (error) {
+    console.warn("Could not load user stats for welcome screen:", error);
+  }
 };
 
 QuizUI.prototype.renderThemesSimple = function(themes) {
@@ -38,6 +53,9 @@ QuizUI.prototype.renderThemesSimple = function(themes) {
   container.innerHTML = "";
 
   themes.forEach(theme => {
+    const progress = this.getThemeProgress(theme.id);
+    const completionPercent = Math.round((progress.completed / progress.total) * 100) || 0;
+    
     const el = document.createElement("div");
     el.className = "selection-item theme-item";
     el.setAttribute("data-theme-id", theme.id);
@@ -50,14 +68,27 @@ QuizUI.prototype.renderThemesSimple = function(themes) {
         <h3>${theme.name}</h3>
         <p>${theme.description || ''}</p>
         <div class="progress-info">
-          <div class="progress-bar"><div class="progress" style="width: 0%"></div></div>
-          <span>${theme.quizzes?.length || 0} quiz disponibles</span>
+          <div class="progress-bar">
+            <div class="progress" style="width: ${completionPercent}%"></div>
+          </div>
+          <span>${progress.completed}/${progress.total} quiz terminés (${completionPercent}%)</span>
         </div>
       </div>
       <div class="item-action" aria-hidden="true">Explorer <i class="fas fa-arrow-right"></i></div>
     `;
     container.appendChild(el);
   });
+};
+
+QuizUI.prototype.getThemeProgress = function(themeId) {
+  // Get theme progress from storage or default
+  const theme = this.themeIndexCache?.find(t => t.id === themeId);
+  const total = theme?.quizzes?.length || 5;
+  
+  // This would connect to your storage system
+  const completed = this.themeProgress[themeId]?.completed || 0;
+  
+  return { completed, total };
 };
 
 QuizUI.prototype.setupEventListeners = function() {
@@ -101,7 +132,7 @@ QuizUI.prototype.setupEventListeners = function() {
   // Quiz navigation
   if (this.dom.buttons?.exitQuiz) {
     this.dom.buttons.exitQuiz.addEventListener('click', () => {
-      this.showWelcomeScreen();
+      this.showExitConfirmation();
     });
   }
 
@@ -110,6 +141,7 @@ QuizUI.prototype.setupEventListeners = function() {
       if (this.quizManager.goToPreviousQuestion()) {
         this.renderCurrentQuestion();
         this.updateNavigationButtons();
+        this.updateProgressBar();
       }
     });
   }
@@ -119,6 +151,7 @@ QuizUI.prototype.setupEventListeners = function() {
       if (this.quizManager.goToNextQuestion()) {
         this.renderCurrentQuestion();
         this.updateNavigationButtons();
+        this.updateProgressBar();
       }
     });
   }
@@ -140,6 +173,12 @@ QuizUI.prototype.setupEventListeners = function() {
   console.log("UI event listeners setup complete.");
 };
 
+QuizUI.prototype.showExitConfirmation = function() {
+  if (confirm('Êtes-vous sûr de vouloir quitter ce quiz ? Votre progression sera perdue.')) {
+    this.showQuizSelection();
+  }
+};
+
 QuizUI.prototype.showQuizSelection = async function() {
   const themeId = this.quizManager.currentThemeId;
   if (!themeId) return this.showWelcomeScreen();
@@ -158,18 +197,24 @@ QuizUI.prototype.showQuizSelection = async function() {
     container.innerHTML = "";
 
     quizzes.forEach(quiz => {
+      const isCompleted = this.isQuizCompleted(quiz.id);
       const el = document.createElement("div");
-      el.className = "selection-item quiz-item";
+      el.className = `selection-item quiz-item ${isCompleted ? 'completed' : ''}`;
       el.setAttribute("data-quiz-id", quiz.id);
       el.setAttribute("tabindex", "0");
       el.setAttribute("role", "button");
       el.innerHTML = `
-        <div class="item-icon"><i class="fas fa-question-circle"></i></div>
+        <div class="item-icon">
+          <i class="fas ${isCompleted ? 'fa-check-circle' : 'fa-question-circle'}"></i>
+        </div>
         <div class="item-content">
           <h3>${quiz.name}</h3>
           <p>${quiz.description || ''}</p>
+          ${isCompleted ? '<span class="completion-badge">✅ Terminé</span>' : ''}
         </div>
-        <div class="item-action" aria-hidden="true">Démarrer <i class="fas fa-arrow-right"></i></div>
+        <div class="item-action" aria-hidden="true">
+          ${isCompleted ? 'Refaire' : 'Démarrer'} <i class="fas fa-arrow-right"></i>
+        </div>
       `;
       container.appendChild(el);
     });
@@ -185,6 +230,10 @@ QuizUI.prototype.showQuizSelection = async function() {
         this.showQuizScreen();
       }
     });
+
+    // Show theme completion status
+    this.showThemeCompletionStatus(theme, quizzes);
+    
   } catch (error) {
     console.error("Error loading quizzes:", error);
     const container = this.dom.quizzesList;
@@ -194,11 +243,90 @@ QuizUI.prototype.showQuizSelection = async function() {
   }
 };
 
+QuizUI.prototype.showThemeCompletionStatus = function(theme, quizzes) {
+  const completedQuizzes = quizzes.filter(quiz => this.isQuizCompleted(quiz.id)).length;
+  const totalQuizzes = quizzes.length;
+  
+  if (completedQuizzes === totalQuizzes) {
+    this.showThemeFeedback(theme.id, theme.name);
+  }
+};
+
+QuizUI.prototype.showThemeFeedback = function(themeId, themeName) {
+  // Show theme completion feedback
+  const feedbackEl = document.createElement('div');
+  feedbackEl.className = 'theme-completion-feedback';
+  feedbackEl.innerHTML = `
+    <div class="theme-feedback-content">
+      <h3>🎉 Thème "${themeName}" terminé !</h3>
+      <p>Félicitations ! Vous avez terminé tous les quiz de ce thème.</p>
+      <div class="theme-level-assessment">
+        ${this.calculateThemeLevel(themeId)}
+      </div>
+    </div>
+  `;
+  
+  // Insert after theme description
+  if (this.dom.themeDescription && this.dom.themeDescription.parentNode) {
+    this.dom.themeDescription.parentNode.insertBefore(feedbackEl, this.dom.themeDescription.nextSibling);
+  }
+};
+
+QuizUI.prototype.calculateThemeLevel = function(themeId) {
+  // Calculate average score for theme
+  const themeResults = this.getThemeResults(themeId);
+  if (themeResults.length === 0) return '<p>Niveau non déterminé</p>';
+  
+  const averageScore = themeResults.reduce((sum, result) => sum + result.percentage, 0) / themeResults.length;
+  
+  let level, description;
+  if (averageScore >= 90) {
+    level = "A2+";
+    description = "Excellent ! Vous maîtrisez parfaitement ce thème.";
+  } else if (averageScore >= 80) {
+    level = "A2";
+    description = "Très bien ! Vous avez une bonne maîtrise de ce thème.";
+  } else if (averageScore >= 70) {
+    level = "A1+";
+    description = "Bien ! Quelques révisions et vous serez au niveau supérieur.";
+  } else if (averageScore >= 60) {
+    level = "A1";
+    description = "Correct ! Continuez à vous entraîner pour progresser.";
+  } else {
+    level = "Pré-A1";
+    description = "Continuez vos efforts ! La pratique vous aidera à progresser.";
+  }
+  
+  return `
+    <div class="level-badge level-${level.toLowerCase().replace('+', 'plus')}">
+      <span class="level-text">Niveau : ${level}</span>
+    </div>
+    <p class="level-description">${description}</p>
+    <p class="level-score">Score moyen : ${Math.round(averageScore)}%</p>
+  `;
+};
+
+QuizUI.prototype.isQuizCompleted = function(quizId) {
+  // Check if quiz is completed (would connect to storage)
+  return false; // Placeholder
+};
+
+QuizUI.prototype.getThemeResults = function(themeId) {
+  // Get all quiz results for a theme (would connect to storage)
+  return []; // Placeholder
+};
+
 QuizUI.prototype.showQuizScreen = function() {
   this.hideAllScreens();
   this.dom.screens.quiz.classList.remove("hidden");
   
-  // Mettre à jour le titre du quiz
+  // Clear any existing feedback
+  if (this.dom.quiz?.feedback) {
+    this.dom.quiz.feedback.classList.add('hidden');
+    this.dom.quiz.feedback.innerHTML = '';
+  }
+  
+  // Update quiz title
   if (this.dom.quiz?.title && this.quizManager.currentQuizData) {
     this.dom.quiz.title.textContent = this.quizManager.currentQuizData.name || "Quiz";
   }
@@ -224,7 +352,6 @@ QuizUI.prototype.renderCurrentQuestion = function() {
 
   console.log("Rendering question:", question);
 
-  // ✅ CORRECTION : Utiliser question.question au lieu de question.text
   const questionText = question.question || question.text || "Question sans texte";
   
   const audioHTML = question.audio
@@ -233,7 +360,6 @@ QuizUI.prototype.renderCurrentQuestion = function() {
        </div>`
     : "";
 
-  // ✅ CORRECTION : Vérifier que les options existent
   const optionsHTML = question.options && Array.isArray(question.options)
     ? question.options.map((opt, idx) => `
         <div class="option" data-index="${idx}" tabindex="0" role="button" aria-label="Option ${idx + 1}">
@@ -243,9 +369,22 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       `).join('')
     : '<p>Aucune option disponible</p>';
 
+  // ✅ AJOUT: Boutons de navigation rapide
+  const quickNavHTML = `
+    <div class="quick-navigation">
+      <button class="btn-quick-nav" onclick="window.quizUI.showWelcomeScreen()">
+        <i class="fas fa-home"></i> Accueil
+      </button>
+      <button class="btn-quick-nav" onclick="window.quizUI.showQuizSelection()">
+        <i class="fas fa-list"></i> Thème
+      </button>
+    </div>
+  `;
+
   container.innerHTML = `
     <div class="question-header">
       <span class="question-number">Question ${this.quizManager.currentQuestionIndex + 1}</span>
+      ${quickNavHTML}
     </div>
     <div class="question-text">
       <p>${questionText}</p>
@@ -255,6 +394,9 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       ${optionsHTML}
     </div>
   `;
+
+  // Expose quizUI globally for quick nav buttons
+  window.quizUI = this;
 
   // Gestion de la sélection des options
   const options = container.querySelectorAll('.option');
@@ -274,7 +416,7 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       options.forEach(opt => opt.classList.remove("selected"));
       optionEl.classList.add("selected");
       
-      // Afficher le feedback immédiat
+      // ✅ CORRECTION: Afficher le feedback avec explication
       this.showQuestionFeedback(question, idx);
       
       // Mettre à jour les boutons de navigation
@@ -291,6 +433,62 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       }
     });
   });
+};
+
+QuizUI.prototype.showQuestionFeedback = function(question, selectedIndex) {
+  const feedbackContainer = this.dom.quiz?.feedback;
+  if (!feedbackContainer) return;
+
+  // Déterminer si la réponse est correcte
+  const correctAnswer = question.correctAnswer;
+  const selectedAnswer = question.options[selectedIndex];
+  const isCorrect = selectedAnswer === correctAnswer;
+
+  // ✅ AJOUT: Inclure l'explication quand elle existe
+  const explanationHTML = question.explanation 
+    ? `<div class="feedback-explanation">
+         <strong><i class="fas fa-lightbulb"></i> Le saviez-vous ?</strong>
+         <p>${question.explanation}</p>
+       </div>`
+    : '';
+
+  // Construire le HTML du feedback
+  const feedbackHTML = `
+    <div class="feedback-content ${isCorrect ? 'correct' : 'incorrect'}">
+      <div class="feedback-result">
+        <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+        <span class="feedback-status">${isCorrect ? 'Correct !' : 'Incorrect'}</span>
+      </div>
+      
+      ${!isCorrect ? `
+        <div class="feedback-answer">
+          <strong>Bonne réponse :</strong> ${correctAnswer}
+        </div>
+      ` : ''}
+      
+      ${explanationHTML}
+      
+      <div class="feedback-actions">
+        <button class="btn-feedback-continue" onclick="this.parentElement.parentElement.parentElement.classList.add('hidden')">
+          <i class="fas fa-arrow-right"></i> Continuer
+        </button>
+      </div>
+    </div>
+  `;
+
+  feedbackContainer.innerHTML = feedbackHTML;
+  feedbackContainer.classList.remove('hidden');
+
+  // Masquer automatiquement après 5 secondes si correct
+  if (isCorrect && this.feedbackTimeout) {
+    clearTimeout(this.feedbackTimeout);
+  }
+  
+  if (isCorrect) {
+    this.feedbackTimeout = setTimeout(() => {
+      feedbackContainer.classList.add('hidden');
+    }, 5000);
+  }
 };
 
 QuizUI.prototype.updateNavigationButtons = function() {
@@ -385,22 +583,10 @@ QuizUI.prototype.showResults = function(results) {
     this.dom.results.totalQuestions.textContent = `${results.total}`;
   }
 
-  // Message de félicitations
+  // ✅ AJOUT: Évaluation du niveau avec feedback détaillé
   if (this.dom.results.message) {
-    const percent = results.percentage;
-    let message = "";
-    
-    if (percent >= 90) {
-      message = "🎉 Excellent ! Vous maîtrisez parfaitement ce sujet !";
-    } else if (percent >= 70) {
-      message = "👏 Très bien ! Quelques petites révisions et ce sera parfait !";
-    } else if (percent >= 50) {
-      message = "👍 Pas mal ! Continuez à vous entraîner pour progresser !";
-    } else {
-      message = "💪 Continuez à vous entraîner, vous allez y arriver !";
-    }
-    
-    this.dom.results.message.innerHTML = message;
+    const levelAssessment = this.calculateQuizLevel(results.percentage);
+    this.dom.results.message.innerHTML = levelAssessment;
   }
 
   // Résumé détaillé des réponses
@@ -445,6 +631,46 @@ QuizUI.prototype.showResults = function(results) {
   this.saveQuizResults(results);
 };
 
+QuizUI.prototype.calculateQuizLevel = function(percentage) {
+  let level, message, color;
+  
+  if (percentage >= 90) {
+    level = "A2+";
+    message = "🏆 Excellent ! Vous maîtrisez parfaitement ce sujet !<br>Vous êtes prêt(e) pour des défis plus avancés.";
+    color = "#4CAF50";
+  } else if (percentage >= 80) {
+    level = "A2";
+    message = "🌟 Très bien ! Vous avez une solide compréhension.<br>Quelques révisions et vous atteindrez l'excellence !";
+    color = "#8BC34A";
+  } else if (percentage >= 70) {
+    level = "A1+";
+    message = "👏 Bien joué ! Vous progressez de manière constante.<br>Continuez sur cette lancée !";
+    color = "#FFC107";
+  } else if (percentage >= 60) {
+    level = "A1";
+    message = "👍 Bon travail ! Les bases sont acquises.<br>Un peu plus de pratique vous mènera au niveau supérieur.";
+    color = "#FF9800";
+  } else if (percentage >= 40) {
+    level = "Pré-A1";
+    message = "💪 Continuez vos efforts ! Vous êtes sur la bonne voie.<br>La persévérance paie toujours !";
+    color = "#FF5722";
+  } else {
+    level = "Débutant";
+    message = "🌱 Tout le monde doit commencer quelque part !<br>Chaque erreur est une leçon apprise.";
+    color = "#9E9E9E";
+  }
+  
+  return `
+    <div class="level-assessment" style="border-left: 4px solid ${color};">
+      <div class="level-badge" style="background-color: ${color};">
+        Niveau : ${level}
+      </div>
+      <div class="level-message">${message}</div>
+      <div class="level-score">Score : ${Math.round(percentage)}% (${Math.round(percentage/10)}/10)</div>
+    </div>
+  `;
+};
+
 QuizUI.prototype.saveQuizResults = function(results) {
   if (window.storage && this.quizManager.currentQuizData) {
     const quizResult = {
@@ -469,52 +695,6 @@ QuizUI.prototype.showStatsScreen = function() {
     this.dom.screens.stats.classList.remove("hidden");
   }
   // TODO: Implémenter l'affichage des statistiques
-};
-
-QuizUI.prototype.showQuestionFeedback = function(question, selectedIndex) {
-  const feedbackContainer = this.dom.quiz?.feedback;
-  if (!feedbackContainer) return;
-
-  // Déterminer si la réponse est correcte
-  const correctAnswer = question.correctAnswer;
-  const selectedAnswer = question.options[selectedIndex];
-  const isCorrect = selectedAnswer === correctAnswer;
-
-  // Construire le HTML du feedback
-  const feedbackHTML = `
-    <div class="feedback-content ${isCorrect ? 'correct' : 'incorrect'}">
-      <div class="feedback-result">
-        <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
-        <span class="feedback-status">${isCorrect ? 'Correct !' : 'Incorrect'}</span>
-      </div>
-      
-      ${!isCorrect ? `
-        <div class="feedback-answer">
-          <strong>Bonne réponse :</strong> ${correctAnswer}
-        </div>
-      ` : ''}
-      
-      ${question.explanation ? `
-        <div class="feedback-explanation">
-          <strong>Explication :</strong> ${question.explanation}
-        </div>
-      ` : ''}
-    </div>
-  `;
-
-  feedbackContainer.innerHTML = feedbackHTML;
-  feedbackContainer.classList.remove('hidden');
-
-  // Masquer automatiquement après 3 secondes si correct
-  if (isCorrect && this.feedbackTimeout) {
-    clearTimeout(this.feedbackTimeout);
-  }
-  
-  if (isCorrect) {
-    this.feedbackTimeout = setTimeout(() => {
-      feedbackContainer.classList.add('hidden');
-    }, 3000);
-  }
 };
 
 QuizUI.prototype.toggleTimerDisplay = function() {
