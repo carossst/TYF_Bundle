@@ -119,9 +119,9 @@ window.ResourceManager = (function() {
       return this.cache.quizzes[cacheKey];
     }
 
-    // ⚠️ CORRECTION : Utiliser le vrai nom de fichier
-    // Vos fichiers s'appellent "quiz_XXX.json", pas "ThemeKey_quiz_XXX.json"
-    const filename = `quiz_${quizId}.json`;
+    // ✅ CORRECTION : Utiliser le bon format avec themeKey
+    // Vos fichiers s'appellent "themekey_quiz_XXX.json" (ex: colors_quiz_101.json)
+    const filename = `${themeKey}_quiz_${quizId}.json`;
 
     // Chemins à essayer pour le fichier quiz
     const pathsToTry = [
