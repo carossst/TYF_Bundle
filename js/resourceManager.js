@@ -1,4 +1,4 @@
-/* resourceManager.js – Version corrigée pour la vraie structure des fichiers */
+/* resourceManager.js – Version finale corrigée pour colors_quiz_101.json */
 
 window.ResourceManager = (function() {
   function ResourceManagerClass() {
@@ -10,13 +10,13 @@ window.ResourceManager = (function() {
     this.isGitHubPages = window.location.hostname.includes('github.io');
     this.isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     
-    // Mapping des clés de thèmes - CORRIGÉ avec minuscules
+    // ✅ CORRECTION : Mapping avec minuscules pour correspondre aux vrais fichiers
     this.themeKeys = {
       1: "colors", 2: "numbers", 3: "gender", 4: "singular_plural", 5: "present_tense",
       6: "accents", 7: "ca_va", 8: "metro", 9: "boulangerie", 10: "cafe"
     };
     
-    // Configuration des chemins selon l'environnement  
+    // Configuration des chemins selon l'environnement
     this.baseDataPath = this.getBasePath();
     
     console.log(`🔧 ResourceManager: Environment=${this.getEnvironment()}, basePath=${this.baseDataPath}`);
@@ -31,70 +31,83 @@ window.ResourceManager = (function() {
 
   // Configuration du chemin de base
   ResourceManagerClass.prototype.getBasePath = function() {
-    // Configuration manuelle si définie
     if (window.resourceManagerConfig?.baseDataPath) {
       return window.resourceManagerConfig.baseDataPath;
     }
     
-    // GitHub Pages
     if (this.isGitHubPages) {
       return '/TYF_Bundle/js/data/';
     }
     
-    // Développement local
     return './js/data/';
   };
 
-  // Chargement des métadonnées avec plusieurs chemins de fallback
+  // Vérification si le cache est activé
+  ResourceManagerClass.prototype.isCacheEnabled = function() {
+    return !this.isDevelopment || window.resourceManagerConfig?.forceCache === true;
+  };
+
+  // Chargement des métadonnées avec retry et fallback
   ResourceManagerClass.prototype.loadMetadata = async function() {
-    if (this.cache.metadata) {
+    if (this.cache.metadata && this.isCacheEnabled()) {
       console.log("📦 Using cached metadata");
       return this.cache.metadata;
     }
 
-    // Chemins à essayer pour metadata.json
-    const pathsToTry = [
-      `${this.baseDataPath}metadata.json`,
-      './js/data/metadata.json',
-      './metadata.json'
-    ];
-    
-    // Ajout de chemins spécifiques GitHub Pages
-    if (this.isGitHubPages) {
-      pathsToTry.unshift('/TYF_Bundle/js/data/metadata.json');
-      pathsToTry.push('/TYF_Bundle/metadata.json');
-    }
+    const pathsToTry = this.getMetadataPaths();
+    let lastError = null;
 
-    let metadata = null;
-    for (const path of pathsToTry) {
+    for (let i = 0; i < pathsToTry.length; i++) {
+      const path = pathsToTry[i];
       try {
-        console.log(`🔍 Trying to load metadata from: ${path}`);
-        const response = await fetch(path);
+        console.log(`🔍 Attempting to load metadata from: ${path} (${i + 1}/${pathsToTry.length})`);
+        
+        const response = await this.fetchWithTimeout(path, 5000);
         if (response.ok) {
-          metadata = await response.json();
-          console.log(`✅ Metadata loaded from: ${path}`);
-          break;
+          const metadata = await response.json();
+          
+          if (this.validateMetadata(metadata)) {
+            this.cache.metadata = metadata;
+            console.log(`✅ Metadata loaded successfully from: ${path}`);
+            return metadata;
+          } else {
+            console.warn(`⚠️ Invalid metadata structure from: ${path}`);
+          }
         } else {
           console.warn(`❌ HTTP ${response.status} for: ${path}`);
         }
       } catch (error) {
+        lastError = error;
         console.warn(`❌ Failed to load metadata from ${path}:`, error.message);
       }
     }
 
-    if (!metadata) {
-      console.error("❌ Unable to load metadata from any path");
-      throw new Error("Failed to load metadata");
-    }
+    console.error("❌ All metadata loading attempts failed");
+    throw new Error(`Failed to load metadata: ${lastError?.message || 'Unknown error'}`);
+  };
 
-    // Validation basique
-    if (!metadata.themes || !Array.isArray(metadata.themes)) {
-      console.error("❌ Invalid metadata structure");
-      throw new Error("Invalid metadata structure");
+  // Génération des chemins de métadonnées à essayer
+  ResourceManagerClass.prototype.getMetadataPaths = function() {
+    const paths = [`${this.baseDataPath}metadata.json`];
+    
+    if (this.isGitHubPages && !this.baseDataPath.includes('/TYF_Bundle/')) {
+      paths.unshift('/TYF_Bundle/js/data/metadata.json', '/TYF_Bundle/metadata.json');
     }
+    
+    if (!this.isGitHubPages && this.baseDataPath !== './') {
+      paths.push('./metadata.json', './js/data/metadata.json');
+    }
+    
+    return [...new Set(paths)];
+  };
 
-    this.cache.metadata = metadata;
-    return metadata;
+  // Validation de la structure des métadonnées
+  ResourceManagerClass.prototype.validateMetadata = function(metadata) {
+    return metadata && 
+           metadata.themes && 
+           Array.isArray(metadata.themes) && 
+           metadata.themes.length > 0 &&
+           metadata.themes.every(theme => theme.id && theme.name && Array.isArray(theme.quizzes));
   };
 
   // Récupération des quiz d'un thème
@@ -103,30 +116,34 @@ window.ResourceManager = (function() {
     const theme = metadata.themes.find(t => t.id === Number(themeId));
     
     if (!theme) {
-      console.error(`Theme ${themeId} not found in metadata`);
-      throw new Error(`Theme ${themeId} not found`);
+      throw new Error(`Theme ${themeId} not found in metadata`);
     }
     
     return theme.quizzes || [];
   };
 
-  // Chargement d'un quiz - CORRECTION MAJEURE
+  // ✅ CHARGEMENT D'UN QUIZ - VERSION FINALE CORRIGÉE
   ResourceManagerClass.prototype.getQuiz = async function(themeId, quizId) {
     const cacheKey = `quiz_${quizId}`;
     
-    if (this.cache.quizzes[cacheKey]) {
+    if (this.cache.quizzes[cacheKey] && this.isCacheEnabled()) {
       console.log(`📦 Using cached quiz ${quizId}`);
       return this.cache.quizzes[cacheKey];
     }
 
-    // ✅ CORRECTION : Utiliser le bon format avec themeKey
-    // Vos fichiers s'appellent "themekey_quiz_XXX.json" (ex: colors_quiz_101.json)
+    // ✅ RÉCUPÉRER LE THEME KEY
+    const themeKey = this.themeKeys[themeId];
+    if (!themeKey) {
+      throw new Error(`Unknown theme ID ${themeId}`);
+    }
+
+    // ✅ CONSTRUIRE LE BON NOM DE FICHIER
     const filename = `${themeKey}_quiz_${quizId}.json`;
+    console.log(`🔍 Looking for file: ${filename}`);
 
     // Chemins à essayer pour le fichier quiz
     const pathsToTry = [
-      `${this.baseDataPath}themes/theme-${themeId}/${filename}`,
-      `./js/data/themes/theme-${themeId}/${filename}`
+      `${this.baseDataPath}themes/theme-${themeId}/${filename}`
     ];
     
     // Ajout de chemins GitHub Pages
@@ -137,15 +154,16 @@ window.ResourceManager = (function() {
     let quizData = null;
     for (const path of pathsToTry) {
       try {
-        console.log(`🔍 Trying to load quiz from: ${path}`);
-        const response = await fetch(path);
+        console.log(`🧪 Tentative de chargement quiz via : ${path}`);
+        
+        const response = await this.fetchWithTimeout(path, 8000);
         if (response.ok) {
           quizData = await response.json();
           
-          // Validation basique du quiz
+          // Validation du quiz
           if (this.validateQuiz(quizData, themeId, quizId)) {
             this.cache.quizzes[cacheKey] = quizData;
-            console.log(`✅ Quiz ${quizId} loaded from: ${path}`);
+            console.log(`✅ Quiz ${quizId} chargé depuis : ${path}`);
             return quizData;
           } else {
             console.warn(`⚠️ Quiz validation failed for: ${path}`);
@@ -158,15 +176,13 @@ window.ResourceManager = (function() {
       }
     }
 
-    console.error(`❌ Quiz ${quizId} not found in any location`);
-    throw new Error(`Quiz ${quizId} not found`);
+    throw new Error(`Quiz ${quizId} not found: filename should be ${filename}`);
   };
 
   // Validation de la structure d'un quiz
   ResourceManagerClass.prototype.validateQuiz = function(quizData, expectedThemeId, expectedQuizId) {
     if (!quizData) return false;
     
-    // Validation flexible - vos quiz peuvent avoir des structures différentes
     const hasValidId = quizData.id === Number(expectedQuizId) || !quizData.id;
     const hasValidThemeId = quizData.themeId === Number(expectedThemeId) || !quizData.themeId;
     const hasQuestions = Array.isArray(quizData.questions) && quizData.questions.length > 0;
@@ -176,18 +192,20 @@ window.ResourceManager = (function() {
       return false;
     }
     
-    if (!hasValidId) {
-      console.warn(`Quiz ID mismatch: expected ${expectedQuizId}, got ${quizData.id}`);
-    }
-    
-    if (!hasValidThemeId) {
-      console.warn(`Theme ID mismatch: expected ${expectedThemeId}, got ${quizData.themeId}`);
-    }
-    
     return hasQuestions;
   };
 
-  // Chemin des fichiers audio
+  // Fetch avec timeout
+  ResourceManagerClass.prototype.fetchWithTimeout = function(url, timeout = 5000) {
+    return Promise.race([
+      fetch(url),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error(`Timeout after ${timeout}ms`)), timeout)
+      )
+    ]);
+  };
+
+  // Gestion des chemins audio
   ResourceManagerClass.prototype.getAudioPath = function(themeId, audioFilename) {
     return `${this.baseDataPath}themes/theme-${themeId}/audio/${audioFilename}`;
   };
@@ -196,8 +214,8 @@ window.ResourceManager = (function() {
   ResourceManagerClass.prototype.preloadTheme = async function(themeId) {
     try {
       const quizzes = await this.getThemeQuizzes(themeId);
-      const loadPromises = quizzes.map(quiz => this.getQuiz(themeId, quiz.id));
-      await Promise.all(loadPromises);
+      const promises = quizzes.map(quiz => this.getQuiz(themeId, quiz.id));
+      await Promise.all(promises);
       console.log(`✅ Theme ${themeId} preloaded successfully`);
     } catch (error) {
       console.error(`❌ Failed to preload theme ${themeId}:`, error);
@@ -217,6 +235,7 @@ window.ResourceManager = (function() {
     
     console.log("Environment:", this.getEnvironment());
     console.log("Base path:", this.baseDataPath);
+    console.log("Theme keys:", this.themeKeys);
     console.log("Current URL:", window.location.href);
     
     try {
@@ -232,9 +251,13 @@ window.ResourceManager = (function() {
           const firstQuiz = firstTheme.quizzes[0];
           console.log("Testing first quiz:", firstQuiz.id);
           
+          const expectedFilename = `${this.themeKeys[firstTheme.id]}_quiz_${firstQuiz.id}.json`;
+          console.log("Expected filename:", expectedFilename);
+          
           try {
-            await this.getQuiz(firstTheme.id, firstQuiz.id);
+            const quizData = await this.getQuiz(firstTheme.id, firstQuiz.id);
             console.log("✅ First quiz loaded successfully");
+            console.log("Questions found:", quizData.questions?.length || 0);
           } catch (error) {
             console.error("❌ Failed to load first quiz:", error);
           }
@@ -249,10 +272,3 @@ window.ResourceManager = (function() {
 
   return new ResourceManagerClass();
 })();
-
-// Diagnostic automatique en mode développement
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  window.addEventListener('load', () => {
-    setTimeout(() => ResourceManager.diagnose(), 1000);
-  });
-}
