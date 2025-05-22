@@ -10,10 +10,10 @@ window.ResourceManager = (function() {
     this.isGitHubPages = window.location.hostname.includes('github.io');
     this.isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     
-    // ✅ CORRECTION : Mapping avec la VRAIE structure de vos fichiers
+    // ✅ CORRECTION FINALE : Mapping avec minuscules selon vos VRAIS fichiers GitHub
     this.themeKeys = {
-      1: "Colors", 2: "Numbers", 3: "Gender", 4: "Singular_Plural", 5: "Present_tense",
-      6: "Accents", 7: "Ca_va", 8: "Metro", 9: "Boulangerie", 10: "Cafe"
+      1: "colors", 2: "numbers", 3: "gender", 4: "singular_plural", 5: "present_tense",
+      6: "accents", 7: "ca_va", 8: "metro", 9: "boulangerie", 10: "cafe"
     };
     
     // Configuration des chemins selon l'environnement
