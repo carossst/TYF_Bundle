@@ -140,6 +140,7 @@ window.ResourceManager = (function() {
     // ✅ CONSTRUIRE LE BON NOM DE FICHIER
     const filename = `${themeKey}_quiz_${quizId}.json`;
     console.log(`🔍 Looking for file: ${filename}`);
+    console.log(`🔍 Theme ${themeId} -> Key: ${themeKey} -> File: ${filename}`);
 
     // Chemins à essayer pour le fichier quiz
     const pathsToTry = [
@@ -164,9 +165,11 @@ window.ResourceManager = (function() {
           if (this.validateQuiz(quizData, themeId, quizId)) {
             this.cache.quizzes[cacheKey] = quizData;
             console.log(`✅ Quiz ${quizId} chargé depuis : ${path}`);
+            console.log(`✅ Questions trouvées: ${quizData.questions?.length || 0}`);
             return quizData;
           } else {
             console.warn(`⚠️ Quiz validation failed for: ${path}`);
+            console.warn(`⚠️ Quiz data:`, quizData);
           }
         } else {
           console.warn(`❌ HTTP ${response.status} for: ${path}`);
@@ -176,6 +179,8 @@ window.ResourceManager = (function() {
       }
     }
 
+    console.error(`❌ Quiz ${quizId} not found: filename should be ${filename}`);
+    console.error(`❌ Paths tried:`, pathsToTry);
     throw new Error(`Quiz ${quizId} not found: filename should be ${filename}`);
   };
 
