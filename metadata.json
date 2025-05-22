@@ -3,265 +3,331 @@
   "releaseDate": "2025-05-20",
   "themes": [
     {
-      "id": 2,
+      "id": 1,
       "name": "I Speak Colors",
-      "description": "Mastering colors in French.",
+      "description": "Practice French color vocabulary and usage.",
       "icon": "fas fa-palette",
       "quizzes": [
         {
+          "id": 101,
+          "name": "Writing and Reading Color Test 1",
+          "description": ""
+        },
+        {
+          "id": 102,
+          "name": "Writing and Reading Conversation Color Test 2",
+          "description": ""
+        },
+        {
+          "id": 103,
+          "name": "Listening Color Test 3",
+          "description": ""
+        },
+        {
+          "id": 104,
+          "name": "Listening Color Conversation Test 4",
+          "description": ""
+        },
+        {
+          "id": 105,
+          "name": "Writing and Reading & Listening Color Test 5",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "I Speak Numbers",
+      "description": "Practice French numbers and numerical expressions.",
+      "icon": "fas fa-sort-numeric-down",
+      "quizzes": [
+        {
           "id": 201,
-          "name": "Quiz 201",
+          "name": "Writing and Reading Numbers Test 1",
           "description": ""
         },
         {
           "id": 202,
-          "name": "Quiz 202",
+          "name": "Writing and Reading Conversation Numbers Test 2",
           "description": ""
         },
         {
           "id": 203,
-          "name": "Quiz 203",
+          "name": "Listening Numbers Test 3",
           "description": ""
         },
         {
           "id": 204,
-          "name": "Quiz 204",
+          "name": "Listening Conversation Numbers Test 4",
           "description": ""
         },
         {
           "id": 205,
-          "name": "Quiz 205",
+          "name": "Writing and Reading & Listening Numbers Test 5",
           "description": ""
         }
       ]
     },
     {
       "id": 3,
-      "name": "I Speak Numbers",
-      "description": "Mastering French numbers.",
-      "icon": "fas fa-sort-numeric-down",
+      "name": "I Speak Gender",
+      "description": "Master grammatical gender in French.",
+      "icon": "fas fa-venus-mars",
       "quizzes": [
         {
           "id": 301,
-          "name": "Quiz 301",
+          "name": "Writing and Reading Gender Test 1",
           "description": ""
         },
         {
           "id": 302,
-          "name": "Quiz 302",
+          "name": "Writing and Reading Conversation Gender Test 2",
           "description": ""
         },
         {
           "id": 303,
-          "name": "Quiz 303",
+          "name": "Listening Gender Test 3",
           "description": ""
         },
         {
           "id": 304,
-          "name": "Quiz 304",
+          "name": "Listening Conversation Gender Test 4",
           "description": ""
         },
         {
           "id": 305,
-          "name": "Quiz 305",
+          "name": "Writing and Reading & Listening Gender Test 5",
           "description": ""
         }
       ]
     },
     {
       "id": 4,
-      "name": "I Speak Gender",
-      "description": "Understanding grammatical gender.",
-      "icon": "fas fa-venus-mars",
+      "name": "I Speak Singular and Plural",
+      "description": "Practice French singular and plural forms.",
+      "icon": "fas fa-copy",
       "quizzes": [
         {
           "id": 401,
-          "name": "Quiz 401",
+          "name": "Writing and Reading Singular/plural Test 1",
           "description": ""
         },
         {
           "id": 402,
-          "name": "Quiz 402",
+          "name": "Writing and Reading Conversation Singular/plural  Test 2",
           "description": ""
         },
         {
           "id": 403,
-          "name": "Quiz 403",
+          "name": "Listening Singular/plural  Test 3",
           "description": ""
         },
         {
           "id": 404,
-          "name": "Quiz 404",
+          "name": "Listening Conversation Singular/plural  Test 4",
           "description": ""
         },
         {
           "id": 405,
-          "name": "Quiz 405",
+          "name": "Writing and Reading & Listening Singular/plural  Test 5",
           "description": ""
         }
       ]
     },
     {
       "id": 5,
-      "name": "I Speak Singular & Plural",
-      "description": "Mastering singular and plural forms.",
-      "icon": "fas fa-copy",
+      "name": "I Speak Present Tense",
+      "description": "Conjugate and use the French present tense.",
+      "icon": "fas fa-italic",
       "quizzes": [
         {
           "id": 501,
-          "name": "Quiz 501",
+          "name": "Writing and Reading present tense Test 1",
           "description": ""
         },
         {
           "id": 502,
-          "name": "Quiz 502",
+          "name": "Writing and Reading Conversation present tense Test 2",
           "description": ""
         },
         {
           "id": 503,
-          "name": "Quiz 503",
+          "name": "Listening present tense Test 3",
           "description": ""
         },
         {
           "id": 504,
-          "name": "Quiz 504",
+          "name": "Listening Conversation present tense Test 4",
           "description": ""
         },
         {
           "id": 505,
-          "name": "Quiz 505",
+          "name": "Writing and Reading & Listening present tense  Test 5",
           "description": ""
         }
       ]
     },
     {
       "id": 6,
-      "name": "I Speak Present Tense",
-      "description": "Using the present tense correctly in French.",
-      "icon": "fas fa-italic",
+      "name": "I Speak Accents",
+      "description": "Understand and use French accents correctly.",
+      "icon": "fas fa-asterisk",
       "quizzes": [
         {
           "id": 601,
-          "name": "Quiz 601",
+          "name": "Writing and Reading accents Test 1",
           "description": ""
         },
         {
           "id": 602,
-          "name": "Quiz 602",
+          "name": "Writing and Reading Conversation accents Test 2",
           "description": ""
         },
         {
           "id": 603,
-          "name": "Quiz 603",
+          "name": "Listening accents Test 3",
           "description": ""
         },
         {
           "id": 604,
-          "name": "Quiz 604",
+          "name": "Listening accents conversationTest 4",
           "description": ""
         },
         {
           "id": 605,
-          "name": "Quiz 605",
+          "name": "Writing and Reading & Listening accents Test 5",
           "description": ""
         }
       ]
     },
     {
       "id": 7,
-      "name": "I Speak Accents",
-      "description": "Understanding and using French accents.",
-      "icon": "fas fa-asterisk",
+      "name": "I Speak Ça Va",
+      "description": "Learn essential greetings and ice-breaking phrases.",
+      "icon": "fas fa-handshake",
       "quizzes": [
         {
           "id": 701,
-          "name": "Quiz 701",
+          "name": "Writing and Reading ça va Test 1",
           "description": ""
         },
         {
           "id": 702,
-          "name": "Quiz 702",
+          "name": "Writing and Reading Conversation ça va Test 2",
           "description": ""
         },
         {
           "id": 703,
-          "name": "Quiz 703",
+          "name": "Listening ça va Test 3",
           "description": ""
         },
         {
           "id": 704,
-          "name": "Quiz 704",
+          "name": "Listening Conversation ça va Test 4",
           "description": ""
         },
         {
           "id": 705,
-          "name": "Quiz 705",
+          "name": "Writing and Reading & Listening ça va Test 5",
           "description": ""
         }
       ]
     },
     {
       "id": 8,
-      "name": "I Speak \u00c7a Va",
-      "description": "Breaking the ice with everyday conversations.",
-      "icon": "fas fa-handshake",
+      "name": "I Speak Métro",
+      "description": "Navigate public transport and use related vocabulary.",
+      "icon": "fas fa-subway",
       "quizzes": [
         {
           "id": 801,
-          "name": "Quiz 801",
+          "name": "Writing and Reading metro Test 1",
           "description": ""
         },
         {
           "id": 802,
-          "name": "Quiz 802",
+          "name": "Writing and Reading Conversation metro Test 2",
           "description": ""
         },
         {
           "id": 803,
-          "name": "Quiz 803",
+          "name": "Listening metro Test 3",
           "description": ""
         },
         {
           "id": 804,
-          "name": "Quiz 804",
+          "name": "Listening Conversation metro Test 4",
           "description": ""
         },
         {
           "id": 805,
-          "name": "Quiz 805",
+          "name": "Writing and Reading & Listening metro Test 5",
           "description": ""
         }
       ]
     },
     {
       "id": 9,
-      "name": "I Speak M\u00e9tro",
-      "description": "Navigating Paris M\u00e9tro and transport vocabulary.",
-      "icon": "fas fa-subway",
+      "name": "I Speak Boulangerie",
+      "description": "Order bread and pastries like a local.",
+      "icon": "fas fa-bread-slice",
+      "quizzes": [
+        {
+          "id": 901,
+          "name": "Writing and Reading boulangerie Test 1",
+          "description": ""
+        },
+        {
+          "id": 902,
+          "name": "Writing and Reading Conversation boulangerie Test 2",
+          "description": ""
+        },
+        {
+          "id": 903,
+          "name": "Listening boulangerie Test 3",
+          "description": ""
+        },
+        {
+          "id": 904,
+          "name": "Listening Conversation boulangerie Test 4",
+          "description": ""
+        },
+        {
+          "id": 905,
+          "name": "Writing and Reading & Listening boulangerie Test 5",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "I Speak Café",
+      "description": "Order drinks and food in a French café.",
+      "icon": "fas fa-coffee",
       "quizzes": [
         {
           "id": 1001,
-          "name": "Quiz 1001",
+          "name": "Writing and reading café 1",
           "description": ""
         },
         {
           "id": 1002,
-          "name": "Quiz 1002",
+          "name": "Writing and Reading Test Café 2",
           "description": ""
         },
         {
           "id": 1003,
-          "name": "Quiz 1003",
+          "name": "Listening Café Test 3",
           "description": ""
         },
         {
           "id": 1004,
-          "name": "Quiz 1004",
+          "name": "Listening Café Test 4",
           "description": ""
         },
         {
           "id": 1005,
-          "name": "Quiz 1005",
+          "name": "Writing and Reading & Listening Café Test 5",
           "description": ""
         }
       ]

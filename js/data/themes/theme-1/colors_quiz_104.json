@@ -1,0 +1,79 @@
+{
+  "id": 104,
+  "themeId": 1,
+  "name": "Listening Conversation Colors – Quiz 4",
+  "description": "Practice listening comprehension in conversation scenarios using Colors vocabulary.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. On va manger une glace ?", "B. On va manger deux glaces ?", "C. On va manger sur glace ?", "D. On va manger sur place ?"],
+      "correctAnswer": "A. On va manger une glace ?",
+      "audio": "TYF_Colors_4_1.mp3",
+      "explanation": "How about some ice cream?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Oui super. Allons tester le magasin, avec la devanture blanche et noire.", "B. Oui super. Allons tester ce nouveau magasin de glaces, avec la devanture blanche et noire.", "C. Oui super. Allons tester ce nouveau magasin deux glaces, avec la devanture blanche et noire.", "D. Oui super. Allons tester ce magasin deux glaces, avec la devanture blanche et noire."],
+      "correctAnswer": "B. Oui super. Allons tester ce nouveau magasin de glaces, avec la devanture blanche et noire.",
+      "audio": "TYF_Colors_4_2.mp3",
+      "explanation": "Great! Let's check out that new ice cream shop with the black and white storefront."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ok. On y va. J'ai leu feu vert de mes parents.", "B. Ok. On y va. J'ai les feux verts de mes parents.", "C. Ok. On y va. J'ai le feu vert des parents.", "D. Ok. On y va. J'ai le feu vert de mes parents."],
+      "correctAnswer": "D. Ok. On y va. J'ai le feu vert de mes parents.",
+      "audio": "TYF_Colors_4_3.mp3",
+      "explanation": "Alright, let's go! I got the green light from my parents."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Cool. On y est ! Bonjour, pourrions-nous tester quelques parfums ?", "B. Cool. On y est ! Bonjour, pourrions-nous tester quelques uns des parfums ?", "C. Cool. On y est ! Bonjour, pourrions-nous tester quelques parfums s'il-vous-plaît ?", "D. Cool. On y est ! Bonjour, pourrons-nous tester vos parfums s'il-vous-plaît ?"],
+      "correctAnswer": "C. Cool. On y est ! Bonjour, pourrions-nous tester quelques parfums s'il-vous-plaît ?",
+      "audio": "TYF_Colors_4_4.mp3",
+      "explanation": "Cool, we're here! Hello, could we try a few flavors, please?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Oui bien sûr. J'ai cette délicieuse glace surprise bleu marine.", "B. Oui bien sûr. J'ai cette glace surprise bleu marine.", "C. Oui bien sûr. J'ai cette surprise bleu marine.", "D. Oui bien sûr. J'ai cette délicieuse glace surprise bleue marine."],
+      "correctAnswer": "A. Oui bien sûr. J'ai cette délicieuse glace surprise bleu marine.",
+      "audio": "TYF_Colors_4_5.mp3",
+      "explanation": "Sure, I have this delicious blue marine surprise ice cream."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ah c'est rigolo. Moi je la vois bleu clair. Miam, c'est trop bon !", "B. Ah. Moi je la vois plutôt bleu. Miam, c'est bon !", "C. Ah. Moi je la vois bleu clair. Miam, c'est bon !", "D. Ah c'est rigolo. Moi je la vois plutôt bleu clair. Miam, c'est bon !"],
+      "correctAnswer": "D. Ah c'est rigolo. Moi je la vois plutôt bleu clair. Miam, c'est bon !",
+      "audio": "TYF_Colors_4_6.mp3",
+      "explanation": "Oh, that's funny. I see it more as light blue. Yum, it's good!"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Je peux aussi tester celle qui a une couleur s'il-vous-plaît ?", "B. Je peux aussi tester celle qui a une couleur cerise s'il-vous-plaît ?", "C. Je peux aussi tester celle qui a cerise ?", "D. Je peux aussi tester celle qui a une couleur rouge cerise ?"],
+      "correctAnswer": "B. Je peux aussi tester celle qui a une couleur cerise s'il-vous-plaît ?",
+      "audio": "TYF_Colors_4_7.mp3",
+      "explanation": "Could I also try the cherry colored one, please?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Miam. Elle est très bonne aussi. Et vous avez de la glace aux marrons ?", "B. Miam. Elle est bonne aussi. Et vous glace aux marrons ?", "C. Miam. Elle est très bonne aussi. Vous avez glace aux marrons ?", "D. Miam. Elle est bonne aussi. Et vous avez de la glace avec des marrons ?"],
+      "correctAnswer": "A. Miam. Elle est très bonne aussi. Et vous avez de la glace aux marrons ?",
+      "audio": "TYF_Colors_4_8.mp3",
+      "explanation": "Yum, this one is also very good. Do you have any chestnut ice cream?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Oui, voilà. Vous voulez commander quoi ?", "B. Oui, voilà. Que voulez-vous commander ?", "C. Oui, voilà. Et vous voulez commander s'il-vous-plaît ?", "D. Oui, voilà. Et vous voulez commander pour quoi ?"],
+      "correctAnswer": "B. Oui, voilà. Que voulez-vous commander ?",
+      "audio": "TYF_Colors_4_9.mp3",
+      "explanation": "Yes, here you go. What would you like to order"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. On va reprendre deux glaces aux marrons avec un peu d'orange, s'il vous plaît.", "B. On va prendre de la glace aux marrons avec d'orange, s'il vous plaît.", "C. On va prendre des glaces marrons avec un peu d'orange, s'il vous plaît.", "D. On va prendre deux glaces aux marrons avec un peu d'orange, s'il vous plaît."],
+      "correctAnswer": "D. On va prendre deux glaces aux marrons avec un peu d'orange.",
+      "audio": "TYF_Colors_4_10.mp3",
+      "explanation": "We'll have two scoops of chestnut ice cream with a bit of orange, please."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": 603,
+  "themeId": 6,
+  "name": "Listening accents – Quiz 3",
+  "description": "Practice listening comprehension focusing on French accents and pronunciation.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Éléve", "B. Élève", "C. Èlève", "D. Èléve"],
+      "correctAnswer": "B. Élève",
+      "audio": "TYF_Accents_3_1.mp3",
+      "explanation": "Student"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ce moment-la", "B. Cè moment-là", "C. Ces moments-là", "D. Ce moment-là"],
+      "correctAnswer": "D. Ce moment-là",
+      "audio": "TYF_Accents_3_2.mp3",
+      "explanation": "That moment"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. L'eau se rèpand.", "B. L'eau se roupand.", "C. L'eau se répand.", "D. L'eau se repentit."],
+      "correctAnswer": "C. L'eau se répand.",
+      "audio": "TYF_Accents_3_3.mp3",
+      "explanation": "The water is spreading."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ils brulent les zarchives.", "B. Ils brûlent les archives.", "C. Ils brûlent leurs archives.", "D. Ils brûlent laids archives."],
+      "correctAnswer": "B. Ils brûlent les archives.",
+      "audio": "TYF_Accents_3_4.mp3",
+      "explanation": "They burn the archives."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Priviléges", "B. Privilages", "C. Privilégiés", "D. Privilèges"],
+      "correctAnswer": "D. Privilèges",
+      "audio": "TYF_Accents_3_5.mp3",
+      "explanation": "Privileges"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. La société de l'ancien régime", "B. La sociètè de l'ancien règime", "C. La socièté de l'ancien règime", "D. La sociétè de l'ancien régime"],
+      "correctAnswer": "A. La société de l'ancien régime",
+      "audio": "TYF_Accents_3_6.mp3",
+      "explanation": "The society of the old regime"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Elle est adoptée.", "B. Elle est adaptée.", "C. Elle est adoptèe.", "D. Elle n'est pas adoptée."],
+      "correctAnswer": "A. Elle est adoptée.",
+      "audio": "TYF_Accents_3_7.mp3",
+      "explanation": "She's adopted."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. J'arrète les leçons.", "B. J'arrête la leçon.", "C. Je n'arrête pas la leçon.", "D. J'arrête les lessons."],
+      "correctAnswer": "B. J'arrête la leçon.",
+      "audio": "TYF_Accents_3_8.mp3",
+      "explanation": "I'm stopping the lesson."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Les pènuries alimentaires perdurent.", "B. Les pénuries alimentaires perdurent.", "C. Les pènuries élémentaires ne perdurent pas.", "D. Les pénuries élémentaires perdurent."],
+      "correctAnswer": "B. Les pénuries alimentaires perdurent.",
+      "audio": "TYF_Accents_3_9.mp3",
+      "explanation": "Food shortages persist."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Et ça n'est pas fini.", "B. Et c'est fini.", "C. Et ca n'est pas fini.", "D. Et c'est pas fini."],
+      "correctAnswer": "A. Et ça n'est pas fini.",
+      "audio": "TYF_Accents_3_10.mp3",
+      "explanation": "And there's more to come."
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "id": 605,
+  "themeId": 6,
+  "name": "Writing and Reading & Listening accents – Quiz 5",
+  "description": "Combine writing/reading and listening skills focusing on French accents and pronunciation.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "J'aimerais bien en savoir plus sur le ___ des femmes dans la Révolution. Tu connais ça toi ? (fill the blank)",
+      "options": ["A. rôle", "B. role", "C. rosle", "D. rôlle"],
+      "correctAnswer": "A. rôle",
+      "explanation": "J'aimerais bien en savoir plus sur le rôle des femmes dans la Révolution. Tu connais ça toi ? (I'd love to know more about the role of women in the Revolution. Do you know about that?)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Oui, elles ont joué un rôle majeur.", "B. Oui, c'est sur qu'elles n'ont pas joué un rôle majeur dans la révolution.", "C. Oui, c'est sûr qu'elles ont joué un rôle majeur dans la révolution.", "D. Oui, c'est sûr qu'elles ont jouè un rôle dans l'évolution."],
+      "correctAnswer": "C. Oui, c'est sûr qu'elles ont joué un rôle majeur dans la révolution.",
+      "audio": "TYF_Accents_5_2.mp3",
+      "explanation": "Yes, they certainly played a major role in the revolution."
+    },
+    {
+      "question": "Le 5 octobre 1789, les femmes s'organisent et se rendent à Versailles ___ ! (fill the blank)",
+      "options": ["A. à pied", "B. a pied", "C. à piéd", "D. All of the above"],
+      "correctAnswer": "A. à pied",
+      "explanation": "Le 5 octobre 1789, les femmes s'organisent et se rendent à Versailles à pied ! (On October 5, 1789, the women get organized and walk to Versailles!)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. C'est la rumeur du banquet dans un contexte de famine qui attise leur colère, c'est ça ?", "B. C'est la rumeur du banquet etde famine qui attise leur colère ?", "C. Ce n'est pas la rumeur du banquet et de famine qui attise leur colère.", "D. C'est la rumeur du banquet du 1er octobre qui attise leur colère, c'est ça ?"],
+      "correctAnswer": "A. C'est la rumeur du banquet dans un contexte de famine qui attise leur colère, c'est ça ?",
+      "audio": "TYF_Accents_5_4.mp3",
+      "explanation": "It's the rumor of the banquet against a backdrop of famine that fuels their anger, isn't it?"
+    },
+    {
+      "question": "Exactement. Les femmes interpellent les ___ municipales : « Nous allons à Versailles ! » (fill the blank)",
+      "options": ["A. autorités", "B. autoritès", "C. autoritets", "D. All of the above"],
+      "correctAnswer": "A. autorités",
+      "explanation": "Exactement. Les femmes interpellent les autorités municipales : « Nous allons à Versailles ! » (Exactly. The women call out to the municipal authorities: "We're going to Versailles!")"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. La Fayette ordonne à la garde nationale d'escorter le cortège pour les protéger.", "B. La Fayette garde la nationale d'escorter le cortège pour les surveiller.", "C. La Fayette ordonne à la garde d'escorter le cortége pour les protéger.", "D. La Fayette ordonne à la garde d'escorter le cortège pour protéger l'itinèraire."],
+      "correctAnswer": "A. La Fayette ordonne à la garde nationale d'escorter le cortège pour les protéger.",
+      "audio": "TYF_Accents_5_6.mp3",
+      "explanation": "La Fayette orders the National Guard to escort the procession to protect them."
+    },
+    {
+      "question": "Il ___ que le départ de Paris se fait sous la pluie, en chantant. (fill the blank)",
+      "options": ["A. parait", "B. paraït", "C. paraît", "D. All of the above"],
+      "correctAnswer": "C. paraît",
+      "explanation": "Il paraît que le départ de Paris se fait sous la pluie, en chantant. (I hear that the departure from Paris was done in the rain, with singing.)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Elles ne se battent pas pour obtenir la baisse du prix du pain.", "B. Elles se battent pour obtenir la hausse du prix du pain.", "C. Elles se battent pour obtenir la baisse du prix du pain.", "D. Elles se battent pour obtenir la baisse du prix."],
+      "correctAnswer": "C. Elles se battent pour obtenir la baisse du prix du pain.",
+      "audio": "TYF_Accents_5_8.mp3",
+      "explanation": "They are fighting to lower the price of bread."
+    },
+    {
+      "question": "Et c'est incroyable car elles l'obtiennent ! Le roi accepte___. (fill the blank)",
+      "options": ["A. leurs requètes", "B. leurs requêtes", "C. leurs requétes", "D. All of the above"],
+      "correctAnswer": "B. leurs requêtes",
+      "explanation": "Et c'est incroyable car elles l'obtiennent ! Le roi accepte leurs requêtes. (And it's incredible, because they get it! The king accepts their requests.)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ce sera suffisant et on connaît la suite… Je dois filer. Je te dis à bientôt !", "B. Mais ce ne sera pas suffisant et on connaît pas bien la suite… Je dois rester. Je te dis à bientôt !", "C. Mais ce ne sera pas suffisant et on connaît la suite… Je dois filer. Je te dis à bientôt !", "D. Mais ce ne sera pas suffisant et on connaît les suites… Je ne dois pas y aller. Je ne te dis pas à bientôt !"],
+      "correctAnswer": "C. Mais ce ne sera pas suffisant et on connaît la suite… Je dois filer. Je te dis à bientôt !",
+      "audio": "TYF_Accents_5_10.mp3",
+      "explanation": "But that won't be enough and we know what happens next... I have to go. See you soon!"
+    }
+  ]
+}
+    

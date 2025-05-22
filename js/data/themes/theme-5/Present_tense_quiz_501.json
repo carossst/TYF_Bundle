@@ -1,0 +1,59 @@
+{
+  "id": 501,
+  "themeId": 5,
+  "name": "Writing and Reading present tense – Quiz 1",
+  "description": "Practice Present Tense vocabulary and grammar through writing and reading exercises.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "How do you say "I'm watching a movie"?",
+      "options": ["A. Je regarde un film.", "B. Je regardes un film.", "C. Je regardé un film.", "D. All of the above"],
+      "correctAnswer": "A. Je regarde un film."
+    },
+    {
+      "question": "How do you say \"She doesn't like the draft coming from the window\"?",
+      "options": ["A. Elles n'aiment pas les courants d'air.", "B. Elles n'aimes pas les courants d'air.", "C. Elle n'aime pas les courants d'air.", "D. Elle m'aime pas les courants d'air."],
+      "correctAnswer": "C. Elle n'aime pas les courants d'air."
+    },
+    {
+      "question": "How do you say "It's time to eat"?",
+      "options": ["A. Il est l'heure de manger.", "B. Il est l'heure de mangé.", "C. Il est l'heure manger.", "D. All of the above"],
+      "correctAnswer": "A. Il est l'heure de manger."
+    },
+    {
+      "question": "How do you say "We are leaving right now"?",
+      "options": ["A. On part deux suite.", "B. On parte tout suite.", "C. On part tout de suite.", "D. On partent tout de suite."],
+      "correctAnswer": "C. On part tout de suite."
+    },
+    {
+      "question": "How do you say "She's been working here since January"?",
+      "options": ["A. Elles travaillent ici depuis janvier.", "B. Elle travailles ici depuis janvier.", "C. Elle travaille ici depuis janvier.", "D. Elle travaillé ici depuis janvier."],
+      "correctAnswer": "C. Elle travaille ici depuis janvier."
+    },
+    {
+      "question": "How do you say "The cat is jumping everywhere"?",
+      "options": ["A. Le chat courre partout.", "B. Le chat est en train de courir partout.", "C. Le chat n'arrête pas de courir partout.", "D. All of the above"],
+      "correctAnswer": "B. Le chat est en train de courir partout."
+    },
+    {
+      "question": "How do you say \"He's reading in bed\"?",
+      "options": ["A. Il litt dans son lit.", "B. Il lis dans son lit.", "C. Il lit dans son lit.", "D. Ils lisent dans son lit."],
+      "correctAnswer": "C. Il lit dans son lit."
+    },
+    {
+      "question": "How do you say \"We are happy\"?",
+      "options": ["A. Nous sont heureuses.", "B. Nous somme heureuses.", "C. Nous ont heureuses.", "D. Nous sommes heureuses."],
+      "correctAnswer": "D. Nous sommes heureuses."
+    },
+    {
+      "question": "How do you say \"They are small\"?",
+      "options": ["A. Ils sont petits.", "B. On est petit.", "C. Ils ont petits.", "D. Ils soient petits."],
+      "correctAnswer": "A. Ils sont petits."
+    },
+    {
+      "question": "How do you say \"You pushed me just now\"?",
+      "options": ["A. Tu vients de me bousculer.", "B. Tu viens de me bousculer.", "C. Tu viennes de me bousculer.", "D. Tu vins de me bousculer."],
+      "correctAnswer": "B. Tu viens de me bousculer."
+    }
+  ]
+}

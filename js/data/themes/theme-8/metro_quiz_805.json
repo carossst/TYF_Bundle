@@ -1,0 +1,74 @@
+{
+  "id": 805,
+  "themeId": 8,
+  "name": "Writing and Reading & Listening metro – Quiz 5",
+  "description": "Combine writing/reading and listening skills focusing on public transportation conversation.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Bonsoir, je vais à Oberkampf. ___ (fill the blank)",
+      "options": ["A. Un ticket de métro s'il vous plait ?", "B. Un tickete de métro s'il vous plait ?", "C. Des tickets de métro s'il vous plait ?", "D. All of the above"],
+      "correctAnswer": "A. Un ticket de métro s'il vous plait ?",
+      "explanation": "Bonsoir, je vais à Oberkampf. Un ticket de métro s'il vous plait ? (Good evening, I'm going to Oberkampf. One subway ticket please)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. C'est 2,25 euros.", "B. Voilà. 2,15 euros.", "C. Voilà. Ça fait 2,15 euros.", "D. Voilà. 2,15 euros."],
+      "correctAnswer": "C. Voilà. Ça fait 2,15 euros.",
+      "audio": "TYF_Metro_5_2.mp3",
+      "explanation": "Here you go. 2.15 euros please."
+    },
+    {
+      "question": "C'est cher. Vous avez une option ___ (fill the blank)",
+      "options": ["A. moins chère ?", "B. plus chère ?", "C. aussi cher ?", "D. All of the above"],
+      "correctAnswer": "A. moins chère ?",
+      "explanation": "C'est cher. Vous avez une option moins chère ? (It's expensive. Do you have a cheaper option?)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Oui. Vous pouvez acheter une carte Navigo directement sur l'application RATP.", "B. Oui. Vous pouvez acheter une carte Navigo ou un carnet directement sur l'application RATP.", "C. Oui. Vous pouvez acheter un carnet sur l'application RATP.", "D. Oui. Vous ne pouvez acheter une carte Navigo Easy ou un carnet directement sur RATP."],
+      "correctAnswer": "B. Oui. Vous pouvez acheter une carte Navigo Easy ou un carnet directement sur l'application RATP.",
+      "audio": "TYF_Metro_5_4.mp3",
+      "explanation": "Yes, you can buy a Navigo Easy card or carnet directly from the RATP application."
+    },
+    {
+      "question": "Entendu. Je le ferai la prochaine fois. ___ (fill the blank)",
+      "options": ["A. Je peux payer avec ma carte ?", "B. Je peux payer par carte ?", "C. Je peux payer par carte bancaire ?", "D. All of the above"],
+      "correctAnswer": "D. All of the above",
+      "explanation": "Entendu. Je le ferai la prochaine fois. Je peux payer par carte ? (All right, then. I'll do it next time. Can I pay by card?.)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Oui bien sûr. Voilà la machine. Pour un ticket, c'est ça ?", "B. La machine. Pour un ticket, c'est ça ?", "C. Oui bien sûr. Pour deux tickets, c'est ça ?", "D. Bien sûr. Voilà les machines. Pour un ticket ?"],
+      "correctAnswer": "A. Oui bien sûr. Voilà la machine. Pour un ticket, c'est ça ?",
+      "audio": "TYF_Metro_5_6.mp3",
+      "explanation": "Yes, of course. Here's the machine. For a ticket, right?"
+    },
+    {
+      "question": "___ . (fill the blank)",
+      "options": ["A. Oui tout à fait", "B. Oui", "C. C'est ça", "D. All of the above"],
+      "correctAnswer": "D. All of the above",
+      "explanation": "Oui tout à fait/ç'est ça. (Yes, that's right.)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Voilà vos tickets. Bon voyage.", "B. Voilà le ticket. Bon voyage.", "C. Voilà votre ticket. Bon voyage.", "D. Voilà votre ticket. Beau voyage."],
+      "correctAnswer": "C. Voilà votre ticket. Bon voyage.",
+      "audio": "TYF_Metro_5_8.mp3",
+      "explanation": "Here's your ticket. Enjoy your trip."
+    },
+    {
+      "question": "Merci beaucoup. ___ (fill the blank)",
+      "options": ["A. Je prends quelle ligne pour aller à Oberkampf ?", "B. Je prends une ligne Oberkampf ?", "C. Je prends qu'est-ce que comme ligne pour aller à Oberkampf ?", "D. All of the above"],
+      "correctAnswer": "A. Je prends quelle ligne pour aller à Oberkampf ?",
+      "explanation": "Merci beaucoup. Je prends quelle ligne pour aller à Oberkampf ? (Thank you very much. Which line do I take to get to Oberkampf?)"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Vous prenez la ligne 5 Bobigny. L'orange. Bon voyage !", "B. C'est direct. Vous prenez ligne 5 vers Bobigny. C'est la ligne orange. Au revoir !", "C. C'est direct. Vous prenez la ligne 5 à Bobigny. A bientôt !", "D. C'est direct. Vous prenez la ligne 5 vers Bobigny. C'est la ligne orange. Bon voyage !"],
+      "correctAnswer": "D. C'est direct. Vous prenez la ligne 5 vers Bobigny. C'est la ligne orange. Bon voyage !",
+      "audio": "TYF_Metro_5_10.mp3",
+      "explanation": "It's direct. Take line 5 to Bobigny. It's the orange line. Enjoy your trip!"
+    }
+  ]
+}

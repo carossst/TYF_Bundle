@@ -1,0 +1,69 @@
+{
+  "id": 601,
+  "themeId": 6,
+  "name": "Writing and Reading accents – Quiz 1",
+  "description": "Practice French accents through writing and reading exercises.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "How do you say "summer"?",
+      "options": ["A. Été", "B. Étè", "C. Étë", "D. Étet"],
+      "correctAnswer": "A. Été",
+      "explanation": "This acute accent (´) helps us distinguish the long \"e\" from the short \"e\" sound and maintain spelling consistency."
+    },
+    {
+      "question": "How do you say \"it was\"?",
+      "options": ["A. C'ètait", "B. C'étaît", "C. C'était", "D. C'étaît"],
+      "correctAnswer": "C. C'était",
+      "explanation": "Accents are crucial for correct spelling and pronunciation in French."
+    },
+    {
+      "question": "How do you say "forest"? ",
+      "options": ["A. Forêt", "B. Forèt", "C. Forest", "D. All of the above"],
+      "correctAnswer": "A. Forêt",
+      "explanation": "The circumflex accent on \"ê\" in \"forêt\" plays a vital role in indicating the long, open \"ê\" sound."
+    },
+    {
+      "question": "How do you say "father and mother"? ",
+      "options": ["A. Pére et mère", "B. Père et mére", "C. Père et mère", "D. Pére et mére"],
+      "correctAnswer": "C. Père et mère",
+      "explanation": "The grave accent (`) is less common than the acute accent (´)."
+    },
+    {
+      "question": "How do you say "window"?",
+      "options": ["A. Fenétre", "B. Fenestre", "C. Fenëtre", "D. Fenêtre"],
+      "correctAnswer": "D. Fenêtre",
+      "explanation": "The circumflex helps ensure the long, open \"ê\" sound is pronounced correctly, differentiating fenêtre from words like fermeture (closure) with a short \"e\"."
+    },
+    {
+      "question": "How do you say "where"?",
+      "options": ["A. Oü", "B. Où", "C. Ou", "D. Oùé"],
+      "correctAnswer": "B. Où",
+      "explanation": "The letter \"ù\" in \"où\" (where) is a unique case in French because it's the only instance with the letter \"ù\"."
+    },
+    {
+      "question": "How do you say \"party\"?",
+      "options": ["A. Fète", "B. Feste", "C. Fête", "D. Féte"],
+      "correctAnswer": "C. Fête",
+      "explanation": "The circumflex helps ensure the long, open \"ê\" sound is pronounced correctly."
+    },
+    {
+      "question": "How do you say \"disorderly place\"?",
+      "options": ["A. Capharnaum", "B. Capharnaûm", "C. Capharnaùm", "D. Capharnaüm"],
+      "correctAnswer": "D. Capharnaüm",
+      "explanation": "The diaeresis (¨) is used to separate two vowels that would otherwise be pronounced together. Capharnaüm is used figuratively to describe a place of great chaos, containing many objects piled up in a jumble, a disorderly place."
+    },
+    {
+      "question": "How do you say \"task\"?",
+      "options": ["A. Tâche", "B. Tache", "C. Tasche", "D. Täche"],
+      "correctAnswer": "A. Tâche",
+      "explanation": "The primary function of the circumflex in tâche is to signal a long, open \"â\" sound. This sound is distinct from the short \"a\" sound found in tache (spot)."
+    },
+    {
+      "question": "How do you say \"Christmas\" ?",
+      "options": ["A. Noel", "B. Noël", "C. Noèl", "D. Noél"],
+      "correctAnswer": "B. Noël",
+      "explanation": "The diaeresis  (¨) is used to separate two vowels that would otherwise be pronounced together."
+    }
+  ]
+}

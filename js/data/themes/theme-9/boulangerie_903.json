@@ -1,0 +1,79 @@
+{
+  "id": 903,
+  "themeId": 9,
+  "name": "Listening boulangerie – Quiz 3",
+  "description": "Practice listening comprehension focusing on boulangerie vocabulary and phrases.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Il y a plusieurs types de baguettes.", "B. Il y a trois types de baguettes.", "C. Il y a plusieurs sortes de baguettes.", "D. Il y a plusieurs baguettes."],
+      "correctAnswer": "A. Il y a plusieurs types de baguettes.",
+      "audio": "TYF_Boulangerie_3_1.mp3",
+      "explanation": "There are several types of baguettes."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Selon une loi, la baguette n'utilise que de la farine, de l'eau, de la levure et du sel.", "B. Selon une loi de 1993, la baguette de tradition n'utilise pas la farine, l'eau, la levure et le sel.", "C. Selon une loi de 1993, la baguette de tradition n'utilise que de la farine, de l'eau, de la levure et du sel.", "D. Selon une loi de 1993, la baguette de tradition n'utilise que de la farine, de l'eau, de la levure, des œufs, du beurre et du sel."],
+      "correctAnswer": "C. Selon une loi de 1993, la baguette de tradition n'utilise que de la farine, de l'eau, de la levure et du sel.",
+      "audio": "TYF_Boulangerie_3_2.mp3",
+      "explanation": "According to a 1993 law, the traditional baguette uses only flour, water, yeast and salt."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. La recette exacte n'est pas différente pour chaque boulanger.", "B. La recette est pour chaque boulanger.", "C. La recette exacte appartient à chaque personne.", "D. La recette exacte est propre à chaque boulanger."],
+      "correctAnswer": "D. La recette exacte est propre à chaque boulanger.",
+      "audio": "TYF_Boulangerie_3_3.mp3",
+      "explanation": "The exact recipe is the responsibility of each individual baker."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. La baguette tradition ne doit pas avoir été surgelée.", "B. Les baguettes doivent respecter certaines règles comme ne pas avoir été surgelées.", "C. La baguette tradition doit avoir été surgelée.", "D. La baguette tradition doit respecter certaines règles comme avoir été surgelé et ne pas contenir d'additifs."],
+      "correctAnswer": "A. La baguette tradition ne doit pas avoir été surgelée.",
+      "audio": "TYF_Boulangerie_3_4.mp3",
+      "explanation": "The traditional baguette must not having been frozen."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Les pains ont une croûte épaisse et une mie plus dense.", "B. Le pain de campagne a la croûte épaisse et à la mie dense, souvent fabriqué à partir d'un levain.", "C. Le pain de campagne est un pain rustique à la croûte épaisse et à la mie dense.", "D. Le pain est un pain à la croûte bien plus épaisse et à la mie bien plus dense."],
+      "correctAnswer": "C. Le pain de campagne est un pain rustique à la croûte épaisse et à la mie dense.",
+      "audio": "TYF_Boulangerie_3_5.mp3",
+      "explanation": "The country bread is a rustic bread with a thick crust and a dense crumb."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Le pain de seigle est élaboré avec un mélange de farine de blé et de farine de seigle.", "B. Le pain de seigle a une mélange de farine de blé et de farine de seigle.", "C. Le pain de seigle est élaboré avec une mélange de farine de blé et de maïs.", "D. Le pain de seigle n'est élaboré pas avec un mélange de blé et de seigle."],
+      "correctAnswer": "A. Le pain de seigle est élaboré avec un mélange de farine de blé et de farine de seigle.",
+      "audio": "TYF_Boulangerie_3_6.mp3",
+      "explanation": "Rye bread is made with a mixture of wheat flour and rye flour."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. La cuisson d'une baguette prend entre 20 et 30 minutes, à une température d'environ 230 à 250 degrés Celsius.", "B. La baguette prend 20 à 30 minutes, à une température d'environ 230 à 250 degrés Celsius.", "C. La cuisson d'une baguette prend 30 minutes, à une température d'environ 230 à 250 degrés Celsius.", "D. La cuisson d'une baguette prend entre 40 minutes."],
+      "correctAnswer": "A. La cuisson d'une baguette prend entre 20 et 30 minutes, à une température d'environ 230 à 250 degrés Celsius.",
+      "audio": "TYF_Boulangerie_3_7.mp3",
+      "explanation": "Baking a baguette takes between 20 and 30 minutes, at a temperature of around 230 to 250 degrees Celsius.)\n230 to 250 degrees Celsius= between 446° and 482°Fahrenheit"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Traditionnellement, la baguette cuit dans un fourtout.", "B. Traditionnellement, la baguette n'est pas cuite dans un four à bois.", "C. Traditionnellement, la baguette est cuite dans un four à pierre.", "D. Traditionnellement, la baguette est cuite dans un four à bois."],
+      "correctAnswer": "D. Traditionnellement, la baguette est cuite dans un four à bois.",
+      "audio": "TYF_Boulangerie_3_8.mp3",
+      "explanation": "Traditionally, baguettes are baked in a wood-fired oven."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. De nos jours, les baguettes sont souvent cuites dans des fours à sole en pierre.", "B. Avant, les baguettes étaient cuites dans des fours à sole en pierre.", "C. De nos jours, les baguettes ne sont pas cuites dans des fours sole en pierre.", "D. De nos jours, les baguettes sont souvent cuites dans des pierres."],
+      "correctAnswer": "A. De nos jours, les baguettes sont souvent cuites dans des fours à sole en pierre.",
+      "audio": "TYF_Boulangerie_3_9.mp3",
+      "explanation": "Nowadays, baguettes are often baked in stone-sole ovens."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. En 2022, la baguette française a été inscrit dans le patrimoine mondial de l'UNESCO en tant que patrimoine culturel immatériel.", "B. En 2002, la baguette française a été inscrite au patrimoine de l'UNESCO en tant que patrimoine.", "C. En 2022, la baguette française a été inscrite au patrimoine mondial de l'UNESCO en tant que patrimoine culturel immatériel.", "D. En 2002, la baguette française a été inscrite au patrimoine de l'UNESCO tant que patrimoine culturel immatériel."],
+      "correctAnswer": "C. En 2022, la baguette française a été inscrite au patrimoine mondial de l'UNESCO en tant que patrimoine culturel immatériel.",
+      "audio": "TYF_Boulangerie_3_10.mp3",
+      "explanation": "In 2022, the French baguette has been given UNESCO World Heritage status as an intangible cultural heritage."
+    }
+  ]
+}

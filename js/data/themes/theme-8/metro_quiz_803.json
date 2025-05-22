@@ -1,0 +1,79 @@
+{
+  "id": 803,
+  "themeId": 8,
+  "name": "Listening metro – Quiz 3",
+  "description": "Practice listening comprehension focusing on vocabulary related to public transportation and the metro.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A.La ville de Paris possède le réseau de métro le plus étendu du pays, avec plus de 300 stations de métro.", "B. La ville de Paris possède un réseau de métro très étendu dans le pays, avec plus de 200 stations de métro.", "C. Paris possède un réseau de métro très étendu, plus de 300 stations de métro.", "D. La ville de Paris a le réseau de métro étendu du pays, avec plus de 500 stations de métro."],
+      "correctAnswer": "A. La ville de Paris possède le réseau de métro le plus étendu du pays, avec plus de 300 stations de métro.",
+      "audio": "TYF_Metro_3_1.mp3",
+      "explanation": "Paris has the most extensive metro network in the country, with over 300 stations."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Le réseau express (RER) est un réseau de transport en commun différent du métro.", "B. Le réseau express (RER) n'est pas un réseau de transport en commun différent du métro.", "C. Le réseau express (RER) est le seul réseau de transport en commun qui est différent du métro.", "D. Le RER est un réseau de transport en commun qui n'est pas vraiment différent du métro."],
+      "correctAnswer": "A. Le réseau express (RER) est un réseau de transport en commun différent du métro.",
+      "audio": "TYF_Metro_3_2.mp3",
+      "explanation": "The regional express network, known as the RER, is a public transport system that differs from the metro."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Le RER traverse Paris et sa banlieue comporte environ 250 points d'arrêt.", "B. Le RER dessert Paris et son agglomération et 250 points d'arrêt.", "C. Le RER dessert Paris et son agglomération avec environ 250 points d'arrêt.", "D. Le RER dessert Paris et la banlieue avec environ 250 points d'arrêt."],
+      "correctAnswer": "C. Le RER dessert Paris et son agglomération avec environ 250 points d'arrêt.",
+      "audio": "TYF_Metro_3_3.mp3",
+      "explanation": "The RER serves Paris and the surrounding area, with around 250 stops."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Marseille a les réseaux de métro de deux lignes et 29 stations.", "B. Marseille ne possède pas de métro, juste deux lignes et 29 stations.", "C. Marseille possède un réseau de métro de deux lignes et 29 stations.", "D. Marseille possède un réseau de métro de trois lignes et 39 stations."],
+      "correctAnswer": "C. Marseille possède un réseau de métro de deux lignes et 29 stations.",
+      "audio": "TYF_Metro_3_4.mp3",
+      "explanation": "Marseille has a metro system with two lines and 29 stations."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. La Régie de Marseille (RTM) ne gère pas le réseau marseillais.", "B. La Régie des transports de métro de Marseille (RTM) gère les réseaux marseillais.", "C. La Régie des transports de Marseille (RTM) gère le réseau de métro pour les Marseillais.", "D. La Régie des transports de Marseille (RTM) gère le réseau marseillais."],
+      "correctAnswer": "D. La Régie des transports de Marseille (RTM) gère le réseau marseillais.",
+      "audio": "TYF_Metro_3_5.mp3",
+      "explanation": "The Régie des transports de Marseille (RTM) manages the subway for Marseille."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. À Lyon, on peut se déplacer d'une station à l'autre en 10-15 minutes.", "B. À Lyon, tu peux te déplacer d'une station à l'autre en 10-15 minutes.", "C. À Lyon, on peut se transporter d'une station à l'autre en 10-15 minutes.", "D. À Lyon, on a une station à l'autre en 10-15 minutes."],
+      "correctAnswer": "A. À Lyon, on peut se déplacer d'une station à l'autre en 10-15 minutes.",
+      "audio": "TYF_Metro_3_6.mp3",
+      "explanation": "In Lyon, one can get from one station to another in 10-15 minutes."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. La première ligne de métro a été ouverte en 1974 à Lyon.", "B. La deuxième ligne de métro a été ouverte en 1994 à Lyon.", "C. Le métro a été ouvert en 1974 à Lyon.", "D. La première métro a été ouverte vers 1974 à Lyon."],
+      "correctAnswer": "A. La première ligne de métro a été ouverte en 1974 à Lyon.",
+      "audio": "TYF_Metro_3_7.mp3",
+      "explanation": "The first metro line opened in Lyon in 1974."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. À Mulhouse, le métro est composé de trois lignes et de trente-sept stations.", "B. À Mulhouse, le métro est composé de quatre lignes et de trente-sept stations.", "C. À Toulouse, le métro est composé de deux lignes et de trente-sept stations.", "D. À Toulouse, le métro comporte quatre lignes et de trente-sept stations."],
+      "correctAnswer": "C. À Toulouse, le métro est composé de deux lignes et de trente-sept stations.",
+      "audio": "TYF_Metro_3_8.mp3",
+      "explanation": "In Toulouse, the metro system has two lines and thirty-seven stations."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Le réseau de métro de Lille est le plus long réseau français à l'exception de Paris.", "B. Le réseau du métro lillois est le plus long réseau français hors Paris.", "C. Le réseau de Lille est le plus long réseau français hors de Paris.", "D. Le réseau du métro lillois est le plus court réseau français hors Paris."],
+      "correctAnswer": "A. Le réseau de métro de Lille est le plus long réseau français à l'exception de Paris.",
+      "audio": "TYF_Metro_3_9.mp3",
+      "explanation": "Lille's metro network is the longest in France outside Paris."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. C'est Rennes, la plus petite ville au monde dotée d'un réseau de métro.", "B. Rennes est la plus grande ville au monde dotée d'un réseau de métro.", "C. Rennes est la plus petite ville au monde dotée d'un métro.", "D. Rennes est le plus petit village au monde doté d'un réseau de métro."],
+      "correctAnswer": "C. Rennes est la plus petite ville au monde dotée d'un réseau de métro.",
+      "audio": "TYF_Metro_3_10.mp3",
+      "explanation": "Rennes is the world's smallest city with a metro system.\nFrom 2002 to 2008, Rennes was the world's smallest city with a metro, until Lausanne (130,000 inhabitants) also inaugurated an automatic metro line. This was followed by Brescia, an Italian city of 196,000, which opened its own in 2013. Rennes is now the third smallest city in the world with a metro."
+    }
+  ]
+}

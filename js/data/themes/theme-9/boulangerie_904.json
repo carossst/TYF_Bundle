@@ -1,0 +1,79 @@
+{
+  "id": 904,
+  "themeId": 9,
+  "name": "Listening Conversation boulangerie – Quiz 4",
+  "description": "Practice listening comprehension in conversation scenarios using boulangerie vocabulary.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Bonjour, vous avez des viennoiseries s'il vous plait ?", "B. Bonjour, vous avez quoi comme viennoiseries s'il vous plait ?", "C. Bonjour, vous avez quelles viennoiseries s'il vous plait ?", "D. Bonjour, vous avez quoi en viennoiseries s'il vous plait ?"],
+      "correctAnswer": "B. Bonjour, vous avez quelles viennoiseries s'il vous plait ?",
+      "audio": "TYF_Boulangerie_4_1.mp3",
+      "explanation": "Hello, what pastries do you have, please?)\nViennoiseries is a category of pastries made with dough like croissants and pain au chocolat (chocolate bread)."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Bonjour, il me reste des pains au chocolat, des pains aux raisins et quelques éclairs.", "B. Bonjour, il reste deux pains au raisin et quelques éclairs.", "C. Bonjour, il me reste les pains au chocolat et quelques éclairs.", "D. Bonjour, il ne me reste pas de pains au chocolat, de pains au raisin et d'éclairs."],
+      "correctAnswer": "A. Bonjour, il me reste des pains au chocolat, des pains au raisin et quelques éclairs.",
+      "audio": "TYF_Boulangerie_4_2.mp3",
+      "explanation": "Hello, I still have some pains au chocolat, some pains au raisin and some éclairs."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Vous avez des croissants ?", "B. Vous avez plus de croissants ?", "C. Vous n'avez plus de croissants ?", "D. Vous n'avez plus deux croissants ?"],
+      "correctAnswer": "C. Vous n'avez plus de croissants ?",
+      "audio": "TYF_Boulangerie_4_3.mp3",
+      "explanation": "Are you out of croissants?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ah si. Il reste des croissants sans beurre.", "B. Ah si. Il me reste deux croissants au beurre.", "C. Ah si. Il reste deux croissants sans beurre.", "D. Si. Il me reste des croissants au beurre."],
+      "correctAnswer": "B. Ah si. Il me reste deux croissants au beurre.",
+      "audio": "TYF_Boulangerie_4_4.mp3",
+      "explanation": "Ah yes, I have two butter croissants left.) \nA croissant au beurre has a richer and more intense buttery flavor. It is slightly denser. It may have a slightly darker golden color due to the higher butter content."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Des croissants et un pain aux raisins s'il vous plait ?", "B. Deux croissants, une pain au chocolat et une pain aux raisins s'il vous plait ?", "C. Deux croissants, deux pains au chocolat et un aux raisins s'il vous plait ?", "D. Deux croissants, un pain au chocolat et un pain aux raisins s'il vous plait ?"],
+      "correctAnswer": "D. Deux croissants, un pain au chocolat et un pain aux raisins s'il vous plait ?",
+      "audio": "TYF_Boulangerie_4_5.mp3",
+      "explanation": "Two croissants, a pain au chocolat and a pain aux raisins, please?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Avec ça ?", "B. Avec cela ?", "C. Et avec tout ça ?", "D. Avec tout ça ?"],
+      "correctAnswer": "A. Avec ça ?",
+      "audio": "TYF_Boulangerie_4_6.mp3",
+      "explanation": "Anything else?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Pardon ? Je ne comprends pas.", "B. Pardon ? Je comprends.", "C. Pardon ? Je ne vous comprends pas.", "D. Pardon ? Je ne le comprends pas."],
+      "correctAnswer": "A. Pardon ? Je ne comprends pas.",
+      "audio": "TYF_Boulangerie_4_7.mp3",
+      "explanation": "Sorry? I don't know what you mean."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ce sera toute ?", "B. Ce sera tout ?", "C. Ce sera tout pour vous ?", "D. Ce sera pour vous ?"],
+      "correctAnswer": "B. Ce sera tout ?",
+      "audio": "TYF_Boulangerie_4_8.mp3",
+      "explanation": "Will that be all?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Non. J'aimerais un éclair et du café s'il vous plait.", "B. Non. J'aimerais aussi un éclair au café s'il vous plait.", "C. Non. J'aimerais un éclair au chocolat s'il vous plait.", "D. Non. J'aimerais aussi deux éclairs avec du café s'il vous plait."],
+      "correctAnswer": "B. Non. J'aimerais aussi un éclair au café s'il vous plait.",
+      "audio": "TYF_Boulangerie_4_9.mp3",
+      "explanation": "No. I'd also like a coffee éclair, please."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Et voilà, un éclair au café, deux croissants, un pain au chocolat et un pain aux raisins.", "B. Voilà, un éclair au café, des croissants, un pain au chocolat et deux pains aux raisins.", "C. Et voilà, une éclair au café, deux croissants, un pain au chocolat et un pain aux raisins.", "D. Et voilà, un éclair, du café, des croissants, deux pains au chocolat et un pain aux raisins."],
+      "correctAnswer": "A. Et voilà, un éclair au café, deux croissants, un pain au chocolat et un pain aux raisins.",
+      "audio": "TYF_Boulangerie_4_10.mp3",
+      "explanation": "Here you go, a coffee éclair, two croissants, a pain au chocolat and a pain aux raisins."
+    }
+  ]
+}

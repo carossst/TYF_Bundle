@@ -1,0 +1,79 @@
+{
+  "id": 103,
+  "themeId": 1,
+  "name": "Listening Colors – Quiz 3",
+  "description": "Practice listening comprehension focusing on Colors vocabulary and phrases.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Être dans le bouge", "B. Être dans le rouge", "C. Être dans le noir", "D. Être dans le brouge"],
+      "correctAnswer": "B. Être dans le rouge",
+      "audio": "TYF_Colors_3_1.mp3",
+      "explanation": "Être dans le rouge\" literally translates to \"to be in the red\". It is a common idiom used in French-speaking countries to describe a financial situation where expenses exceed income, resulting in a negative balance or debt."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Claire jaune", "B. Rire jaune", "C. Rare jaune", "D. Rire jeune"],
+      "correctAnswer": "B. Rire jaune",
+      "audio": "TYF_Colors_3_2.mp3",
+      "explanation": "Rire jaune (to laugh nervously) describes an awkward or forced laughter, often due to embarrassment or discomfort."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Être blanc comme un neige", "B. Être blanche comme neige", "C. Être blanc comme meige", "D. Être blanc comme neige"],
+      "correctAnswer": "D. Être blanc comme neige",
+      "audio": "TYF_Colors_3_3.mp3",
+      "explanation": "Être blanc comme neige (to be as pure as snow) means to be innocent or free from wrongdoing, often used figuratively."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Vin rouge", "B. Var rouge", "C. Voir rouge", "D. Voir rouges"],
+      "correctAnswer": "C. Voir rouge",
+      "audio": "TYF_Colors_3_4.mp3",
+      "explanation": "Voir rouge (to see red) means to feel very angry or furious."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Être vert de rage", "B. Être verre de rage", "C. Être vertte de rage", "D. Être verres de rage"],
+      "correctAnswer": "A. Être vert de rage",
+      "audio": "TYF_Colors_3_5.mp3",
+      "explanation": "Être vert de rage (to be livid) means \"to be green with rage,\" referring to the intense anger that can cause someone's face to turn pale or greenish."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Être rouge de rhonte", "B. Être rouge des hontes", "C. Être rouge deux honte", "D. Être rouge de honte"],
+      "correctAnswer": "D. Être rouge de honte",
+      "audio": "TYF_Colors_3_6.mp3",
+      "explanation": "Être rouge de honte (to be red with shame) describes the feeling of embarrassment or humiliation, often causing someone's face to flush red."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Avoir la main verte", "B. Avoir la main alerte", "C. Avoir les mains vertes", "D. Avoir la main averte"],
+      "correctAnswer": "A. Avoir la main verte",
+      "audio": "TYF_Colors_3_7.mp3",
+      "explanation": "Avoir la main verte (to have a green thumb) is used to describe someone who is skilled at gardening and has a knack for keeping plants alive and thriving."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Être blanc comme un linge", "B. Être blanc à la linge", "C. Être blanc à la nage", "D. Être blanc en ménage"],
+      "correctAnswer": "A. Être blanc comme un linge",
+      "audio": "TYF_Colors_3_8.mp3",
+      "explanation": "Être blanc comme un linge (to be as white as a sheet) describes being extremely pale or ghostly white, often due to shock or fear."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Etre une cordone bleue", "B. Etre un cordon bleu", "C. Etre un cordon bleus", "D. Etre un cordon bleut"],
+      "correctAnswer": "B. Etre un cordon bleu",
+      "audio": "TYF_Colors_3_9.mp3",
+      "explanation": "Être un cordon bleu (to be a master chef) is a term used for someone who is exceptionally skilled at cooking."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Boyer du noir", "B. Broyer des noix", "C. Broyer du noire", "D. Broyer du noir"],
+      "correctAnswer": "D. Broyer du noir",
+      "audio": "TYF_Colors_3_10.mp3",
+      "explanation": "Broyer du noir (to brood over something) means to dwell on negative thoughts or worries, often feeling depressed or pessimistic."
+    }
+  ]
+}

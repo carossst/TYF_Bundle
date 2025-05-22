@@ -1,220 +1,291 @@
-// sw.js - Service Worker adapté à votre structure exacte
-const CACHE_NAME = 'test-your-french-cache-v2.2.2';
-const APP_SHELL = [
-  './',
-  './index.html',
-  './style.css',
-  './manifest.json',
-  './js/main.js',           // Chemin correct
-  './js/quizManager.js',    // Chemin correct
-  './js/resourceManager.js', // Chemin correct
-  './js/storage.js',        // Chemin correct
-  './js/ui.js',             // Chemin correct
-  './js/data/metadata.json', // Chemin correct
-  './icons/icon-192x192.png'
-];
+/* swUpdateManager.js - Gestionnaire intelligent des mises à jour du Service Worker */
 
-// Install event - cache the app shell
-self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installation');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('[Service Worker] Caching app shell');
-        return cache.addAll(APP_SHELL);
-      })
-      .catch(error => {
-        console.error('[Service Worker] Install error:', error);
-      })
-  );
-});
-
-// Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activation');
-  event.waitUntil(
-    caches.keys().then(keyList => {
-      return Promise.all(keyList.map(key => {
-        if (key !== CACHE_NAME) {
-          console.log('[Service Worker] Removing old cache', key);
-          return caches.delete(key);
-        }
-      }));
-    })
-  );
-  return self.clients.claim();
-});
-
-// Fetch event - handle requests with cache strategy
-self.addEventListener('fetch', (event) => {
-  if (!event.request.url.startsWith('http')) return;
-
-  // Parse the URL
-  const requestUrl = new URL(event.request.url);
-  
-  // Handle metadata.json specially
-  if (requestUrl.pathname.includes('/metadata.json')) {
-    event.respondWith(handleMetadataRequest());
-    return;
+window.SWUpdateManager = (function() {
+  function SWUpdateManagerClass() {
+    this.registration = null;
+    this.isUpdateAvailable = false;
+    this.isRefreshing = false;
+    
+    // Configuration
+    this.config = {
+      checkInterval: 60000, // Vérifier les mises à jour toutes les minutes
+      autoUpdate: false,    // Ne pas forcer les mises à jour automatiquement
+      showNotifications: true
+    };
+    
+    // Événements personnalisés
+    this.events = new EventTarget();
+    
+    this.init();
   }
-  
-  // For quiz files, adjust path based on your structure
-  if (requestUrl.pathname.match(/\/quiz_\d+\.json$/)) {
-    const quizFile = requestUrl.pathname.split('/').pop();
-    const themeMatch = requestUrl.pathname.match(/theme-(\d+)/);
-    if (themeMatch && themeMatch[1]) {
-      const themeId = themeMatch[1];
-      event.respondWith(handleQuizRequest(themeId, quizFile));
+
+  // Initialisation
+  SWUpdateManagerClass.prototype.init = function() {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        this.registerServiceWorker();
+      });
+      
+      // Écouter les changements de contrôleur
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (this.isRefreshing) return;
+        this.isRefreshing = true;
+        console.log('[SW Update] Reloading page for new service worker');
+        window.location.reload();
+      });
+    } else {
+      console.warn('[SW Update] Service Worker not supported');
+    }
+  };
+
+  // Enregistrement du Service Worker
+  SWUpdateManagerClass.prototype.registerServiceWorker = async function() {
+    try {
+      this.registration = await navigator.serviceWorker.register('./sw.js');
+      console.log('[SW Update] Service Worker registered:', this.registration.scope);
+      
+      // Vérifier si un worker est en attente
+      if (this.registration.waiting) {
+        this.handleWaitingWorker(this.registration.waiting);
+      }
+      
+      // Écouter les nouveaux workers
+      this.registration.addEventListener('updatefound', () => {
+        this.handleUpdateFound();
+      });
+      
+      // Vérification périodique des mises à jour
+      this.startUpdateChecker();
+      
+      // Événement personnalisé
+      this.events.dispatchEvent(new CustomEvent('registered', { 
+        detail: { registration: this.registration } 
+      }));
+      
+    } catch (error) {
+      console.error('[SW Update] Registration failed:', error);
+    }
+  };
+
+  // Gestion des nouveaux workers trouvés
+  SWUpdateManagerClass.prototype.handleUpdateFound = function() {
+    const newWorker = this.registration.installing;
+    console.log('[SW Update] New service worker found');
+    
+    newWorker.addEventListener('statechange', () => {
+      switch (newWorker.state) {
+        case 'installed':
+          if (navigator.serviceWorker.controller) {
+            // Nouveau worker installé, l'ancien est encore actif
+            this.handleWaitingWorker(newWorker);
+          } else {
+            // Premier worker installé
+            console.log('[SW Update] Service Worker installed for the first time');
+            this.events.dispatchEvent(new CustomEvent('firstInstall'));
+          }
+          break;
+        case 'activated':
+          console.log('[SW Update] Service Worker activated');
+          this.events.dispatchEvent(new CustomEvent('activated'));
+          break;
+      }
+    });
+  };
+
+  // Gestion d'un worker en attente
+  SWUpdateManagerClass.prototype.handleWaitingWorker = function(worker) {
+    this.isUpdateAvailable = true;
+    console.log('[SW Update] Update available');
+    
+    this.events.dispatchEvent(new CustomEvent('updateAvailable', {
+      detail: { worker }
+    }));
+    
+    if (this.config.showNotifications) {
+      this.showUpdateNotification();
+    }
+    
+    if (this.config.autoUpdate) {
+      this.applyUpdate();
+    }
+  };
+
+  // Affichage de la notification de mise à jour
+  SWUpdateManagerClass.prototype.showUpdateNotification = function() {
+    // Créer une notification personnalisée
+    const notification = this.createUpdateNotification();
+    document.body.appendChild(notification);
+    
+    // Auto-masquer après 10 secondes si pas d'interaction
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.remove();
+      }
+    }, 10000);
+  };
+
+  // Création de l'élément de notification
+  SWUpdateManagerClass.prototype.createUpdateNotification = function() {
+    const notification = document.createElement('div');
+    notification.id = 'sw-update-notification';
+    notification.innerHTML = `
+      <div style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #2196F3;
+        color: white;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        max-width: 300px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      ">
+        <div style="font-weight: bold; margin-bottom: 8px;">
+          🔄 Mise à jour disponible
+        </div>
+        <div style="margin-bottom: 12px; font-size: 14px;">
+          Une nouvelle version de l'application est disponible.
+        </div>
+        <div>
+          <button id="sw-update-btn" style="
+            background: white;
+            color: #2196F3;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+            font-weight: bold;
+          ">
+            Mettre à jour
+          </button>
+          <button id="sw-dismiss-btn" style="
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+          ">
+            Plus tard
+          </button>
+        </div>
+      </div>
+    `;
+    
+    // Gestionnaires d'événements
+    notification.querySelector('#sw-update-btn').addEventListener('click', () => {
+      this.applyUpdate();
+      notification.remove();
+    });
+    
+    notification.querySelector('#sw-dismiss-btn').addEventListener('click', () => {
+      notification.remove();
+    });
+    
+    return notification;
+  };
+
+  // Application de la mise à jour
+  SWUpdateManagerClass.prototype.applyUpdate = function() {
+    if (!this.registration || !this.registration.waiting) {
+      console.warn('[SW Update] No update available to apply');
       return;
     }
-  }
-  
-  // Standard cache-first strategy for other requests
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response; // Return cached response
-        }
-        
-        // Not in cache, fetch from network
-        return fetch(event.request)
-          .then(networkResponse => {
-            // Don't cache cross-origin requests
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-              return networkResponse;
-            }
-            
-            // Clone response to cache it
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-              
-            return networkResponse;
-          })
-          .catch(error => {
-            console.log('[Service Worker] Fetch error:', error);
-            // Return a fallback page for navigation requests
-            if (event.request.mode === 'navigate') {
-              return caches.match('./index.html');
-            }
-            return new Response('Network error occurred', {
-              status: 503,
-              statusText: 'Service Unavailable'
-            });
-          });
-      })
-  );
+    
+    console.log('[SW Update] Applying update...');
+    this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+  };
+
+  // Vérification manuelle des mises à jour
+  SWUpdateManagerClass.prototype.checkForUpdate = async function() {
+    if (!this.registration) {
+      console.warn('[SW Update] No registration available');
+      return;
+    }
+    
+    try {
+      await this.registration.update();
+      console.log('[SW Update] Manual update check completed');
+    } catch (error) {
+      console.error('[SW Update] Manual update check failed:', error);
+    }
+  };
+
+  // Démarrage du vérificateur automatique
+  SWUpdateManagerClass.prototype.startUpdateChecker = function() {
+    if (this.config.checkInterval > 0) {
+      setInterval(() => {
+        this.checkForUpdate();
+      }, this.config.checkInterval);
+      
+      console.log(`[SW Update] Auto-update checker started (${this.config.checkInterval}ms interval)`);
+    }
+  };
+
+  // Configuration
+  SWUpdateManagerClass.prototype.configure = function(options) {
+    this.config = { ...this.config, ...options };
+    console.log('[SW Update] Configuration updated:', this.config);
+  };
+
+  // Écouteurs d'événements
+  SWUpdateManagerClass.prototype.on = function(event, callback) {
+    this.events.addEventListener(event, callback);
+  };
+
+  SWUpdateManagerClass.prototype.off = function(event, callback) {
+    this.events.removeEventListener(event, callback);
+  };
+
+  // Getters
+  SWUpdateManagerClass.prototype.getRegistration = function() {
+    return this.registration;
+  };
+
+  SWUpdateManagerClass.prototype.isUpdateReady = function() {
+    return this.isUpdateAvailable;
+  };
+
+  // Utilitaires de diagnostic
+  SWUpdateManagerClass.prototype.getInfo = async function() {
+    if (!this.registration) return null;
+    
+    return {
+      scope: this.registration.scope,
+      updateViaCache: this.registration.updateViaCache,
+      active: this.registration.active?.state,
+      waiting: this.registration.waiting?.state,
+      installing: this.registration.installing?.state,
+      isUpdateAvailable: this.isUpdateAvailable
+    };
+  };
+
+  return new SWUpdateManagerClass();
+})();
+
+// Utilisation simple
+/*
+// Configuration optionnelle
+SWUpdateManager.configure({
+  autoUpdate: false,
+  showNotifications: true,
+  checkInterval: 30000
 });
 
-// Special handler for metadata.json requests
-async function handleMetadataRequest() {
-  const possiblePaths = [
-    './js/data/metadata.json',      // Chemin correct (primaire)
-    './metadata.json',              // Fallback à la racine
-    './js/metadata.json',           // Autre alternative
-    './js/data/themes/metadata.json', // Autre alternative
-    // Chemins GitHub Pages
-    '/TYF_Bundle/js/data/metadata.json',
-    '/TYF_Bundle/metadata.json'
-  ];
-  
-  // Try cache first
-  for (const path of possiblePaths) {
-    const cachedResponse = await caches.match(path);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-  }
-  
-  // Try fetching from network
-  for (const path of possiblePaths) {
-    try {
-      const networkResponse = await fetch(path);
-      if (networkResponse && networkResponse.status === 200) {
-        // Clone and cache
-        const responseToCache = networkResponse.clone();
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(path, responseToCache);
-        return networkResponse;
-      }
-    } catch (error) {
-      console.warn(`[Service Worker] Failed to fetch metadata from ${path}`);
-    }
-  }
-  
-  return new Response(JSON.stringify({error: 'Failed to load metadata'}), {
-    headers: {'Content-Type': 'application/json'},
-    status: 404
-  });
-}
-
-// Special handler for quiz requests
-async function handleQuizRequest(themeId, quizFile) {
-  const possiblePaths = [
-    `./js/data/themes/theme-${themeId}/${quizFile}`,  // Structure originale
-    `./themes/theme-${themeId}/${quizFile}`,          // Alternative sans js/data
-    `./theme-${themeId}/${quizFile}`,                 // Alternative sans themes/
-    `./js/data/themes/theme-${themeId}/quiz_${quizFile.split('_')[1]}`, // Alternative sans "quiz_" préfixe
-    // Chemins GitHub Pages
-    `/TYF_Bundle/js/data/themes/theme-${themeId}/${quizFile}`,
-    `/TYF_Bundle/themes/theme-${themeId}/${quizFile}`
-  ];
-  
-  // Try cache first
-  for (const path of possiblePaths) {
-    const cachedResponse = await caches.match(path);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-  }
-  
-  // Try fetching from network
-  for (const path of possiblePaths) {
-    try {
-      const networkResponse = await fetch(path);
-      if (networkResponse && networkResponse.status === 200) {
-        // Clone and cache
-        const responseToCache = networkResponse.clone();
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(path, responseToCache);
-        return networkResponse;
-      }
-    } catch (error) {
-      console.warn(`[Service Worker] Failed to fetch quiz from ${path}`);
-    }
-  }
-  
-  return new Response(JSON.stringify({error: `Failed to load quiz ${quizFile}`}), {
-    headers: {'Content-Type': 'application/json'},
-    status: 404
-  });
-}
-
-// Listen for messages from the main thread
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.action === 'skipWaiting') {
-    self.skipWaiting();
-  }
-  
-  if (event.data && event.data.action === 'cacheAudio') {
-    const audioUrl = event.data.url;
-    if (audioUrl) {
-      caches.open(CACHE_NAME)
-        .then(cache => {
-          fetch(audioUrl)
-            .then(response => {
-              if (response.ok) {
-                cache.put(audioUrl, response);
-                console.log('[Service Worker] Cached audio file:', audioUrl);
-              }
-            })
-            .catch(error => {
-              console.error('[Service Worker] Audio caching error:', error);
-            });
-        });
-    }
-  }
+// Écouteurs d'événements
+SWUpdateManager.on('updateAvailable', (event) => {
+  console.log('Update available!', event.detail);
 });
+
+SWUpdateManager.on('activated', () => {
+  console.log('New service worker activated');
+});
+
+// Vérification manuelle
+document.getElementById('check-update-btn')?.addEventListener('click', () => {
+  SWUpdateManager.checkForUpdate();
+});
+*/

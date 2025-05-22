@@ -1,0 +1,79 @@
+{
+  "id": 503,
+  "themeId": 5,
+  "name": "Listening present tense – Quiz 3",
+  "description": "Practice listening comprehension focusing on Present Tense vocabulary and phrases.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. On ne change pas une équipe qui gagne.", "B. On ne changera pas une équipe qui gagne.", "C. Vous ne changez pas une équipe qui gagne.", "D. On change une équipe qui gagne."],
+      "correctAnswer": "A. On ne change pas une équipe qui gagne.",
+      "audio": "TYF_Present_tense_3_1.mp3",
+      "explanation": "Don't change a winning team."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Fais ce que je disais, ne fais pas ce que je fais.", "B. Fais pas ce que je te dis, fais ce que je fais.", "C. Fais ce que je dis, ne fais pas ce que je fais.", "D. Fais ce que je disais, pas ce que je faisais."],
+      "correctAnswer": "C. Fais ce que je dis, ne fais pas ce que je fais.",
+      "audio": "TYF_Present_tense_3_2.mp3",
+      "explanation": "Do as I say, not as I do."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Il faut jeter le bébé avec l'eau du bain.", "B. On ne doit pas jeter le bébé avec l'eau de la baignoire.", "C. Il ne faudra jamais jeter le bébé avec l'eau du bain.", "D. Il ne faut pas jeter le bébé avec l'eau du bain."],
+      "correctAnswer": "D. Il ne faut pas jeter le bébé avec l'eau du bain.",
+      "audio": "TYF_Present_tense_3_3.mp3",
+      "explanation": "One shouldn't throw out the baby with the bathwater.\nThis idiomatic expression warns not to get rid of something good or valuable along with something bad.\nDuring the Middle Ages in Europe, it was common practice to bathe together in sequence, starting with the eldest and ending with the youngest. By the time the baby's turn arrived, the bathwater had become quite soiled, and one could forget that there was a baby there when you emptied the bath…"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Comme l'on faisait son lit, on se couchait.", "B. Comme ils font leur lit, ils se couchent.", "C. Tant qu'on n'aura pas fait son lit, on ne se couchera pas.", "D. Comme on fait son lit, on se couche."],
+      "correctAnswer": "D. Comme on fait son lit, on se couche.",
+      "audio": "TYF_Present_tense_3_4.mp3",
+      "explanation": "As you make your bed, so you shall lie in it.).\nWe are responsible for the consequences of our actions. In other words, if we make our bed poorly, we will have an uncomfortable night's sleep. Similarly, if we make poor choices in life, we will have to face the consequences."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Il n'y a que les imbéciles qui ne changent pas d'avis.", "B. Il n'y a que les imbéciles qui ne changeront pas d'avis.", "C. Il n'y a que les imbéciles qui ne changeons pas d'avis.", "D. Il n'y a que les imbéciles qui ne changez pas d'avis."],
+      "correctAnswer": "A. Il n'y a que les imbéciles qui ne changent pas d'avis.",
+      "audio": "TYF_Present_tense_3_5.mp3",
+      "explanation": "Only fools never change their mind."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Donner sera donner ; reprendre sera voler. ", "B. Donner, c'est pas donner ; c'est voler. ", "C. Donner, c'est donnera ; reprendre, c'est volera", "D. Donner, c'est donner ; reprendre, c'est voler. "],
+      "correctAnswer": "D. Donner, c'est donner ; reprendre, c'est voler. ",
+      "audio": "TYF_Present_tense_3_6.mp3",
+      "explanation": "Once given, it is given; to take back is to steal."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Mieux vaut prévenir que guérir.", "B. Mieux vaudrait prévenir que guérir.", "C. Mieux eut vallu prévenir que guérir.", "D. Mieux faudra prévenir que guérir."],
+      "correctAnswer": "A. Mieux vaut prévenir que guérir.",
+      "audio": "TYF_Present_tense_3_7.mp3",
+      "explanation": "Prevention is better than a cure.\nIt emphasizes the importance of taking proactive measures to avoid problems rather than dealing with them after they occur."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Entre l'arbre et l'écorce, il faut qu'on mette le doigt.", "B. Entre l'arbre et l'écorce, il ne faudra pas mettre le doigt.", "C. Entre l'arbre et l'écorce, il ne faut pas mettre le doigt. ", "D. Entre l'arbre et l'écorce, il ne fallait pas mettre les doigts."],
+      "correctAnswer": "C. Entre l'arbre et l'écorce, il ne faut pas mettre le doigt. ",
+      "audio": "TYF_Present_tense_3_8.mp3",
+      "explanation": "Don't put your finger between the tree and the bark). \nIt is best to stay out of disputes between others, as there is a risk of getting hurt or being blamed for something that is not your fault."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. C'est dans le besoin qu'on reconnait ses vrais amis.", "B. C'est dans le besoin qu'on reconnaitra ses vrais amis.", "C. C'était dans le besoin qu'on a reconnu ses vrais amis.", "D. C'est dans le besoin qu'on reconnaît ses vrais amis."],
+      "correctAnswer": "D. C'est dans le besoin qu'on reconnaît ses vrais amis.",
+      "audio": "TYF_Present_tense_3_9.mp3",
+      "explanation": "A friend in need is a friend indeed.\nTrue friends are not just those who enjoy your company and share common interests, but also those who are willing to lend a helping hand, offer emotional support, and stand by you through thick and thin."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Les paroles s'envoleront, les écrits resteront.", "B. Les paroles s'envolont, les écrits restont.", "C. Les paroles se sont envolées, les écrits ça reste pas.", "D. Les paroles s'envolent, les écrits restent."],
+      "correctAnswer": "D. Les paroles s'envolent, les écrits restent.",
+      "audio": "TYF_Present_tense_3_10.mp3",
+      "explanation": "Spoken words fly away, written words remain."
+    }
+  ]
+}

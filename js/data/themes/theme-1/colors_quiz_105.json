@@ -1,0 +1,73 @@
+{
+  "id": 105,
+  "themeId": 1,
+  "name": "Writing and Reading & Listening Conversation Colors – Quiz 5",
+  "description": "Combine writing/reading and listening skills focusing on Colors conversation.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Bonjour, j'aimerais acheter ___ s'il vous plaît ? (fill the blank)",
+      "options": ["A. des chaussures rouges", "B. des chaussures bleues", "C. des chaussures marron", "D. All of the above"],
+      "correctAnswer": "D. All of the above",
+      "explanation": "Marron is singular because common nouns used as color adjectives are invariable (like orange, cerise, turquoise, bronze…)."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Bonjour, oui sûr. Je vous apporte modèles. J'ai les chaussures arc-en-ciel si vous voulez ?", "B. Je vous apporte queques modèles. J'ai des chaussures arc-en-ciel si vous voulez ?", "C. Bonjour, bien sûr. Je vous apporte quelques modèles. J'ai aussi des chaussures arc-en-ciel si vous voulez ?", "D. Je vous apporte quelques modèles. J'ai aussi des chaussures arc-en-ciel si vous le voulez ?"],
+      "correctAnswer": "C. Bonjour, bien sûr. Je vous apporte quelques modèles. J'ai aussi des chaussures arc-en-ciel si vous voulez ?",
+      "audio": "TYF_Colors_5_2.mp3",
+      "explanation": "Hello, of course. I'll bring you a few models. I also have some rainbow shoes if you're interested?"
+    },
+    {
+      "question": "Avec plaisir, j'adore toutes les couleurs de l'arc-en-ciel, surtout ___. (fill the blank)",
+      "options": ["A. l'indigo et le violet", "B. le rouge et l'abricot", "C. le vert et le bronze", "D. All of the above"],
+      "correctAnswer": "A. l'indigo et le violet",
+      "explanation": "All the other answers have one color that is not in the rainbow."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Voilà quatre paires avec du rouge foncé, du bleu pâle, du marron clair et toutes les couleurs de l'arc-en-ciel !", "B. Voilà quatre paires avec du rouge français, du bleu pâle, du marron clair et toutes les couleurs de l'arqu-en-ciel !", "C. Quatre paires avec du rouge foncé, du bleu pâle, du marron clair et tous les couleurs de l'arc-en-ciel !", "D. Quatre paires avec du rouge foncé, du bleu pâle, du marron clair et toutes les couleurs de l'arqu-en-ciel !"],
+      "correctAnswer": "A. Voilà quatre paires avec du rouge foncé, du bleu pâle, du marron clair et toutes les couleurs de l'arc-en-ciel !",
+      "audio": "TYF_Colors_5_4.mp3",
+      "explanation": "Here are four pairs: one in dark red, one in pale blue, one in light brown, and one in all the colors of the rainbow!"
+    },
+    {
+      "question": "Merci. Je vais les essayer en commençant par ___. (fill the blank)",
+      "options": ["A. la paire arc-en-ciel", "B. la paire rouges foncée", "C. la paire marronne", "D. All of the above"],
+      "correctAnswer": "A. la paire arc-en-ciel",
+      "explanation": "Marron is singular because common nouns used as color adjectives are invariable (like orange, cerise, turquoise, bronze…). Rouge does not have an "s" because paire is singular and foncé does not have an "e" because an adjective of color is always invariable when it is composed of two words."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Entendu. Préférez laquelle ?", "B. Entendu. Préférez lequelle ?", "C. Entendu. Vous préférez laquelle ?", "D. Entendu. Vous préférez lequelle ?"],
+      "correctAnswer": "C. Entendu. Vous préférez laquelle ?",
+      "audio": "TYF_Colors_5_6.mp3",
+      "explanation": "Understood. Which one do you prefer?"
+    },
+    {
+      "question": "Ma préférée, c'est ___. (fill the blank)",
+      "options": ["A. la bleue", "B. la rouge", "C. l'arc-en-ciel", "D. la marron"],
+      "correctAnswer": "All the answers are correct.",
+      "explanation": "All the answers are correct. To each their own."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Les gloûts et les couleurs.", "B. Les goûts et les couleurs.", "C. Les gloûts et les couleures.", "D. Les goûts et les couleures."],
+      "correctAnswer": "B. Les goûts et les couleurs.",
+      "audio": "TYF_Colors_5_8.mp3",
+      "explanation": "Les goûts et les couleur\" (tastes and colors) expresses the idea that there is no accounting for personal preferences, especially when it comes to matters of aesthetics or aesthetics or opinion."
+    },
+    {
+      "question": "C'est vrai. Bon, la plus confortable, c'est la ___ (fill the blank). Je la prends.",
+      "options": ["A. marron", "B. paire marron", "C. paire de chaussures marron", "D. All of the above"],
+      "correctAnswer": "D. All of the above"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Très choix. Je vous l'encaisse ?", "B. Très bon choix. Je vous encaisse ?", "C. Bon choix. Je t'encaisse ?", "D. Très bon choix. Je vous l'encaisse ?"],
+      "correctAnswer": "B. Très bon choix. Je vous encaisse ?",
+      "audio": "TYF_Colors_5_10.mp3",
+      "explanation": "Excellent choice. Shall I process your payment?"
+    }
+  ]
+}

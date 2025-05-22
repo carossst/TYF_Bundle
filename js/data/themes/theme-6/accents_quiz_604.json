@@ -1,0 +1,79 @@
+{
+  "id": 604,
+  "themeId": 6,
+  "name": "Listening Conversation accents – Quiz 4",
+  "description": "Practice listening comprehension in conversation scenarios using French accents and pronunciation.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Attends, je comprends. Lafayette est la ?", "B. Attends, je ne comprends pas. Lafayette est là ?", "C. Attends, je ne le comprends plus. Lafayéte est là ?", "D. Attends, je ne vous comprends pas. Lafayette n'est pas là ?"],
+      "correctAnswer": "B. Attends, je ne comprends pas. Lafayette est là ?",
+      "audio": "TYF_Accents_4_1.mp3",
+      "explanation": "Wait, I don't understand. Is Lafayette here?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Non, il n'est pas revenu de la guerre américaine à ce moment-là.", "B. Oui, il est revenu de la guerre à ce moment-là.", "C. Oui, il est revenu de la guerre d'indèpendance amèricaine.", "D. Oui, il est revenu de la guerre d'indépendance américaine à ce moment-là."],
+      "correctAnswer": "D. Oui, il est revenu de la guerre d'indépendance américaine à ce moment-là.",
+      "audio": "TYF_Accents_4_2.mp3",
+      "explanation": "Yes, he came back from the American War of Independence."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Une rumeur se répand selon laquelle les seigneurs ont armé des brigands.", "B. Une rumeur s'étend selon laquelle des seigneurs ont armê des brigands pour attaquer les paysans.", "C. Une rumeur se répand selon laquelle des seigneurs ont armé des brigands pour attaquer les paysans.", "D. Une rumeur se rèpand avec des seigneurs qui ont armé des brigands pour attaquer les paysans."],
+      "correctAnswer": "C. Une rumeur se répand selon laquelle des seigneurs ont armé des brigands pour attaquer les paysans.",
+      "audio": "TYF_Accents_4_3.mp3",
+      "explanation": "Rumors spread that lords had armed brigands to attack peasants."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Les paysans attaquent les maisons mais ne brûlent pas les archives mentionnant les impôts.", "B. Les paysans attaquent les châteaux et brûlent les archives mentionnant les impôts.", "C. Les paysans attaquent et brûlent les archives avec tous les impôts.", "D. Les paysans attaquent les châteaux et ne brûlent pas les archives mentionnant les impôts."],
+      "correctAnswer": "B. Les paysans attaquent les châteaux et brûlent les archives mentionnant les impôts.",
+      "audio": "TYF_Accents_4_4.mp3",
+      "explanation": "Peasants attack castles and burn archives containing information on taxes."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. L'Assemblée nationale ne vote pas lors de la nuit du 4 août la suppression des privilèges.", "B. L'Assemblèe nationale vote lors de la nuit du 4 août la suppression des priviléges.", "C. L'Assemblée nationale vote lors de la nuit du 4 août les privilégiés.", "D. L'Assemblée nationale vote lors de la nuit du 4 août la suppression des privilèges."],
+      "correctAnswer": "D. L'Assemblée nationale vote lors de la nuit du 4 août la suppression des privilèges.",
+      "audio": "TYF_Accents_4_5.mp3",
+      "explanation": "The National Assembly votes on the night of August 4 to abolish privileges. -1789"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Cela met fin à la société de l'ancien régime.", "B. Cela met fin à la vie de l'ancien régime.", "C. Cela ne met pas fin à la sociètè de l'ancien règime.", "D. Cela met fin a l'ancien règime."],
+      "correctAnswer": "A. Cela met fin à la société de l'ancien régime.",
+      "audio": "TYF_Accents_4_6.mp3",
+      "explanation": "This puts an end to the society of the old regime."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Le 26 août 1789, la Déclaration des Droits de l'Homme et du Citoyen est adoptée.", "B. Le 26 août 1790, la Déclaration des Droits de l'Homme et du Citoyen n'est pas adoptée.", "C. Le 26 août 1789, la Dèclaration des Droits de l'Homme est adoptèe.", "D. Le 26 août 1789, la Dèclaration des Droits des personnes est adaptée."],
+      "correctAnswer": "A. Le 26 août 1789, la Déclaration des Droits de l'Homme et du Citoyen est adoptée.",
+      "audio": "TYF_Accents_4_7.mp3",
+      "explanation": "On August 26, 1789, the Declaration of the Rights of Man and of the Citizen is voted."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Attends. J'arrété la leçon à nouveau mais c'est pas croyable quand on y pense.", "B. Attends. J'arrête la leçon à nouveau mais c'est incroyable quand on y pense.", "C. Attends. J'arrête pas la leçon à nouveau et c'est incroyable quand on y pense.", "D. Attends. Je t'arrète la leçon à nouveau : je crois pas ce que je pense."],
+      "correctAnswer": "B. Attends. J'arrête la leçon à nouveau mais c'est incroyable quand on y pense.",
+      "audio": "TYF_Accents_4_8.mp3",
+      "explanation": "Hang on a sec. I am stopping the lesson again, but it's incredible when you think about it"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Les pènuries alimentaires perdurent, la vie se dègrade.", "B. Les pénuries alimentaires perdurent, la vie quotidienne se dégrade.", "C. Les pènuries perdurent, la vie quotidienne s'améliore.", "D. Les pénuries perdurent mais la vie ne se dègrade pas."],
+      "correctAnswer": "B. Les pénuries alimentaires perdurent, la vie quotidienne se dégrade.",
+      "audio": "TYF_Accents_4_9.mp3",
+      "explanation": "Food shortages persist, daily life is deteriorating."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Et c'est pas fini. L'heure est grave.", "B. Et c'est fini. L'heure n'est pas grave.", "C. Et ce n'est pas fini. L'heure est grâve.", "D. Et c'est pas fini. L'heûre est pas grave."],
+      "correctAnswer": "A. Et c'est pas fini. L'heure est grave.",
+      "audio": "TYF_Accents_4_10.mp3",
+      "explanation": "And there's more to come. The situation is serious."
+    }
+  ]
+}

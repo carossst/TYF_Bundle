@@ -1,0 +1,79 @@
+{
+  "id": 804,
+  "themeId": 8,
+  "name": "Listening Conversation metro – Quiz 4",
+  "description": "Practice listening comprehension in conversation scenarios using vocabulary related to public transportation and the metro.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Bonjour Monsieur, un carnet de 10 tickets de métro s'il vous plait ?", "B. Bonjour Madame, un carnet de 10 tickets de métro s'il vous plait ?", "C. Bonjour, deux carnets de 10 tickets s'il vous plait ?", "D. Bonjour Madame, 10 tickets s'il vous plait ?"],
+      "correctAnswer": "B. Bonjour Madame, un carnet de 10 tickets de métro s'il vous plait ?",
+      "audio": "TYF_Metro_4_1.mp3",
+      "explanation": "Hello Madam, a booklet of 10 metro tickets please?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Bonjour, nous ne vendons que des carnets. Vous pouvez acheter sur votre smartphone.", "B. Bonjour, nous vendons des carnets. Vous pouvez acheter un ticket à l'unité ici ou un carnet sur votre smartphone.", "C. Bonjour, nous vendons des carnets. Vous achetez un ticket à l'unité ici ou un carnet sur votre smartphone.", "D. Bonjour, nous ne vendons plus de carnets. Vous pouvez acheter un ticket à l'unité ici."],
+      "correctAnswer": "D. Bonjour, nous ne vendons plus de carnets. Vous pouvez acheter un ticket à l'unité ici.",
+      "audio": "TYF_Metro_4_2.mp3",
+      "explanation": "Hello, we no longer sell booklets. You can buy a single ticket here."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Ah je le savais pas. Je peux aller à Paris avec ce ticket ?", "B. Je vais dans tout Paris avec ce ticket ?", "C. Ah je ne savais pas. Je peux aller dans tout Paris avec ce ticket ?", "D. Ah je le savais. Je ne peux pas aller dans tout Paris avec le ticket ?"],
+      "correctAnswer": "C. Ah je ne savais pas. Je peux aller dans tout Paris avec ce ticket ?",
+      "audio": "TYF_Metro_4_3.mp3",
+      "explanation": "Oh, I didn't know. Can I go anywhere in Paris with this ticket?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Non. Ce ticket ne permet pas les correspondances dans Paris pendant 1h30 à partir de la validation du ticket.", "B. Oui. Ce ticket permet les correspondances dans Paris pendant 1h30 à partir de la validation du ticket.", "C. Oui. Ce ticket permet les correspondances dans Paris pendant 2h30 à partir de la validation du ticket.", "D. Oui. Le ticket permet les correspondances en dehors de Paris pendant 1h30 à partir de la validation du ticket."],
+      "correctAnswer": "B. Oui. Ce ticket permet les correspondances dans Paris pendant 1h30 à partir de la validation du ticket.",
+      "audio": "TYF_Metro_4_4.mp3",
+      "explanation": "Yes, the Ticket t+ allows you to make connections in Paris for 1h30 from the time you validate your ticket."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Et ça marche pour l'aéroport Charles-de-Gaulle ?", "B. Et ça marche aussi pour Charles-de-Gaulle ?", "C. Cela marche aussi pour l'aéroport Charles-de-Gaulle ?", "D. Et ça marche aussi pour l'aéroport Charles-de-Gaulle ?"],
+      "correctAnswer": "D. Et ça marche aussi pour l'aéroport Charles-de-Gaulle ?",
+      "audio": "TYF_Metro_4_5.mp3",
+      "explanation": "And does it also work for Charles-de-Gaulle airport?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Non, c'est juste pour Paris intra muros. Vous devez prendre un ticket de RER si vous voulez aller à l'aéroport.", "B. Non, c'est juste pour Paris. Vous prenez un ticket de RER si vous voulez aller à l'aéroport.", "C. Non, c'est pour intra muros. Vous devez prendre un ticket de RER pour l'aéroport.", "D. Non, c'est juste Paris intra muros. Vous achetez un ticket de RER pour aller à à la gare."],
+      "correctAnswer": "A. Non, c'est juste pour Paris intra-muros. Vous devez prendre un ticket de RER si vous voulez aller à l'aéroport.",
+      "audio": "TYF_Metro_4_6.mp3",
+      "explanation": "No, it's just for Paris intra-muros. You need an RER ticket if you want to go to the airport."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. C'est compliqué. Donc si je comprends bien, le ticket n'est pas valable à l'extérieur de Paris.", "B. C'est pas compliqué. Si je comprends bien, le ticket n'est pas valable dans Paris.", "C. C'est compliqué. Donc si je comprends, le ticket est bon dans les trains ou les RER à l'extérieur de Paris.", "D. C'est compliqué. Donc je comprends bien, le ticket n'est valable qu'à l'extérieur de Paris."],
+      "correctAnswer": "A. C'est compliqué. Donc si je comprends bien, le ticket n'est pas valable à l'extérieur de Paris.",
+      "audio": "TYF_Metro_4_7.mp3",
+      "explanation": "It's complicated. So if I understand correctly, the ticket is not valid outside Paris."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Mais mauvaise nouvelle, vous ne pouvez pas l'utiliser pour le funiculaire de Montmartre.", "B. Exactement. Mais bonne nouvelle, vous pouvez l'utiliser pour le funiculaire de Montmartre.", "C. Exactement. Bonne nouvelle, vous pouvez pour le funiculaire de Montmartre.", "D. Exactement. Mais bonne nouvelle, vous l'utilisez pour le funiculaire de Montmartre."],
+      "correctAnswer": "B. Exactement. Mais bonne nouvelle, vous pouvez l'utiliser pour le funiculaire de Montmartre.",
+      "audio": "TYF_Metro_4_8.mp3",
+      "explanation": "Exactly. But the good news is, you can use it for the Montmartre funicular."
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Cool. Et le bus, ça marche ?", "B. Ah cool. Et pour le bus, ça marche comment ?", "C. Ah cool. Pour le bus, comment ça marche ?", "D. Ah cool. Et pour le bus, cela marchera comment ?"],
+      "correctAnswer": "B. Ah cool. Et pour le bus, ça marche comment ?",
+      "audio": "TYF_Metro_4_9.mp3",
+      "explanation": "Ah cool. How does the bus work?"
+    },
+    {
+      "question": "Listen to this. What is she saying?",
+      "options": ["A. Vous pouvez utiliser ce ticket pour le bus ou le métro, mais pas les deux. C'est bus OU métro.", "B. Vous pouvez utiliser ce ticket pour le bus ou le métro, mais pas les deux. C'est bus OU métro.", "C. Vous pouvez utiliser ce ticket pour le bus et le métro, mais pas les deux. C'est bus ET métro.", "D. Vous ne pouvez pas utiliser ce ticket pour le bus."],
+      "correctAnswer": "A. Vous pouvez utiliser ce ticket pour le bus ou le métro, mais pas les deux. C'est bus OU métro.",
+      "audio": "TYF_Metro_4_10.mp3",
+      "explanation": "You can use this ticket for the bus or metro, but not both. It's bus OR metro."
+    }
+  ]
+}

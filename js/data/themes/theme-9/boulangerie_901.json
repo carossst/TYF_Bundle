@@ -1,0 +1,68 @@
+{
+  "id": 901,
+  "themeId": 9,
+  "name": "Writing and Reading boulangerie – Quiz 1",
+  "description": "Practice boulangerie vocabulary through writing and reading exercises.",
+  "version": "2.2.3",
+  "questions": [
+    {
+      "question": "How do you say "bread"?",
+      "options": ["A. Pan", "B. Pain", "C. Paine", "D. All of the above"],
+      "correctAnswer": "B. Pain",
+      "explanation": "French law requires boulangeries to make their bread fresh on-site."
+    },
+    {
+      "question": "How do you say \"baker\"? (masculine)",
+      "options": ["A. Boulangère", "B. Boulanger", "C. Boulangé", "D. All of the above"],
+      "correctAnswer": "B. Boulanger"
+    },
+    {
+      "question": "How do you say \"pastry shop\"?",
+      "options": ["A. Patisserie", "B. Patiserie", "C. Boulangerie", "D. All of the above"],
+      "correctAnswer": "A. Patisserie",
+      "explanation": "Technically, a boulangerie only sells breads and pastries made with dough, while a patisserie focuses on sweeter pastries and desserts. However, the lines can blur a bit. Most boulangeries will sell at least some sweet pastries, and in rural areas, the boulangerie may be the only place to get any pastries at all."
+    },
+    {
+      "question": "How do you say "chocolate bread"?",
+      "options": ["A. Pain au chocolat", "B. Painochocolat", "C. Pain chocolat", "D. All of the above"],
+      "correctAnswer": "A. Pain au chocolat",
+      "explanation": "This pastry is made with a croissant dough that is filled with a bar of dark chocolate. It's called chocolatine in the south of France."
+    },
+    {
+      "question": "How do you say "raisin bread"? ",
+      "options": ["A. Pain au raisin", "B. Pain aux raisines", "C. Pain aux raisins", "D. All of the above"],
+      "correctAnswer": "C. Pain aux raisins",
+      "explanation": "It's shaped like a spiral and filled with a creamy, sweet custard and raisins. It's also called "escargot" (snail) in the south of France."
+    },
+    {
+      "question": "How do you say "lemon tart"? ",
+      "options": ["A. Tarte au citron", "B. Tarte aù citron", "C. Tarte aux citrons", "D. All of the above"],
+      "correctAnswer": "A. Tarte au citron",
+      "explanation": "The traditional tarte au citron is meringue-less."
+    },
+    {
+      "question": "How do you say "apple tart"?",
+      "options": ["A. Tarte au pomme", "B. Tarte de pommes", "C. Tarte aux pommes", "D. Tarte des pommes"],
+      "correctAnswer": "C. Tarte aux pommes",
+      "explanation": "It comes filled with a sweet homemade frangipane filling topped off with caramelized apples and fanned in the distinctive, striking spiral pattern."
+    },
+    {
+      "question": "How do you say \"here is your change"? ",
+      "options": ["A. Voilà votre monnaie.", "B. Votre monnaie.", "C. Voilà la monnaie.", "D. All of the above"],
+      "correctAnswer": "D. All of the above",
+      "explanation": "You may also find bakeries with automatic coin dispensers. They work by accepting cash that you insert. The machine then verifies the bill's authenticity and dispenses the equivalent amount in coins. It's like you have won the slots when the change comes out."
+    },
+    {
+      "question": "How do you ask \"anything else/is that all\"?",
+      "options": ["A. Ce sera tout ?", "B. Ce sera toute ?", "C. Ceux sera tout ?", "D. All of the above"],
+      "correctAnswer": "A. Ce sera tout ?",
+      "explanation": "When the person feels that you have finished ordering, she might ask ce sera tout ? (is that all?) expecting a yes or no answer. If you say yes, she will give you the price. If you say no, she will expect you to ask for what more you want to order. Et voilà !"
+    },
+    {
+      "question": "How do you order a baguette?",
+      "options": ["A. Une baguette s'il vous plait ?", "B. Puis-je avoir une baguette s'il vous plait ?", "C. Est-ce que vous avez une baguette s'il vous plait ?", "D. All of the above"],
+      "correctAnswer": "D. All of the above",
+      "explanation": "There are about 30,000 boulangeries in France. A lot of places to practise asking for bread!"
+    }
+  ]
+}
