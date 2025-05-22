@@ -274,6 +274,9 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       options.forEach(opt => opt.classList.remove("selected"));
       optionEl.classList.add("selected");
       
+      // Afficher le feedback immédiat
+      this.showQuestionFeedback(question, idx);
+      
       // Mettre à jour les boutons de navigation
       this.updateNavigationButtons();
       
@@ -466,6 +469,52 @@ QuizUI.prototype.showStatsScreen = function() {
     this.dom.screens.stats.classList.remove("hidden");
   }
   // TODO: Implémenter l'affichage des statistiques
+};
+
+QuizUI.prototype.showQuestionFeedback = function(question, selectedIndex) {
+  const feedbackContainer = this.dom.quiz?.feedback;
+  if (!feedbackContainer) return;
+
+  // Déterminer si la réponse est correcte
+  const correctAnswer = question.correctAnswer;
+  const selectedAnswer = question.options[selectedIndex];
+  const isCorrect = selectedAnswer === correctAnswer;
+
+  // Construire le HTML du feedback
+  const feedbackHTML = `
+    <div class="feedback-content ${isCorrect ? 'correct' : 'incorrect'}">
+      <div class="feedback-result">
+        <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+        <span class="feedback-status">${isCorrect ? 'Correct !' : 'Incorrect'}</span>
+      </div>
+      
+      ${!isCorrect ? `
+        <div class="feedback-answer">
+          <strong>Bonne réponse :</strong> ${correctAnswer}
+        </div>
+      ` : ''}
+      
+      ${question.explanation ? `
+        <div class="feedback-explanation">
+          <strong>Explication :</strong> ${question.explanation}
+        </div>
+      ` : ''}
+    </div>
+  `;
+
+  feedbackContainer.innerHTML = feedbackHTML;
+  feedbackContainer.classList.remove('hidden');
+
+  // Masquer automatiquement après 3 secondes si correct
+  if (isCorrect && this.feedbackTimeout) {
+    clearTimeout(this.feedbackTimeout);
+  }
+  
+  if (isCorrect) {
+    this.feedbackTimeout = setTimeout(() => {
+      feedbackContainer.classList.add('hidden');
+    }, 3000);
+  }
 };
 
 QuizUI.prototype.toggleTimerDisplay = function() {
