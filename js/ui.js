@@ -370,7 +370,6 @@ QuizUI.prototype.renderCurrentQuestion = function() {
       `).join('')
     : '<p>Aucune option disponible</p>';
 
-  // ✅ SUPPRESSION: Boutons de navigation rapide retirés
   container.innerHTML = `
     <div class="question-header">
       <span class="question-number">Question ${this.quizManager.currentQuestionIndex + 1}</span>
@@ -384,8 +383,9 @@ QuizUI.prototype.renderCurrentQuestion = function() {
     </div>
   `;
 
-  // Expose quizUI globally for quick nav buttons
-  window.quizUI = this;
+  // ✅ DÉCLARATION DES VARIABLES NÉCESSAIRES
+  const options = container.querySelectorAll('.option');
+  const selectedIndex = this.quizManager.getSelectedAnswer();
 
   // ========== FIX URGENT SÉLECTION RÉPONSES ==========
   // ✅ DÉBOGAGE - Vérifications avant event listeners
