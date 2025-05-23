@@ -137,7 +137,7 @@ window.ResourceManager = (function() {
       throw new Error(`Unknown theme ID ${themeId}`);
     }
 
-    // ✅ CONSTRUIRE LE BON NOM DE FICHIER
+    // ✅ CONSTRUIRE LE BON NOM DE FICHIER - CORRECTION CRITIQUE
     const filename = `${themeKey}_quiz_${quizId}.json`;
     console.log(`🔍 Looking for file: ${filename}`);
     console.log(`🔍 Theme ${themeId} -> Key: ${themeKey} -> File: ${filename}`);
