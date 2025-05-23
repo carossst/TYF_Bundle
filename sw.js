@@ -1,8 +1,8 @@
 /* sw.js — Service Worker production-ready avec améliorations */
 
 // Version incrémentée pour forcer la mise à jour
-const CACHE_NAME = "tyf-cache-v2.2.5";
-const DYNAMIC_CACHE = "tyf-dynamic-v2.2.5";
+const CACHE_NAME = "tyf-cache-v2.2.6";
+const DYNAMIC_CACHE = "tyf-dynamic-v2.2.6";
 
 // Assets statiques à pré-cacher
 const ASSETS_TO_CACHE = [
@@ -198,4 +198,5 @@ async function clearAllCaches() {
     cacheNames.map(name => caches.delete(name))
   );
   console.log("[SW] All caches cleared");
+}
 }

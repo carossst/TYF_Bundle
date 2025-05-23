@@ -139,8 +139,9 @@ window.ResourceManager = (function() {
 
     // ✅ CONSTRUIRE LE BON NOM DE FICHIER - CORRECTION CRITIQUE
     const filename = `${themeKey}_quiz_${quizId}.json`;
-    console.log(`🔍 Looking for file: ${filename}`);
-    console.log(`🔍 Theme ${themeId} -> Key: ${themeKey} -> File: ${filename}`);
+    console.log(`🔍 DEBUG: Looking for file: ${filename}`);
+    console.log(`🔍 DEBUG: Theme ${themeId} -> Key: ${themeKey} -> File: ${filename}`);
+    console.log(`🔍 DEBUG: themeKeys mapping:`, this.themeKeys);
 
     // Chemins à essayer pour le fichier quiz
     const pathsToTry = [
