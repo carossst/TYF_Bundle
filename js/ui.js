@@ -340,10 +340,15 @@ QuizUI.prototype.showQuizScreen = function() {
 // ✅ VERSION CORRIGÉE - Sélection des réponses qui fonctionne !
 QuizUI.prototype.renderCurrentQuestion = function() {
   console.log("🔧 DEBUG: Rendering question - START");
+  console.log("🔧 DEBUG: this.dom =", this.dom);
+  console.log("🔧 DEBUG: this.dom.quiz =", this.dom.quiz);
   
   const container = this.dom.quiz?.container;
+  console.log("🔧 DEBUG: container =", container);
+  
   if (!container) {
-    console.error("❌ Quiz container not found");
+    console.error("❌ Quiz container not found!");
+    console.error("❌ Available DOM elements:", Object.keys(this.dom));
     return;
   }
 
