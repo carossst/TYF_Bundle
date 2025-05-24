@@ -1,29 +1,25 @@
 /*
- * js/data/main.js - Version 2.2.5 (Non-module) - Amélioré pour GitHub Pages
- * Point d'entrée principal de l'application Test Your French
+ * js/main.js - Version 2.3.1 CORRIGÉE COMPLÈTE - GitHub Pages et DOM
  */
 
-// Configuration globale de l'application
+// Configuration globale de l'application  
 window.TYF_CONFIG = {
-  version: '2.2.5',
+  version: '2.3.1',
   environment: detectEnvironment(),
   
-  // Configuration du Service Worker
   serviceWorker: {
     enabled: true,
     autoUpdate: false,
     showUpdateNotifications: true,
-    checkInterval: 60000 // 1 minute
+    checkInterval: 60000
   },
   
-  // Configuration de débogage
   debug: {
     enabled: detectEnvironment() === 'development',
     logLevel: detectEnvironment() === 'development' ? 'debug' : 'warn'
   }
 };
 
-// Détection de l'environnement
 function detectEnvironment() {
   const hostname = window.location.hostname;
   if (hostname === 'localhost' || hostname === '127.0.0.1') return 'development';
@@ -31,7 +27,6 @@ function detectEnvironment() {
   return 'production';
 }
 
-// Logger centralisé
 const Logger = {
   debug: (...args) => window.TYF_CONFIG.debug.enabled && console.log('[TYF Debug]', ...args),
   log: (...args) => console.log('[TYF]', ...args),
@@ -39,7 +34,6 @@ const Logger = {
   error: (...args) => console.error('[TYF Error]', ...args)
 };
 
-// Gestionnaire d'erreurs global
 window.addEventListener('error', (event) => {
   Logger.error('Global error:', event.error);
   if (window.TYF_CONFIG.debug.enabled) {
@@ -54,17 +48,12 @@ window.addEventListener('unhandledrejection', (event) => {
   }
 });
 
-// L'ordre de chargement des scripts est important:
-// 1. resourceManager.js  2. storage.js  3. quizManager.js  4. ui.js  5. main.js (ce fichier)
-
-// Initialisation de l'application au chargement du DOM
 document.addEventListener('DOMContentLoaded', function() {
   Logger.log(`Initialisation de l'application Test Your French v${window.TYF_CONFIG.version} (${window.TYF_CONFIG.environment})`);
 
-  // Initialisation du Service Worker en priorité
   initServiceWorker();
 
-  // Sélection des éléments DOM principaux
+  // 🔧 CORRECTION MAJEURE - DOM complet et cohérent
   const DOM = {
     screens: {
       welcome: document.getElementById('welcome-screen'),
@@ -90,26 +79,18 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     results: {
       quizName: document.getElementById('result-quiz-name'),
-      score: document.getElementById('score'),
+      score: document.getElementById('final-score'),
       totalQuestions: document.getElementById('total-questions'),
       message: document.getElementById('score-message'),
       summary: document.getElementById('answers-summary'),
-      stats: {
-        accuracy: document.getElementById('accuracy'),
-        avgTime: document.getElementById('avg-time'),
-        fastestAnswer: document.getElementById('fastest-answer'),
-        slowestAnswer: document.getElementById('slowest-answer')
-      },
       shareText: document.getElementById('share-text')
     },
     stats: {
-      completionRate: document.getElementById('completion-rate'),
-      completedQuizzes: document.getElementById('completed-quizzes'),
+      completedQuizzes: document.getElementById('stats-quizzes-completed'),
       totalQuizzes: document.getElementById('total-quizzes'),
-      accuracy: document.getElementById('global-accuracy'),
-      correctAnswers: document.getElementById('correct-answers'),
+      accuracy: document.getElementById('stats-average-score'),
+      correctAnswers: document.getElementById('stats-questions-correct'),
       totalAnswers: document.getElementById('total-answers'),
-      avgTimePerQuestion: document.getElementById('avg-time-per-question'),
       themeBars: document.getElementById('themes-bars-container'),
       bestThemeName: document.getElementById('best-theme-name'),
       bestThemeAccuracy: document.getElementById('best-theme-accuracy'),
@@ -124,17 +105,12 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     buttons: {
       backToThemes: document.getElementById('back-to-themes'),
-      backToQuizzes: document.getElementById('back-to-quizzes-btn'),
       showStats: document.getElementById('show-stats-btn'),
       showStatsFromQuiz: document.getElementById('show-stats-btn-from-quiz'),
-      backFromStats: document.getElementById('back-from-stats'),
-      resetProgress: document.getElementById('reset-progress'),
+      backFromStats: document.getElementById('back-to-themes-from-stats'),
       prev: document.getElementById('prev-btn'),
       next: document.getElementById('next-btn'),
       submit: document.getElementById('submit-btn'),
-      restart: document.getElementById('restart-btn'),
-      export: document.getElementById('export-btn'),
-      print: document.getElementById('print-btn'),
       copy: document.getElementById('copy-btn'),
       exitQuiz: document.getElementById('exit-quiz')
     },
@@ -144,18 +120,30 @@ document.addEventListener('DOMContentLoaded', function() {
     quizzesList: document.getElementById('quizzes-list'),
     totalQuestionsCount: document.getElementById('total-questions-count'),
     totalThemesCount: document.getElementById('total-themes-count'),
-    welcomeStatsPlaceholder: document.getElementById('welcome-stats-placeholder')
+    
+    // 🆕 Stats dashboard accueil
+    welcomeStats: {
+      container: document.getElementById('welcome-stats-summary'),
+      quizzesCompleted: document.getElementById('welcome-quizzes-completed'),
+      accuracy: document.getElementById('welcome-accuracy'),
+      themesProgress: document.getElementById('welcome-themes-progress'),
+      streak: document.getElementById('welcome-streak')
+    }
   };
 
-  // Vérification des éléments DOM essentiels
+  // 🔧 VÉRIFICATION CRITIQUE - Seulement les éléments essentiels
   const requiredElements = [
     'screens.welcome', 'screens.quizSelection', 'screens.quiz', 'screens.result', 'screens.stats',
-    'themesList', 'quizzesList', 'quiz.container'
+    'themesList', 'quizzesList', 'quiz.container', 'quiz.feedback'
   ];
 
   const missingElements = requiredElements.filter(path => {
     const element = getNestedProperty(DOM, path);
-    return !element;
+    if (!element) {
+      Logger.error(`Missing required DOM element: ${path}`);
+      return true;
+    }
+    return false;
   });
 
   if (missingElements.length > 0) {
@@ -164,21 +152,19 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  // Vérification de la disponibilité des modules requis
+  // 🔧 CORRECTION - Vérification modules AVANT utilisation
   if (!window.ResourceManager || !window.QuizManager || !window.QuizUI || !window.storage) {
     Logger.error("Modules requis manquants. Vérifiez le chargement des scripts.");
     showErrorMessage("Erreur de chargement des modules. Veuillez rafraîchir la page.");
     return;
   }
 
-  // Initialisation des gestionnaires
   let quizManager, quizUI;
   
   try {
     quizManager = new window.QuizManager();
     quizUI = new window.QuizUI(quizManager, DOM, window.ResourceManager);
     
-    // Configuration des event listeners
     quizUI.setupEventListeners();
     
     Logger.debug("Gestionnaires initialisés avec succès");
@@ -188,21 +174,14 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  // Initialisation des fonctionnalités de gamification
   initGamification(DOM);
-
-  // Initialisation des utilitaires
   initUtilities(DOM);
-
-  // Préchargement des métadonnées et démarrage de l'application
   startApplication(quizUI, DOM);
 
   Logger.log("Initialisation terminée - Application prête");
 });
 
-/**
- * Initialise le Service Worker avec gestion des mises à jour
- */
+// 🔧 CORRECTION SERVICE WORKER - GitHub Pages optimisé
 function initServiceWorker() {
   if (!window.TYF_CONFIG.serviceWorker.enabled || !('serviceWorker' in navigator)) {
     Logger.debug("Service Worker désactivé ou non supporté");
@@ -211,10 +190,11 @@ function initServiceWorker() {
 
   window.addEventListener('load', async function() {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js');
+      // 🔧 CORRECTION - Chemin Service Worker cohérent
+      const swPath = window.TYF_CONFIG.environment === 'github-pages' ? '/TYF_Bundle/sw.js' : './sw.js';
+      const registration = await navigator.serviceWorker.register(swPath);
       Logger.log('Service Worker enregistré:', registration.scope);
 
-      // Gestion des mises à jour
       setupServiceWorkerUpdates(registration);
 
     } catch (error) {
@@ -222,7 +202,6 @@ function initServiceWorker() {
     }
   });
 
-  // Écouter les changements de contrôleur
   let refreshing = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (refreshing) return;
@@ -232,16 +211,11 @@ function initServiceWorker() {
   });
 }
 
-/**
- * Configure la gestion des mises à jour du Service Worker
- */
 function setupServiceWorkerUpdates(registration) {
-  // Vérifier s'il y a un worker en attente
   if (registration.waiting) {
     showUpdateNotification(registration.waiting);
   }
 
-  // Écouter les nouveaux workers
   registration.addEventListener('updatefound', () => {
     const newWorker = registration.installing;
     
@@ -252,7 +226,6 @@ function setupServiceWorkerUpdates(registration) {
     });
   });
 
-  // Vérification périodique des mises à jour
   if (window.TYF_CONFIG.serviceWorker.checkInterval > 0) {
     setInterval(() => {
       registration.update().catch(error => {
@@ -262,9 +235,6 @@ function setupServiceWorkerUpdates(registration) {
   }
 }
 
-/**
- * Affiche une notification de mise à jour disponible
- */
 function showUpdateNotification(worker) {
   if (!window.TYF_CONFIG.serviceWorker.showUpdateNotifications) return;
 
@@ -284,7 +254,6 @@ function showUpdateNotification(worker) {
     </div>
   `;
 
-  // Styles inline pour éviter les dépendances CSS
   notification.style.cssText = `
     position: fixed; top: 20px; right: 20px; z-index: 10000;
     background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -293,7 +262,6 @@ function showUpdateNotification(worker) {
 
   document.body.appendChild(notification);
 
-  // Gestionnaires d'événements
   notification.querySelector('#update-btn').addEventListener('click', () => {
     worker.postMessage({ type: 'SKIP_WAITING' });
     notification.remove();
@@ -303,7 +271,6 @@ function showUpdateNotification(worker) {
     notification.remove();
   });
 
-  // Auto-masquer après 10 secondes
   setTimeout(() => {
     if (notification.parentNode) {
       notification.remove();
@@ -311,19 +278,15 @@ function showUpdateNotification(worker) {
   }, 10000);
 }
 
-/**
- * Démarre l'application principale
- */
 async function startApplication(quizUI, DOM) {
   try {
     Logger.debug("Chargement des métadonnées...");
     
+    // 🔧 CORRECTION - Diagnostic si échec
     const metadata = await window.ResourceManager.loadMetadata();
     
-    // Mettre à jour les compteurs globaux
     updateGlobalCounters(metadata, DOM);
     
-    // Afficher l'écran d'accueil
     quizUI.showWelcomeScreen();
     
     Logger.log("Application démarrée avec succès");
@@ -331,23 +294,20 @@ async function startApplication(quizUI, DOM) {
   } catch (error) {
     Logger.error("Erreur lors du démarrage:", error);
     
-    // Tentative de diagnostic automatique
+    // 🔧 DIAGNOSTIC AUTO si erreur
     if (window.ResourceManager?.diagnose) {
-      Logger.debug("Exécution du diagnostic...");
+      Logger.debug("Exécution du diagnostic automatique...");
       await window.ResourceManager.diagnose();
     }
     
     showErrorMessage(
       `Impossible de charger les données de l'application. 
-      Veuillez vérifier votre connexion et rafraîchir la page. 
+      Vérifiez que le fichier metadata.json existe dans js/data/. 
       Détails: ${error.message}`
     );
   }
 }
 
-/**
- * Met à jour les compteurs globaux sur l'écran d'accueil
- */
 function updateGlobalCounters(metadata, DOM) {
   if (!metadata?.themes) {
     Logger.warn("Métadonnées invalides pour les compteurs");
@@ -356,37 +316,23 @@ function updateGlobalCounters(metadata, DOM) {
   }
 
   try {
-    // Nombre de thèmes
     if (DOM.totalThemesCount) {
       DOM.totalThemesCount.textContent = metadata.themes.length;
     }
 
-    // Nombre total de questions estimé
     if (DOM.totalQuestionsCount) {
       let estimatedTotalQuestions = 0;
       metadata.themes.forEach(theme => {
         if (theme.quizzes && Array.isArray(theme.quizzes)) {
-          estimatedTotalQuestions += theme.quizzes.length * 10; // 10 questions par quiz
+          estimatedTotalQuestions += theme.quizzes.length * 10; // ~10 questions par quiz
         }
       });
       DOM.totalQuestionsCount.textContent = estimatedTotalQuestions;
     }
 
-    // Nombre total de quiz
-    if (DOM.stats.totalQuizzes) {
-      let totalQuizzes = 0;
-      metadata.themes.forEach(theme => {
-        if (theme.quizzes && Array.isArray(theme.quizzes)) {
-          totalQuizzes += theme.quizzes.length;
-        }
-      });
-      DOM.stats.totalQuizzes.textContent = totalQuizzes;
-    }
-
     Logger.debug("Compteurs globaux mis à jour:", {
       themes: metadata.themes.length,
-      questions: DOM.totalQuestionsCount?.textContent,
-      quizzes: DOM.stats.totalQuizzes?.textContent
+      estimatedQuestions: DOM.totalQuestionsCount?.textContent
     });
 
   } catch (error) {
@@ -395,34 +341,34 @@ function updateGlobalCounters(metadata, DOM) {
   }
 }
 
-/**
- * Définit des placeholders pour les compteurs en cas d'erreur
- */
 function setPlaceholderCounters(DOM) {
   if (DOM.totalThemesCount) DOM.totalThemesCount.textContent = '...';
   if (DOM.totalQuestionsCount) DOM.totalQuestionsCount.textContent = '...';
-  if (DOM.stats.totalQuizzes) DOM.stats.totalQuizzes.textContent = '...';
 }
 
-/**
- * Initialise les fonctionnalités de gamification
- */
 function initGamification(DOM) {
   Logger.debug("Initialisation de la gamification");
   
-  if (!DOM.badges.container) {
-    Logger.warn("Container de badges non trouvé");
+  if (!DOM.badges?.container) {
+    Logger.debug("Container de badges non trouvé - gamification désactivée");
     return;
   }
 
-  // Affichage des badges quand l'écran stats devient visible
-  DOM.screens.stats.addEventListener('transitionend', (event) => {
-    if (!DOM.screens.stats.classList.contains('hidden')) {
-      loadAndDisplayBadges(DOM);
-    }
-  });
+  const statsScreen = DOM.screens.stats;
+  if (statsScreen) {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (!statsScreen.classList.contains('hidden')) {
+            loadAndDisplayBadges(DOM);
+          }
+        }
+      });
+    });
+    
+    observer.observe(statsScreen, { attributes: true });
+  }
 
-  // Écouter les notifications de nouveaux badges
   document.addEventListener('badgesEarned', (event) => {
     if (event.detail?.badges && Array.isArray(event.detail.badges)) {
       showBadgeNotification(event.detail.badges, DOM);
@@ -430,44 +376,41 @@ function initGamification(DOM) {
   });
 }
 
-/**
- * Charge et affiche les badges utilisateur
- */
 async function loadAndDisplayBadges(DOM) {
+  if (!DOM.badges?.list) {
+    Logger.debug("Badge list element not found");
+    return;
+  }
+
   try {
     const badges = await window.storage.getUserBadges();
     
-    if (badges && badges.length > 0 && DOM.badges.list) {
+    if (badges && badges.length > 0) {
       renderBadges(badges, DOM);
-    } else if (DOM.badges.list) {
+    } else {
       DOM.badges.list.innerHTML = '<p class="no-data">Aucun badge obtenu pour le moment.</p>';
     }
     
-    DOM.badges.container.classList.remove('hidden');
+    if (DOM.badges.container) {
+      DOM.badges.container.classList.remove('hidden');
+    }
     
   } catch (error) {
     Logger.warn("Erreur lors du chargement des badges:", error);
     if (DOM.badges.list) {
       DOM.badges.list.innerHTML = '<p class="error-message">Impossible de charger les badges.</p>';
     }
-    DOM.badges.container.classList.remove('hidden');
   }
 }
 
-/**
- * Initialise les utilitaires de l'application
- */
 function initUtilities(DOM) {
-  // Raccourcis clavier
   document.addEventListener('keydown', (event) => {
-    // Échap pour fermer les notifications
     if (event.key === 'Escape') {
       const notifications = document.querySelectorAll('.update-notification, .badge-notification');
       notifications.forEach(notification => notification.remove());
     }
   });
 
-  // Gestion du mode hors ligne
   window.addEventListener('online', () => {
     Logger.log("Connexion rétablie");
     showTemporaryMessage("Connexion rétablie", 'success');
@@ -479,9 +422,6 @@ function initUtilities(DOM) {
   });
 }
 
-/**
- * Affiche un message temporaire
- */
 function showTemporaryMessage(message, type = 'info') {
   const messageEl = document.createElement('div');
   messageEl.className = `temp-message temp-message-${type}`;
@@ -495,21 +435,16 @@ function showTemporaryMessage(message, type = 'info') {
   
   document.body.appendChild(messageEl);
   
-  // Animation d'apparition
   requestAnimationFrame(() => {
     messageEl.style.opacity = '1';
   });
   
-  // Suppression automatique
   setTimeout(() => {
     messageEl.style.opacity = '0';
     setTimeout(() => messageEl.remove(), 300);
   }, 3000);
 }
 
-/**
- * Renders the user's earned badges into the badge list DOM element.
- */
 function renderBadges(badges, DOM) {
   const badgeListEl = DOM.badges.list;
 
@@ -545,9 +480,6 @@ function renderBadges(badges, DOM) {
   });
 }
 
-/**
- * Displays a notification popup for newly earned badges.
- */
 function showBadgeNotification(newBadges, DOM) {
   const notificationEl = DOM.badges.notification;
 
@@ -555,7 +487,6 @@ function showBadgeNotification(newBadges, DOM) {
     return;
   }
 
-  // Construction du contenu de notification
   let notificationContent = `
     <div class="badge-notification-header">
       <i class="fas fa-trophy"></i>
@@ -581,11 +512,9 @@ function showBadgeNotification(newBadges, DOM) {
     <button class="close-notification" aria-label="Fermer la notification">Fermer</button>
   `;
 
-  // Affichage de la notification
   notificationEl.innerHTML = notificationContent;
   notificationEl.classList.remove('hidden');
 
-  // Bouton de fermeture
   const closeButton = notificationEl.querySelector('.close-notification');
   if (closeButton) {
     closeButton.addEventListener('click', () => {
@@ -593,7 +522,6 @@ function showBadgeNotification(newBadges, DOM) {
     });
   }
 
-  // Masquage automatique
   const displayTime = Math.max(5000, newBadges.length * 2000);
   setTimeout(() => {
     if (!notificationEl.classList.contains('hidden')) {
@@ -601,13 +529,9 @@ function showBadgeNotification(newBadges, DOM) {
     }
   }, displayTime);
 
-  // Mise à jour de la liste des badges après notification
   loadAndDisplayBadges(DOM);
 }
 
-/**
- * Displays a global error message to the user.
- */
 function showErrorMessage(message) {
   const errorElement = document.createElement('div');
   errorElement.className = 'global-error-message';
@@ -633,7 +557,6 @@ function showErrorMessage(message) {
   document.body.appendChild(errorElement);
   Logger.error(message);
 
-  // Suppression automatique après 10 secondes
   setTimeout(() => {
     if (errorElement.parentNode) {
       errorElement.remove();
@@ -641,9 +564,6 @@ function showErrorMessage(message) {
   }, 10000);
 }
 
-/**
- * Utilitaire pour accéder aux propriétés imbriquées d'un objet
- */
 function getNestedProperty(obj, path) {
   return path.split('.').reduce((current, key) => current?.[key], obj);
 }

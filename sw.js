@@ -1,12 +1,11 @@
-/* sw.js — Service Worker production-ready avec améliorations */
+/* sw.js — Service Worker CORRIGÉ pour GitHub Pages - Version 2.3.1 */
 
-// Version incrémentée pour forcer la mise à jour
-const CACHE_NAME = "tyf-cache-v2.2.6";
-const DYNAMIC_CACHE = "tyf-dynamic-v2.2.6";
+// 🔧 CORRECTION VERSION et chemins GitHub Pages
+const CACHE_NAME = "tyf-cache-v2.3.1";
+const DYNAMIC_CACHE = "tyf-dynamic-v2.3.1";
 
-// Assets statiques à pré-cacher
+// 🔧 CORRECTION CHEMINS - Assets adaptés pour GitHub Pages
 const ASSETS_TO_CACHE = [
-  "/",
   "/TYF_Bundle/",
   "/TYF_Bundle/index.html",
   "/TYF_Bundle/style.css",
@@ -15,10 +14,20 @@ const ASSETS_TO_CACHE = [
   "/TYF_Bundle/js/quizManager.js",
   "/TYF_Bundle/js/resourceManager.js",
   "/TYF_Bundle/js/storage.js",
-  "/TYF_Bundle/manifest.json"
+  "/TYF_Bundle/manifest.json",
+  // Fallbacks pour localhost
+  "/",
+  "./index.html",
+  "./style.css",
+  "./js/main.js",
+  "./js/ui.js",
+  "./js/quizManager.js",
+  "./js/resourceManager.js",
+  "./js/storage.js",
+  "./manifest.json"
 ];
 
-// INSTALL — Mise en cache initiale avec gestion d'erreur robuste
+// INSTALL — Mise en cache initiale robuste
 self.addEventListener("install", event => {
   console.log("[SW] Install - Version:", CACHE_NAME);
   self.skipWaiting();
@@ -27,7 +36,7 @@ self.addEventListener("install", event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log(`[SW] Precaching app shell - Cache: ${CACHE_NAME}`);
-        // Utilisation de Promise.allSettled pour continuer même si certains assets échouent
+        // 🔧 CORRECTION - Gestion d'erreur améliorée pour chaque asset
         return Promise.allSettled(
           ASSETS_TO_CACHE.map(asset => 
             cache.add(asset).catch(err => {
@@ -47,12 +56,12 @@ self.addEventListener("install", event => {
       })
       .catch(err => {
         console.error("[SW] Critical precaching error:", err);
-        throw err;
+        // Ne pas throw l'erreur pour permettre l'installation même partielle
       })
   );
 });
 
-// ACTIVATE — Nettoyage des anciens caches + dynamic cache
+// ACTIVATE — Nettoyage des anciens caches
 self.addEventListener("activate", event => {
   console.log("[SW] Activate - Version:", CACHE_NAME);
   
@@ -91,29 +100,66 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // Stratégie Network-First pour les fichiers JSON (données dynamiques)
+  // 🎵 CORRECTION AUDIO - Stratégie spéciale pour les fichiers audio
+  if (requestUrl.pathname.includes('/audio/') && 
+      (requestUrl.pathname.endsWith('.mp3') || 
+       requestUrl.pathname.endsWith('.ogg') || 
+       requestUrl.pathname.endsWith('.wav'))) {
+    event.respondWith(handleAudioRequest(request));
+    return;
+  }
+
+  // Stratégie Network-First pour les fichiers JSON
   if (requestUrl.pathname.endsWith('.json')) {
-    event.respondWith(
-      handleJsonRequest(request)
-    );
+    event.respondWith(handleJsonRequest(request));
     return;
   }
 
   // Stratégie Cache-First pour les assets statiques
-  event.respondWith(
-    handleStaticRequest(request)
-  );
+  event.respondWith(handleStaticRequest(request));
 });
+
+// 🎵 NOUVELLE FONCTION - Gestion spéciale des fichiers audio
+async function handleAudioRequest(request) {
+  console.log(`[SW] Audio request: ${request.url}`);
+  
+  try {
+    // Essayer le cache d'abord pour les fichiers audio
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      console.log(`[SW] Audio served from cache: ${request.url}`);
+      return cachedResponse;
+    }
+
+    // Si pas en cache, essayer le réseau
+    const response = await fetch(request);
+    if (response.ok) {
+      // Mettre en cache seulement si succès
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, response.clone());
+      console.log(`[SW] Audio cached: ${request.url}`);
+      return response;
+    }
+    
+    throw new Error(`Audio network response not ok: ${response.status}`);
+  } catch (error) {
+    console.warn(`[SW] Audio request failed: ${request.url}`, error.message);
+    
+    // Retourner une réponse d'erreur audio silencieuse
+    return new Response(null, {
+      status: 404,
+      statusText: 'Audio file not found'
+    });
+  }
+}
 
 // Gestion des requêtes JSON (Network-First avec fallback cache)
 async function handleJsonRequest(request) {
   console.log(`[SW] JSON request: ${request.url}`);
   
   try {
-    // Essayer le réseau en premier
     const response = await fetch(request);
     if (response.ok) {
-      // Mise en cache du résultat pour usage hors ligne
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, response.clone());
       console.log(`[SW] JSON cached: ${request.url}`);
@@ -123,14 +169,12 @@ async function handleJsonRequest(request) {
   } catch (error) {
     console.warn(`[SW] JSON network failed: ${request.url}`, error.message);
     
-    // Fallback vers le cache si disponible
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       console.log(`[SW] JSON served from cache: ${request.url}`);
       return cachedResponse;
     }
     
-    // Si pas de cache, retourner l'erreur réseau
     throw error;
   }
 }
@@ -149,7 +193,6 @@ async function handleStaticRequest(request) {
   try {
     const response = await fetch(request);
     
-    // Validation de la réponse avant mise en cache
     if (response && response.status === 200 && response.type === 'basic') {
       const cache = await caches.open(CACHE_NAME);
       cache.put(request, response.clone());
@@ -160,11 +203,39 @@ async function handleStaticRequest(request) {
   } catch (error) {
     console.error(`[SW] Static network failed: ${request.url}`, error);
     
-    // Pour les pages HTML, retourner une page d'erreur générique
+    // 🔧 CORRECTION - Page d'erreur plus informative
     if (request.headers.get('accept')?.includes('text/html')) {
       return new Response(
-        '<h1>Offline</h1><p>Cette page n\'est pas disponible hors ligne.</p>',
-        { headers: { 'Content-Type': 'text/html' } }
+        `<!DOCTYPE html>
+        <html>
+        <head>
+          <title>Application hors ligne</title>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+            .offline-container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            .offline-icon { font-size: 48px; margin-bottom: 20px; }
+            h1 { color: #333; margin-bottom: 15px; }
+            p { color: #666; line-height: 1.6; }
+            .retry-btn { background: #2196F3; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+            .retry-btn:hover { background: #1976D2; }
+          </style>
+        </head>
+        <body>
+          <div class="offline-container">
+            <div class="offline-icon">📡</div>
+            <h1>Application hors ligne</h1>
+            <p>Cette page n'est pas disponible hors ligne. Vérifiez votre connexion internet et réessayez.</p>
+            <button class="retry-btn" onclick="window.location.reload()">Réessayer</button>
+          </div>
+        </body>
+        </html>`,
+        { 
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
+          status: 503,
+          statusText: 'Service Unavailable'
+        }
       );
     }
     
@@ -188,8 +259,44 @@ self.addEventListener('message', event => {
         event.ports[0].postMessage({ success: true });
       });
       break;
+    case 'CACHE_AUDIO':
+      // 🎵 NOUVELLE FONCTIONNALITÉ - Pré-cacher des fichiers audio spécifiques
+      if (event.data.audioUrls && Array.isArray(event.data.audioUrls)) {
+        cacheAudioFiles(event.data.audioUrls).then(results => {
+          event.ports[0].postMessage({ 
+            success: true, 
+            cached: results.filter(r => r.success).length,
+            failed: results.filter(r => !r.success).length
+          });
+        });
+      }
+      break;
   }
 });
+
+// 🎵 NOUVELLE FONCTION - Pré-cache des fichiers audio
+async function cacheAudioFiles(audioUrls) {
+  const cache = await caches.open(DYNAMIC_CACHE);
+  const results = [];
+  
+  for (const url of audioUrls) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        await cache.put(url, response);
+        results.push({ url, success: true });
+        console.log(`[SW] Audio pre-cached: ${url}`);
+      } else {
+        results.push({ url, success: false, error: `HTTP ${response.status}` });
+      }
+    } catch (error) {
+      results.push({ url, success: false, error: error.message });
+      console.warn(`[SW] Failed to pre-cache audio: ${url}`, error.message);
+    }
+  }
+  
+  return results;
+}
 
 // Fonction utilitaire pour vider les caches
 async function clearAllCaches() {
@@ -199,4 +306,13 @@ async function clearAllCaches() {
   );
   console.log("[SW] All caches cleared");
 }
-}
+
+// 🔧 AMÉLIORATION - Gestion d'erreur globale du Service Worker
+self.addEventListener('error', event => {
+  console.error('[SW] Service Worker error:', event.error);
+});
+
+self.addEventListener('unhandledrejection', event => {
+  console.error('[SW] Unhandled promise rejection:', event.reason);
+  event.preventDefault(); // Empêche l'erreur de remonter
+});

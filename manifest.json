@@ -2,60 +2,60 @@
   "name": "Test Your French",
   "short_name": "TYF",
   "description": "Application web progressive pour apprendre le français à travers des quiz interactifs",
-  "version": "2.2.5",
+  "version": "2.3.1",
   "start_url": "/TYF_Bundle/",
   "scope": "/TYF_Bundle/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#2196F3",
-  "background_color": "#ffffff",
+  "theme_color": "#111f46",
+  "background_color": "#f9f9f9",
   "lang": "fr",
   
   "icons": [
     {
-      "src": "./icons/icon-72x72.png",
+      "src": "/TYF_Bundle/icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-96x96.png",
+      "src": "/TYF_Bundle/icons/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-128x128.png",
+      "src": "/TYF_Bundle/icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-144x144.png",
+      "src": "/TYF_Bundle/icons/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-152x152.png",
+      "src": "/TYF_Bundle/icons/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-192x192.png",
+      "src": "/TYF_Bundle/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-384x384.png",
+      "src": "/TYF_Bundle/icons/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icons/icon-512x512.png",
+      "src": "/TYF_Bundle/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -71,7 +71,7 @@
       "url": "/TYF_Bundle/#quiz",
       "icons": [
         {
-          "src": "./icons/shortcut-quiz.png",
+          "src": "/TYF_Bundle/icons/shortcut-quiz.png",
           "sizes": "96x96"
         }
       ]
@@ -83,7 +83,7 @@
       "url": "/TYF_Bundle/#stats",
       "icons": [
         {
-          "src": "./icons/shortcut-stats.png",
+          "src": "/TYF_Bundle/icons/shortcut-stats.png",
           "sizes": "96x96"
         }
       ]
@@ -92,14 +92,14 @@
   
   "screenshots": [
     {
-      "src": "./screenshots/mobile-home.png",
+      "src": "/TYF_Bundle/screenshots/mobile-home.png",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Écran d'accueil mobile"
     },
     {
-      "src": "./screenshots/desktop-quiz.png", 
+      "src": "/TYF_Bundle/screenshots/desktop-quiz.png", 
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",

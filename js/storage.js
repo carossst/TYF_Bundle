@@ -1,6 +1,7 @@
 /*
- * js/data/storage.js - Version 2.2.2 (Non-module)
+ * js/storage.js - Version 2.3.1 COMPLÈTE (Non-module)
  * Gestion du stockage local (localStorage) pour la progression et les statistiques.
+ * TOUTES les méthodes requises pour ui.js intégrées
  */
 
 // Éviter les imports avec une référence globale
@@ -8,10 +9,10 @@
 
 // Classe StorageManager
 function StorageManager() {
-  this.progressKey = 'tyf_quiz_progress_v2.2';
-  this.statsKey = 'tyf_global_stats_v2.2';
-  this.badgeKey = 'tyf_user_badges_v2.2';
-  console.log("StorageManager initialized (non-module version)");
+  this.progressKey = 'tyf_quiz_progress_v2.3';
+  this.statsKey = 'tyf_global_stats_v2.3';
+  this.badgeKey = 'tyf_user_badges_v2.3';
+  console.log("StorageManager initialized v2.3.1 - Version complète");
 }
 
 // ----- Méthodes générales localStorage -----
@@ -145,6 +146,7 @@ StorageManager.prototype.getGlobalStats = function() {
   return this._getData(this.statsKey);
 };
 
+// 🆕 MÉTHODE PRINCIPALE REQUISE PAR UI.JS - getVisualizationData
 // Calcule les statistiques agrégées pour l'affichage
 StorageManager.prototype.getVisualizationData = async function() {
    let allThemesData = [];
@@ -256,7 +258,7 @@ StorageManager.prototype.resetAllData = function() {
   return false;
 };
 
-// ----- Fonctions Badges -----
+// ----- Fonctions Badges COMPLÈTES -----
 StorageManager.prototype.getUserBadges = async function() { 
   return this._getData(this.badgeKey) || []; 
 };
@@ -281,7 +283,8 @@ StorageManager.prototype.addBadge = async function(badge) {
     return false; // Badge déjà possédé
 };
 
-// Fonction pour vérifier les badges
+// 🆕 MÉTHODE PRINCIPALE REQUISE PAR UI.JS - checkAndAwardBadges
+// Fonction pour vérifier et attribuer les badges automatiquement
 StorageManager.prototype.checkAndAwardBadges = async function(results) {
     if (!results || !results.completed) return [];
 
@@ -299,25 +302,53 @@ StorageManager.prototype.checkAndAwardBadges = async function(results) {
               description: 'Completed your first quiz!', 
               icon: 'fas fa-flag' 
             })) {
-                 newBadges.push(
-                   allBadges.find(b => b.id === 'first_completed') || 
-                   { name: 'First Step', icon: 'fas fa-flag' }
-                 );
+                 newBadges.push({ 
+                   id: 'first_completed',
+                   name: 'First Step', 
+                   description: 'Completed your first quiz!',
+                   icon: 'fas fa-flag' 
+                 });
             }
         }
 
          // Badge: Score Parfait
          if (results.accuracy === 100) {
-             if (await this.addBadge({ 
-               id: 'perfect_score', 
-               name: 'Perfectionist', 
-               description: 'Achieved a perfect score!', 
-               icon: 'fas fa-star' 
-             })) {
-                 newBadges.push(
-                   allBadges.find(b => b.id === 'perfect_score') || 
-                   { name: 'Perfectionist', icon: 'fas fa-star'}
-                 );
+             if (!allBadges.some(b => b.id === 'perfect_score')) {
+                 if (await this.addBadge({ 
+                   id: 'perfect_score', 
+                   name: 'Perfectionist', 
+                   description: 'Achieved a perfect score!', 
+                   icon: 'fas fa-star' 
+                 })) {
+                     newBadges.push({
+                       id: 'perfect_score',
+                       name: 'Perfectionist', 
+                       description: 'Achieved a perfect score!',
+                       icon: 'fas fa-star'
+                     });
+                 }
+             }
+         }
+
+         // Badge: Série de 5 quiz
+         if (stats.history && stats.history.length >= 5) {
+             const recentFive = stats.history.slice(0, 5);
+             const allGoodScores = recentFive.every(h => h.accuracy >= 70);
+             
+             if (allGoodScores && !allBadges.some(b => b.id === 'streak_5')) {
+                 if (await this.addBadge({
+                   id: 'streak_5',
+                   name: 'On Fire!',
+                   description: '5 quiz d\'affilée avec 70%+',
+                   icon: 'fas fa-fire'
+                 })) {
+                     newBadges.push({
+                       id: 'streak_5',
+                       name: 'On Fire!',
+                       description: '5 quiz d\'affilée avec 70%+',
+                       icon: 'fas fa-fire'
+                     });
+                 }
              }
          }
 
@@ -326,16 +357,55 @@ StorageManager.prototype.checkAndAwardBadges = async function(results) {
          const themeStats = stats.themeStats[themeId];
          if (themeStats && themeStats.completionRate === 100) {
               const badgeId = `theme_${themeId}_completed`;
-             if (await this.addBadge({ 
-               id: badgeId, 
-               name: `Master of ${themeStats.name}`, 
-               description: `Completed all quizzes in the ${themeStats.name} theme!`, 
-               icon: 'fas fa-medal' 
+              if (!allBadges.some(b => b.id === badgeId)) {
+                  if (await this.addBadge({ 
+                    id: badgeId, 
+                    name: `Master of ${themeStats.name}`, 
+                    description: `Completed all quizzes in the ${themeStats.name} theme!`, 
+                    icon: 'fas fa-medal' 
+                  })) {
+                       newBadges.push({
+                         id: badgeId,
+                         name: `Master of ${themeStats.name}`, 
+                         description: `Completed all quizzes in the ${themeStats.name} theme!`,
+                         icon: 'fas fa-medal'
+                       });
+                  }
+              }
+         }
+
+         // Badge: Compléter 50% des thèmes
+         const completedThemesCount = Object.values(stats.themeStats).filter(t => t.completionRate === 100).length;
+         if (completedThemesCount >= 5 && !allBadges.some(b => b.id === 'half_themes')) {
+             if (await this.addBadge({
+               id: 'half_themes',
+               name: 'Theme Explorer',
+               description: 'Completed 50% of all themes!',
+               icon: 'fas fa-compass'
              })) {
-                  newBadges.push(
-                    allBadges.find(b => b.id === badgeId) || 
-                    { name: `Master of ${themeStats.name}`, icon: 'fas fa-medal'}
-                  );
+                 newBadges.push({
+                   id: 'half_themes',
+                   name: 'Theme Explorer',
+                   description: 'Completed 50% of all themes!',
+                   icon: 'fas fa-compass'
+                 });
+             }
+         }
+
+         // Badge: Maître absolu (tous les thèmes)
+         if (completedThemesCount === 10 && !allBadges.some(b => b.id === 'all_themes')) {
+             if (await this.addBadge({
+               id: 'all_themes',
+               name: 'French Master',
+               description: 'Completed ALL themes! Félicitations!',
+               icon: 'fas fa-crown'
+             })) {
+                 newBadges.push({
+                   id: 'all_themes',
+                   name: 'French Master',
+                   description: 'Completed ALL themes! Félicitations!',
+                   icon: 'fas fa-crown'
+                 });
              }
          }
 
@@ -354,6 +424,75 @@ StorageManager.prototype.setTimerPreference = function(enabled) {
 
 StorageManager.prototype.getTimerPreference = async function() {
   return this._getData('tyf_timer_preference');
+};
+
+// ----- Méthodes utilitaires supplémentaires -----
+
+// Obtenir statistiques rapides pour dashboard
+StorageManager.prototype.getQuickStats = function() {
+  const progress = this.getProgress() || { themes: {} };
+  const globalStats = this.getGlobalStats() || { completedQuizzesSet: {}, quizHistory: [] };
+  
+  const completedQuizzes = Object.keys(globalStats.completedQuizzesSet).length;
+  const completedThemes = Object.values(progress.themes).filter(theme => {
+    if (!theme.quizzes) return false;
+    const totalQuizzes = Object.keys(theme.quizzes).length;
+    const completedInTheme = Object.values(theme.quizzes).filter(q => q.completed).length;
+    return totalQuizzes > 0 && completedInTheme === totalQuizzes;
+  }).length;
+  
+  const avgAccuracy = globalStats.totalQuestionsAnswered > 0 
+    ? Math.round((globalStats.totalCorrectAnswers / globalStats.totalQuestionsAnswered) * 100) 
+    : 0;
+    
+  // Calculer série actuelle
+  let currentStreak = 0;
+  if (globalStats.quizHistory && globalStats.quizHistory.length > 0) {
+    for (let i = 0; i < globalStats.quizHistory.length; i++) {
+      if (globalStats.quizHistory[i].accuracy >= 70) {
+        currentStreak++;
+      } else {
+        break;
+      }
+    }
+  }
+  
+  return {
+    completedQuizzes,
+    completedThemes,
+    avgAccuracy,
+    currentStreak
+  };
+};
+
+// Export d'un résumé des données pour debug
+StorageManager.prototype.exportData = function() {
+  return {
+    progress: this.getProgress(),
+    globalStats: this.getGlobalStats(),
+    badges: this._getData(this.badgeKey),
+    version: '2.3.1'
+  };
+};
+
+// Import de données (pour migration/restauration)
+StorageManager.prototype.importData = function(data) {
+  if (!data || typeof data !== 'object') {
+    console.error("Invalid data for import");
+    return false;
+  }
+  
+  try {
+    if (data.progress) this._saveData(this.progressKey, data.progress);
+    if (data.globalStats) this._saveData(this.statsKey, data.globalStats);
+    if (data.badges) this._saveData(this.badgeKey, data.badges);
+    
+    console.log("Data imported successfully");
+    return true;
+  } catch (error) {
+    console.error("Error importing data:", error);
+    return false;
+  }
 };
 
 // Définition de storage comme variable globale

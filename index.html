@@ -5,13 +5,69 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#111f46" />
-  <title>Test Your French</title>
+  
+  <!-- SEO Meta Tags -->
+  <title>Test Your French - Interactive French Learning App</title>
+  <meta name="description" content="Learn French with interactive quizzes covering 10 themes: colors, numbers, grammar, and real-life conversations. Track your progress and earn badges!">
+  <meta name="keywords" content="French learning, French quiz, French language, interactive learning, French grammar, French vocabulary">
+  <meta name="author" content="Test Your French">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Test Your French - Interactive French Learning">
+  <meta property="og:description" content="Master French with 50+ interactive quizzes across 10 essential themes. Perfect for beginners to intermediate learners.">
+  <meta property="og:image" content="./icons/icon-512x512.png">
+  <meta property="og:url" content="https://carossst.github.io/TYF_Bundle/">
+  <meta property="og:site_name" content="Test Your French">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Test Your French - Interactive Learning">
+  <meta name="twitter:description" content="Learn French with interactive quizzes and track your progress!">
+  <meta name="twitter:image" content="./icons/icon-512x512.png">
+  
+  <!-- PWA Meta Tags -->
   <link rel="stylesheet" href="./style.css">
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192x192.png">
   <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Test Your French">
+  
+  <!-- Performance Optimization -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  
   <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Test Your French",
+    "description": "Interactive French learning application with quizzes covering essential themes like colors, numbers, grammar, and conversations.",
+    "url": "https://carossst.github.io/TYF_Bundle/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "10 French learning themes",
+      "50+ interactive quizzes",
+      "Progress tracking",
+      "Badge system",
+      "Audio pronunciation",
+      "Mobile responsive",
+      "Offline capable"
+    ]
+  }
+  </script>
   
   <!-- Service Worker Registration -->
   <script>
@@ -25,20 +81,51 @@
       });
     }
   </script>
+
+  <!-- 🔧 CORRECTION CRITIQUE - Configuration ResourceManager AVANT les scripts -->
+  <script>
+    // Configuration automatique selon l'environnement
+    window.resourceManagerConfig = {
+      baseDataPath: window.location.hostname.includes('github.io') ? '/TYF_Bundle/js/data/' : './js/data/',
+      enableLog: true,
+      cacheEnabled: true,
+      fallbackEnabled: true,
+      version: '2.3.1'
+    };
+    console.log('🔧 ResourceManager config loaded:', window.resourceManagerConfig);
+  </script>
 </head>
 <body>
   <div id="app-container">
     <!-- Welcome Screen -->
     <div id="welcome-screen" class="screen">
         <div class="quiz-logo">
-            <img src="./icons/icon-192x192.png" alt="Test Your French Logo">
+            <img src="./icons/icon-192x192.png" alt="Test Your French Logo" width="100" height="100">
         </div>
         <h1>Test Your French</h1>
         <p class="subtitle">Improve your French with interactive quizzes on various topics.</p>
 
-        <!-- Placeholder for initial stats -->
-        <div id="welcome-stats-placeholder">
-            <!-- Initial stats summary will be injected here -->
+        <!-- 🆕 SECTION STATS DASHBOARD INTÉGRÉE -->
+        <div id="welcome-stats-summary">
+            <h3>Votre Progression</h3>
+            <div class="stats-mini-grid">
+                <div class="stat-mini">
+                    <div class="stat-value" id="welcome-quizzes-completed">0</div>
+                    <div class="stat-label">Quiz terminés</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="stat-value" id="welcome-accuracy">0%</div>
+                    <div class="stat-label">Précision moyenne</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="stat-value" id="welcome-themes-progress">0/10</div>
+                    <div class="stat-label">Thèmes explorés</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="stat-value" id="welcome-streak">0</div>
+                    <div class="stat-label">Série actuelle</div>
+                </div>
+            </div>
         </div>
 
         <!-- Global Counters -->
@@ -51,9 +138,9 @@
               </div>
          </div>
 
-        <!-- New section for theme list -->
+        <!-- Theme selection section -->
         <h2>Sélectionne un thème</h2>
-        <div id="themes-list" class="selection-container">
+        <div id="themes-list" class="themes-grid">
             <!-- Les thèmes seront insérés dynamiquement ici -->
             <p class="loading-message">Chargement des thèmes...</p>
         </div>
@@ -61,7 +148,7 @@
         <div class="buttons">
             <div class="button-group">
                 <button id="show-stats-btn" class="btn" aria-label="Afficher les statistiques globales">
-                    <i class="fas fa-chart-bar btn-icon"></i>Statistiques Globales
+                    <i class="fas fa-chart-bar btn-icon"></i>Statistiques Détaillées
                 </button>
             </div>
         </div>
@@ -74,7 +161,7 @@
         <h1 id="theme-title">Nom du Thème</h1>
         <p id="theme-description" class="subtitle">Description du thème sélectionné</p>
 
-        <div id="quizzes-list" class="selection-container">
+        <div id="quizzes-list" class="quizzes-list">
             <!-- Les quiz seront ajoutés dynamiquement ici -->
             <p class="loading-message">Chargement des quiz...</p>
         </div>
@@ -121,7 +208,7 @@
             <p class="loading-message">Chargement de la question...</p>
         </div>
 
-        <div id="feedback" class="feedback-container">
+        <div id="feedback" class="feedback-container hidden">
             <!-- Le feedback sera généré dynamiquement ici -->
         </div>
 
@@ -146,38 +233,185 @@
     </div>
 
     <!-- Results Screen -->
-    <div id="result" class="screen" style="display: none;">
-        <!-- Contenu écran résultats -->
+    <div id="result" class="screen hidden">
+        <header class="screen-header">
+            <h1>Résultats du Quiz</h1>
+            <p id="result-quiz-name" class="subtitle">Nom du Quiz</p>
+        </header>
+
+        <div id="result-content-area" class="result-content-area">
+            <!-- Score summary -->
+            <section class="score-summary card">
+                <h2>Votre Score</h2>
+                <p id="final-score" class="score-highlight">0/10</p>
+                <div id="score-message">
+                    <!-- Message basé sur le score -->
+                </div>
+            </section>
+
+            <!-- Answers summary -->
+            <section class="summary-container card">
+                <h2>Résumé des Réponses</h2>
+                <div id="answers-summary">
+                    <!-- Liste des questions/réponses/correctes par ui.js -->
+                </div>
+            </section>
+
+            <!-- Social Share -->
+            <section class="social-share card">
+                <h3 class="social-share-title">Partagez vos résultats !</h3>
+                <div class="copyable-text-container">
+                    <textarea id="share-text" class="copyable-text" readonly>Mon score au quiz [Nom du Quiz] sur Test Your French : [Score]/10 ! Testez-vous ici : [Lien]</textarea>
+                    <button id="copy-btn" class="btn btn-secondary" aria-label="Copier le texte à partager">
+                        <i class="fas fa-copy"></i> Copier
+                    </button>
+                </div>
+            </section>
+
+            <!-- 🆕 CTA / Next Steps COMPLET -->
+            <section class="cta-container card">
+                <h3>Que faire maintenant ?</h3>
+                <div class="cta-buttons">
+                    <button id="cta-explore-themes" class="cta-button primary">
+                        <i class="fas fa-book-open cta-icon"></i>
+                        <span class="cta-content">
+                            <span class="cta-title">Explorer d'autres thèmes</span>
+                            <span class="cta-desc">Découvrez de nouveaux sujets pour progresser.</span>
+                        </span>
+                        <i class="fas fa-arrow-right cta-arrow"></i>
+                    </button>
+                    <button id="cta-view-stats" class="cta-button secondary">
+                        <i class="fas fa-chart-bar cta-icon"></i>
+                        <span class="cta-content">
+                            <span class="cta-title">Voir mes statistiques globales</span>
+                            <span class="cta-desc">Suivez votre progression dans l'application.</span>
+                        </span>
+                        <i class="fas fa-arrow-right cta-arrow"></i>
+                    </button>
+                    <button id="cta-try-again" class="cta-button tertiary">
+                        <i class="fas fa-redo-alt cta-icon"></i>
+                        <span class="cta-content">
+                            <span class="cta-title">Refaire ce quiz</span>
+                            <span class="cta-desc">Améliorez votre score en réessayant.</span>
+                        </span>
+                        <i class="fas fa-arrow-right cta-arrow"></i>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <div class="buttons">
+            <div class="button-group">
+                <button id="back-to-quiz-selection-from-results" class="btn btn-secondary" aria-label="Retour à la sélection de quiz">
+                    <i class="fas fa-arrow-left btn-icon"></i>Retour Quiz
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Stats Screen -->
-     <div id="stats-screen" class="screen hidden">
-         <!-- Contenu écran statistiques -->
-     </div>
+    <div id="stats-screen" class="screen hidden">
+        <header class="screen-header">
+            <h1>Statistiques Globales</h1>
+            <p class="subtitle">Suivez votre progression dans l'application.</p>
+        </header>
 
-    <!-- Badge Notification (add this if not present) -->
-    <div id="badges-notification" class="install-notification hidden">
+        <div id="stats-content-area" class="stats-content-area">
+            <!-- Global Stats Summary -->
+            <section class="stats-overview card">
+                <h2>Résumé</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="stats-themes-completed">0/10</div>
+                        <div class="stat-label">Thèmes Complétés</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stats-quizzes-completed">0/50</div>
+                        <div class="stat-label">Quizzes Terminés</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stats-questions-correct">0/500</div>
+                        <div class="stat-label">Bonnes Réponses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stats-average-score">0%</div>
+                        <div class="stat-label">Score Moyen</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🆕 Theme Performance Chart/List COMPLET -->
+            <section class="themes-performance card">
+                <h2>Performance par Thème</h2>
+                <div class="themes-chart">
+                    <div id="themes-bars-container">
+                        <!-- Theme performance bars generated by ui.js -->
+                        <p class="loading-message">Chargement de la performance des thèmes...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🆕 Best/Worst Themes Comparison COMPLET -->
+            <section class="themes-comparison card">
+                <h2>Vos Thèmes Forts et Faibles</h2>
+                <div class="comparison-container">
+                    <div class="best-theme">
+                        <h3>Votre Meilleur Thème</h3>
+                        <div class="theme-name" id="best-theme-name">N/A</div>
+                        <div class="theme-accuracy" id="best-theme-accuracy">--%</div>
+                    </div>
+                    <div class="worst-theme">
+                        <h3>Votre Thème Faible</h3>
+                        <div class="theme-name" id="worst-theme-name">N/A</div>
+                        <div class="theme-accuracy" id="worst-theme-accuracy">--%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🆕 Recent Quiz History COMPLET -->
+            <section class="recent-history card">
+                <h2>Historique Récent</h2>
+                <div class="history-list">
+                    <div id="quiz-history-list">
+                        <!-- Recent quiz results listed here by ui.js -->
+                        <p class="no-history">Aucun historique de quiz terminé.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="buttons">
+            <div class="button-group">
+                <button id="back-to-themes-from-stats" class="btn btn-secondary" aria-label="Retour à l'écran d'accueil">
+                    <i class="fas fa-arrow-left btn-icon"></i>Retour Accueil
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🆕 Badge Notification COMPLET -->
+    <div id="badges-notification" class="badge-notification hidden">
         <!-- Badge notification content injected here -->
          <button class="close-notification" aria-label="Fermer la notification"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- 🆕 Badges Container COMPLET -->
+    <div id="badges-container" class="badges-section hidden">
+        <h3>Vos Badges</h3>
+        <div id="badges-list">
+            <!-- Badges generated by storage.js -->
+        </div>
     </div>
   </div>
 
   <footer class="footer">
       <div class="footer-content">
           <a href="/" class="footer-logo">Test Your French</a>
-          <p class="footer-text">Version 2.2.2 - © 2025 French Quiz App</p>
+          <p class="footer-text">Version 2.3.1 - © 2025 French Quiz App</p>
       </div>
   </footer>
 
-  <!-- Configuration pour resourceManager -->
-  <script>
-    window.resourceManagerConfig = {
-      baseDataPath: './'
-    };
-  </script>
-
-  <!-- Chargement des scripts JavaScript sans modules -->
-  <!-- CHEMINS CORRIGÉS pour correspondre à la structure réelle -->
+  <!-- 🔧 SCRIPTS DANS LE BON ORDRE -->
   <script src="./js/storage.js"></script>
   <script src="./js/resourceManager.js"></script>
   <script src="./js/quizManager.js"></script>
